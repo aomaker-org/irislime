@@ -6,7 +6,7 @@
 #   3. make verify  (Check for regressions)
 #   4. make build   (Run the orchestrator)
 
-.PHONY: build setup scrub verify promote clean help
+.PHONY: build setup scrub verify promote clean help run-llama
 
 # --- STRICT ENVIRONMENT GUARD ---
 # Stop execution if environment is not sourced
@@ -57,6 +57,12 @@ promote: scrub
 build: setup
 	@echo "--- Starting build ---"
 	@./venv/bin/python3 config_env.py
+
+run-llama:
+	./llama.cpp/build/bin/llama-cli \
+	  -m models/Llama-3.2-1B-Instruct-Q4_K_M.gguf \
+	  -p "The future of AI is" \
+	  -n 50
 
 clean:
 	@rm -rf venv/ *.scrubbed

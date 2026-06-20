@@ -1,24 +1,57 @@
 #!/bin/bash
-# Filename: config_env
-# Purpose: Clean foreign environments and load IrisLime dependencies
+# config_env - Idempotent environment loader
+# Usage: source config_env [unset]
 
-# 1. Environment Sweeper: Deactivate any existing venv
-if [[ "$VIRTUAL_ENV" != "" ]]; then
-    echo "[!] Deactivating foreign environment: $VIRTUAL_ENV"
-    # Try to deactivate, fallback to manual unset
-    if command -v deactivate >/dev/null; then
+# 1. Guard: Prevent execution as a sub-shell
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    echo "[!] ERROR: You must SOURCE this file, not execute it."
+    return 1 # return instead of exit for sourcing safety
+fi
+
+# 2. Handle explicit unset
+if [ "$1" == "unset" ]; then
+    echo "[!] Unsetting IrisLime environment..."
+    unset IRISLIME_READY
+    unset ONEAPI_ROOT
+    unset MKLROOT
+    
+    if command -v deactivate &> /dev/null; then
         deactivate
-    else
-        unset VIRTUAL_ENV
+        echo "[+] Virtual environment deactivated."
     fi
+    echo "[+] IrisLime environment unset."
+    return 0
 fi
 
-# 2. Setup IrisLime local environment
-if [ -d "venv" ]; then
-    source venv/bin/activate
-    export IRISLIME_ROOT=$(pwd)
-    export IRISLIME_READY=true
-    echo "[+] IrisLime environment is ready (Root: $IRISLIME_ROOT)."
-else
-    echo "[!] Error: 'venv' directory not found. Run 'make setup' first."
+# 3. Idempotency check
+if [ -n "$IRISLIME_READY" ]; then
+    echo "[!] IrisLime environment is already loaded."
+    return 0
 fi
+
+# 4. Activate venv (Robustly)
+if [ -f "venv/bin/activate" ]; then
+    # Ensure any active venv is killed first
+    if [[ "$VIRTUAL_ENV" != "" ]]; then
+        deactivate 2>/dev/null || unset VIRTUAL_ENV
+    fi
+    source venv/bin/activate
+    echo "[+] Virtual environment activated."
+else
+    echo "[!] Virtual environment not found. Run 'make setup' first."
+fi
+
+# 5. Source Intel oneAPI
+INTEL_ROOT="/opt/intel/oneapi"
+if [ -f "$INTEL_ROOT/setvars.sh" ]; then
+    source "$INTEL_ROOT/setvars.sh" --force > /dev/null
+    export ONEAPI_ROOT="$INTEL_ROOT"
+    export MKLROOT="$INTEL_ROOT/mkl/latest"
+    echo "[+] Intel oneAPI environment sourced (Root: $ONEAPI_ROOT)."
+else
+    echo "[!] Intel oneAPI setvars.sh not found at $INTEL_ROOT."
+fi
+
+# 6. Set the marker
+export IRISLIME_READY=1
+echo "[+] IrisLime environment is ready."
