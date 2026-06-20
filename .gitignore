@@ -1,0 +1,63 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.env/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# --- Rust ---
+/target/
+**/*.rs.bk
+
+# Tracking dependencies, so keeping Cargo.lock
+# For application development, it is recommended to keep Cargo.lock.
+# Cargo.lock
+
+# --- SLM / LLM / Edge Computing Artifacts ---
+# Do not track large model weights
+/models/
+*.gguf
+*.bin
+*.pt
+
+# --- Build / oneAPI / Tooling ---
+/build/
+/build_*/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+*.o
+*.so
+*.a
+*.exe
+
+# --- Local Environment & Logs ---
+.status.json
+.DS_Store
+# Tracking logs for audit trails!
+# *.log
+.vscode/
+.idea/
+.env
+
+# Ignore local development backups and archives
+**/*.local
+**/.archive/
+
+# Don't log sensitive information, but track the scrubbed logs for auditing.
+# Note: The !.security_scrub/ line tells Git to track the directory itself
+# but ignore the files created inside it.
+.security_scrub/*
+!.security_scrub/
+
+# --- OS / Miscellaneous ---
+Thumbs.db
+*~
