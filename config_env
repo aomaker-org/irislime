@@ -1,11 +1,11 @@
 #!/bin/bash
 # config_env - Idempotent environment loader
-# Usage: source config_env [unset]
+# Usage: source config_env [unset|force]
 
 # 1. Guard: Prevent execution as a sub-shell
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     echo "[!] ERROR: You must SOURCE this file, not execute it."
-    return 1 # return instead of exit for sourcing safety
+    return 1
 fi
 
 # 2. Handle explicit unset
@@ -23,15 +23,18 @@ if [ "$1" == "unset" ]; then
     return 0
 fi
 
-# 3. Idempotency check
-if [ -n "$IRISLIME_READY" ]; then
-    echo "[!] IrisLime environment is already loaded."
+# 3. Idempotency check with force override
+if [ -n "$IRISLIME_READY" ] && [ "$1" != "force" ]; then
+    echo "[!] IrisLime environment is already loaded. Use 'source config_env force' to reload."
     return 0
 fi
 
-# 4. Activate venv (Robustly)
+# 4. Set Symbol Caching for GDB
+export DEBUGINFOD_CACHE_PATH=/home/fekerr/.cache/gdb_symbols
+mkdir -p "$DEBUGINFOD_CACHE_PATH"
+
+# 5. Activate venv (Robustly)
 if [ -f "venv/bin/activate" ]; then
-    # Ensure any active venv is killed first
     if [[ "$VIRTUAL_ENV" != "" ]]; then
         deactivate 2>/dev/null || unset VIRTUAL_ENV
     fi
@@ -41,7 +44,7 @@ else
     echo "[!] Virtual environment not found. Run 'make setup' first."
 fi
 
-# 5. Source Intel oneAPI
+# 6. Source Intel oneAPI
 INTEL_ROOT="/opt/intel/oneapi"
 if [ -f "$INTEL_ROOT/setvars.sh" ]; then
     source "$INTEL_ROOT/setvars.sh" --force > /dev/null
@@ -52,6 +55,6 @@ else
     echo "[!] Intel oneAPI setvars.sh not found at $INTEL_ROOT."
 fi
 
-# 6. Set the marker
+# 7. Set the marker
 export IRISLIME_READY=1
 echo "[+] IrisLime environment is ready."

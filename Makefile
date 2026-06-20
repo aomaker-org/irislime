@@ -5,8 +5,15 @@
 #   2. make setup
 #   3. make verify  (Check for regressions)
 #   4. make build   (Run the orchestrator)
+#   5. make debug-llama (Launch with GDB and environment bypasses)
 
-.PHONY: build setup scrub verify promote clean help run-llama
+.PHONY: build setup scrub verify promote clean help run-llama debug-llama
+
+# --- CONFIGURATION ---
+# Define the build directory for the binary
+BUILD_DIR := llama.cpp/build_iris
+# Environment flags to prevent SYCL/LevelZero segfaults
+SYCL_DEBUG_FLAGS := ZET_ENABLE_API_TRACING_LAYER=0 ZET_ENABLE_PROGRAM_INSTRUMENTATION=0
 
 # --- STRICT ENVIRONMENT GUARD ---
 # Stop execution if environment is not sourced
@@ -55,18 +62,37 @@ promote: scrub
 
 # Build: Run the orchestrator
 build: setup
-	@echo "--- Starting build ---"
-	@./venv/bin/python3 config_env.py
+	@echo "--- Starting build in $(BUILD_DIR) ---"
+	@./venv/bin/python3 config_env.py --build-dir $(BUILD_DIR)
 
+# Run-Llama: Run inference using the defined build directory
 run-llama:
-	./llama.cpp/build/bin/llama-cli \
-	  -m models/Llama-3.2-1B-Instruct-Q4_K_M.gguf \
+	@if [ ! -d "$(BUILD_DIR)" ]; then \
+		echo "[!] Error: Build directory '$(BUILD_DIR)' not found."; \
+		exit 1; \
+	fi
+	$(SYCL_DEBUG_FLAGS) ./$(BUILD_DIR)/bin/llama-cli \
+	  -m ../models/Llama-3.2-1B-Instruct-Q4_K_M.gguf \
 	  -p "The future of AI is" \
-	  -n 50
+	  -n 50 \
+	  --device sycl:0
+
+# Debug-Llama: Launch the binary via GDB with required environment bypasses
+debug-llama:
+	@if [ ! -d "$(BUILD_DIR)" ]; then \
+		echo "[!] Error: Build directory '$(BUILD_DIR)' not found."; \
+		exit 1; \
+	fi
+	$(SYCL_DEBUG_FLAGS) gdb -iex "set auto-load safe-path /" \
+	  --args ./$(BUILD_DIR)/bin/llama-cli \
+	  -m ../models/Llama-3.2-1B-Instruct-Q4_K_M.gguf \
+	  -p "The future of AI is" \
+	  -n 50 \
+	  --device sycl:0
 
 clean:
 	@rm -rf venv/ *.scrubbed
 	@echo "[+] Clean complete."
 
 help:
-	@echo "Targets: setup, scrub, verify, promote, build, clean"
+	@echo "Targets: setup, scrub, verify, promote, build, clean, run-llama, debug-llama"
