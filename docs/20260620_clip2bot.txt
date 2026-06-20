@@ -1,0 +1,316 @@
+
+--- BEGIN FILE: ./.gitignore | Size: 999 bytes ---
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.env/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# --- Rust ---
+/target/
+**/*.rs.bk
+
+# Tracking dependencies, so keeping Cargo.lock
+# For application development, it is recommended to keep Cargo.lock.
+# Cargo.lock
+
+# --- SLM / LLM / Edge Computing Artifacts ---
+# Do not track large model weights
+/models/
+*.gguf
+*.bin
+*.pt
+
+# --- Build / oneAPI / Tooling ---
+/build/
+/build_*/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+*.o
+*.so
+*.a
+*.exe
+
+# --- Local Environment & Logs ---
+.status.json
+.DS_Store
+# Tracking logs for audit trails!
+# *.log
+.vscode/
+.idea/
+.env
+
+# Ignore local development backups and archives
+**/*.local
+**/.archive/
+
+# Don't log sensitive information, but track the scrubbed logs for auditing.
+# Note: The !.security_scrub/ line tells Git to track the directory itself
+# but ignore the files created inside it.
+.security_scrub/*
+!.security_scrub/
+
+# --- OS / Miscellaneous ---
+Thumbs.db
+*~
+
+
+--- BEGIN FILE: ./todo.md | Size: 528 bytes ---
+# IrisLime: Project Backlog
+
+## Pending Features & Improvements
+- [ ] **Forensic Metadata:** Capture `git rev-parse HEAD` in `build_meta.json` to track the exact version of `llama.cpp` used in every build.
+- [ ] **Log Cleanup Utility:** Create a script to archive or purge logs older than 30 days to manage disk space.
+- [ ] **Performance Benchmarking:** Add a `run-bench.sh` script to log inference speed (tokens/sec) alongside the build metadata.
+
+## Known Issues
+- [ ] None at the moment; build pipeline is currently active.
+
+
+--- BEGIN FILE: ./README.md | Size: 1160 bytes ---
+# IrisLime: Edge AI Exploration
+
+**IrisLime** (Iris + SLM) is a research-focused environment designed to facilitate local, small-scale Large Language Model (LLM) inference on Intel Iris Xe integrated graphics, leveraging WSL2 and the Intel oneAPI toolkit.
+
+## Vision
+To provide a replicable, self-documenting workflow for running GGUF-based models on Intel hardware, bridging the gap between Windows-hosted GPU resources and Linux-based AI inference.
+
+## Key Features
+- **Modular Orchestration:** A Python-based `config_env.py` conductor handles hardware diagnostics and inference engine builds.
+- **Hardware-First:** Validates the WSL2/GPU bridge (Level Zero/OpenCL) before any workload begins.
+- **Portable Setup:** Decoupled from user-specific shell configurations (e.g., `.bashrc`) to ensure reproducibility.
+
+## Project Structure
+- `config_env.py`: The root orchestrator for the environment.
+- `tools/`: Modular library containing hardware diagnostics and build logic.
+- `models/`: Placeholder for your GGUF model files.
+- `docs/`: Research notes and performance logs.
+
+## Getting Started
+See [getting_started.md](getting_started.md) to begin your setup.
+
+
+--- BEGIN FILE: ./requirements.txt | Size: 35 bytes ---
+huggingface_hub
+requests
+pyperclip
+
+
+--- BEGIN FILE: ./getting_started.md | Size: 952 bytes ---
+# Getting Started with IrisLime
+
+**IrisLime** is a research-focused environment designed to facilitate local, small-scale Large Language Model (LLM) inference on Intel Iris Xe integrated graphics, leveraging WSL2 and the Intel oneAPI toolkit.
+
+## 1. Prerequisites
+- **Windows 11** with WSL2 enabled.
+- [Intel oneAPI Base Toolkit](https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit.html) installed (v2026 recommended).
+- Ensure Windows host GPU drivers are current.
+
+## 2. System Configuration (Manual)
+To bridge your Windows GPU to the WSL2 environment:
+1. **Enable the vgem bridge:** Run `sudo modprobe vgem` to enable the virtual graphics module.
+2. **Verification:** Check for the render node: `ls -l /dev/dri/renderD128`.
+   *(If not present, ensure you have initialized your WSL2 instance after driver updates).*
+
+## 3. Environment Setup
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repo-url>
+   cd irislime
+
+
+--- BEGIN FILE: ./Makefile | Size: 3051 bytes ---
+# Filename: Makefile
+# Purpose: Formal Verification Pipeline for IrisLime
+# Usage:
+#   1. source config_env
+#   2. make setup
+#   3. make verify  (Check for regressions)
+#   4. make build   (Run the orchestrator)
+#   5. make debug-llama (Launch with GDB and environment bypasses)
+
+.PHONY: build setup scrub verify promote clean help run-llama debug-llama
+
+# --- CONFIGURATION ---
+# Define the build directory for the binary
+BUILD_DIR := llama.cpp/build_iris
+# Environment flags to prevent SYCL/LevelZero segfaults
+SYCL_DEBUG_FLAGS := ZET_ENABLE_API_TRACING_LAYER=0 ZET_ENABLE_PROGRAM_INSTRUMENTATION=0
+
+# --- STRICT ENVIRONMENT GUARD ---
+# Stop execution if environment is not sourced
+ifndef IRISLIME_READY
+  $(error [!] IrisLime environment not detected! Run 'source config_env')
+endif
+
+# Files targeted for scrub/trust
+FILES = config_env Makefile
+INSTALLED = venv/.installed
+
+# --- TARGETS ---
+
+# Setup: Install/update dependencies only if needed
+setup: $(INSTALLED)
+
+$(INSTALLED): requirements.txt
+	@if [ ! -d "venv" ]; then python3 -m venv venv; fi
+	@./venv/bin/pip install --upgrade pip
+	@./venv/bin/pip install -r requirements.txt
+	@touch $(INSTALLED)
+	@echo "[+] Environment setup complete."
+
+# Scrub: Generate ephemeral .scrubbed files for inspection
+scrub:
+	@./tools/scrub $(FILES)
+
+# Verify: Check if current scrubbed output matches the 'Trusted' baseline
+verify: scrub
+	@for f in $(FILES); do \
+		if [ ! -f "$$f.trusted" ]; then \
+			echo "[!] Missing baseline for $$f. Run 'make promote' to establish one."; \
+			exit 1; \
+		fi; \
+		diff -q $$f.scrubbed $$f.trusted > /dev/null || \
+		(echo "[!] REGRESSION: $$f scrubbed output differs from $$f.trusted!" && exit 1); \
+	done
+	@echo "[+] Verification passed: All scrubbed files match trusted baselines."
+
+# Promote: Update the Trusted baseline from the current Scrubbed version
+promote: scrub
+	@for f in $(FILES); do \
+		cp $$f.scrubbed $$f.trusted; \
+		echo "[+] Promoted $$f to trusted status."; \
+	done
+
+# Build: Run the orchestrator
+build: setup
+	@echo "--- Starting build in $(BUILD_DIR) ---"
+	@./venv/bin/python3 config_env.py --build-dir $(BUILD_DIR)
+
+# Run-Llama: Run inference using the defined build directory
+run-llama:
+	@if [ ! -d "$(BUILD_DIR)" ]; then \
+		echo "[!] Error: Build directory '$(BUILD_DIR)' not found."; \
+		exit 1; \
+	fi
+	$(SYCL_DEBUG_FLAGS) ./$(BUILD_DIR)/bin/llama-cli \
+	  -m ../models/Llama-3.2-1B-Instruct-Q4_K_M.gguf \
+	  -p "The future of AI is" \
+	  -n 50 \
+	  --device sycl:0
+
+# Debug-Llama: Launch the binary via GDB with required environment bypasses
+debug-llama:
+	@if [ ! -d "$(BUILD_DIR)" ]; then \
+		echo "[!] Error: Build directory '$(BUILD_DIR)' not found."; \
+		exit 1; \
+	fi
+	$(SYCL_DEBUG_FLAGS) gdb -iex "set auto-load safe-path /" \
+	  --args ./$(BUILD_DIR)/bin/llama-cli \
+	  -m ../models/Llama-3.2-1B-Instruct-Q4_K_M.gguf \
+	  -p "The future of AI is" \
+	  -n 50 \
+	  --device sycl:0
+
+clean:
+	@rm -rf venv/ *.scrubbed
+	@echo "[+] Clean complete."
+
+help:
+	@echo "Targets: setup, scrub, verify, promote, build, clean, run-llama, debug-llama"
+
+
+--- BEGIN FILE: ./doit.sh | Size: 96 bytes ---
+make get-model REPO=bartowski/Llama-3.2-1B-Instruct-GGUF FILE=Llama-3.2-1B-Instruct-Q4_K_M.gguf
+
+
+--- BEGIN FILE: ./config_env | Size: 1756 bytes ---
+#!/bin/bash
+# config_env - Idempotent environment loader
+# Usage: source config_env [unset|force]
+
+# 1. Guard: Prevent execution as a sub-shell
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    echo "[!] ERROR: You must SOURCE this file, not execute it."
+    return 1
+fi
+
+# 2. Handle explicit unset
+if [ "$1" == "unset" ]; then
+    echo "[!] Unsetting IrisLime environment..."
+    unset IRISLIME_READY
+    unset ONEAPI_ROOT
+    unset MKLROOT
+    
+    if command -v deactivate &> /dev/null; then
+        deactivate
+        echo "[+] Virtual environment deactivated."
+    fi
+    echo "[+] IrisLime environment unset."
+    return 0
+fi
+
+# 3. Idempotency check with force override
+if [ -n "$IRISLIME_READY" ] && [ "$1" != "force" ]; then
+    echo "[!] IrisLime environment is already loaded. Use 'source config_env force' to reload."
+    return 0
+fi
+
+# 4. Set Symbol Caching for GDB
+export DEBUGINFOD_CACHE_PATH=/home/fekerr/.cache/gdb_symbols
+mkdir -p "$DEBUGINFOD_CACHE_PATH"
+
+# 5. Activate venv (Robustly)
+if [ -f "venv/bin/activate" ]; then
+    if [[ "$VIRTUAL_ENV" != "" ]]; then
+        deactivate 2>/dev/null || unset VIRTUAL_ENV
+    fi
+    source venv/bin/activate
+    echo "[+] Virtual environment activated."
+else
+    echo "[!] Virtual environment not found. Run 'make setup' first."
+fi
+
+# 6. Source Intel oneAPI
+INTEL_ROOT="/opt/intel/oneapi"
+if [ -f "$INTEL_ROOT/setvars.sh" ]; then
+    source "$INTEL_ROOT/setvars.sh" --force > /dev/null
+    export ONEAPI_ROOT="$INTEL_ROOT"
+    export MKLROOT="$INTEL_ROOT/mkl/latest"
+    echo "[+] Intel oneAPI environment sourced (Root: $ONEAPI_ROOT)."
+else
+    echo "[!] Intel oneAPI setvars.sh not found at $INTEL_ROOT."
+fi
+
+# 7. Set the marker
+export IRISLIME_READY=1
+echo "[+] IrisLime environment is ready."
+
+
+--- BEGIN FILE: ./docs/trust_model.md | Size: 946 bytes ---
+# IrisLime Trust Model
+
+To ensure security and prevent the leakage of PII (username, machine names), this repository utilizes a Multi-Stage Trust Pipeline.
+
+## Pipeline Architecture
+1. **Source (`file`)**: The working, "dirty" file. Tracked by Git.
+2. **Scrubbed (`file.scrubbed`)**: The automated artifact generated by `tools/scrub`. Ignored by Git.
+3. **Trusted (`file.trusted`)**: The human-verified baseline. This is the "Gold Standard" for what we expect the scrubbed output to look like. Ignored by Git.
+
+## Commands
+- `make scrub`: Generates the `.scrubbed` artifacts based on current source files.
+- `make verify`: Compares current `.scrubbed` output against `.trusted` baselines. **Use this to check for regressions.**
+- `make promote`: Overwrites the `.trusted` baseline with the latest `.scrubbed` output. **Use this after verifying code changes.**
+
+*Note: Never commit `.scrubbed` or `.trusted` files. These are ephemeral artifacts.*
+
