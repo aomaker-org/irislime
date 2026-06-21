@@ -15,6 +15,8 @@ endif
 BUILD_DIR := ./build
 ENGINE_DIR := ./llama.cpp
 FILES := config_env Makefile
+TIMESTAMP := $(shell date +%Y%m%d_%H%M%S)
+LOG_FILE := build_$(TIMESTAMP).log
 
 # --- TARGETS ---
 
@@ -28,42 +30,19 @@ venv/.installed: requirements.txt
 	@touch venv/.installed
 	@echo "[+] Environment setup complete."
 
-# Build: Out-of-Tree (OOT) build of llama.cpp
-build0: setup
-	@echo "--- Starting Out-of-Tree build in $(BUILD_DIR) ---"
-	@mkdir -p $(BUILD_DIR)
-	@cd $(BUILD_DIR) && cmake ../$(ENGINE_DIR) \
-		-DGGML_SYCL=ON \
-		-DCMAKE_BUILD_TYPE=Release
-	@cd $(BUILD_DIR) && $(MAKE) -j$(shell nproc)
-	@echo "[+] Build complete. Binary located at $(BUILD_DIR)/bin/"
-
-# Makefile
-LOG_FILE := build.log
-
-build1: setup
-	@echo "--- Starting Out-of-Tree build ---"
-	@mkdir -p $(BUILD_DIR)
-	@echo "[+] Logging to $(LOG_FILE)"
-	@cd $(BUILD_DIR) && cmake ../$(ENGINE_DIR) \
-		-DGGML_SYCL=ON \
-		-DCMAKE_BUILD_TYPE=Release 2>&1 | tee ../$(LOG_FILE)
-	@cd $(BUILD_DIR) && $(MAKE) -j$(shell nproc) 2>&1 | tee -a ../$(LOG_FILE)
-	@echo "[+] Build complete. Check $(LOG_FILE) for details."
-
+# Build: Out-of-Tree (OOT) build of llama.cpp using Intel oneAPI
 build: setup
 	@echo "--- Starting Out-of-Tree build ---"
+	@echo "[+] Logging to $(LOG_FILE)"
 	@mkdir -p $(BUILD_DIR)
 	@cd $(BUILD_DIR) && \
-		CC=icx CXX=icpx cmake ../$(ENGINE_DIR) \
+		CC=icx CXX=icpx cmake ../../$(ENGINE_DIR) \
 		-DGGML_SYCL=ON \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_CXX_COMPILER=icpx \
-		-DCMAKE_C_COMPILER=icx
-	@cd $(BUILD_DIR) && $(MAKE) -j$(shell nproc)
-
-
-# the following is under review ...
+		-DCMAKE_C_COMPILER=icx 2>&1 | tee ../../$(LOG_FILE)
+	@cd $(BUILD_DIR) && $(MAKE) -j$(shell nproc) 2>&1 | tee -a ../../$(LOG_FILE)
+	@echo "[+] Build complete. Binary located at $(BUILD_DIR)/bin/"
 
 # Forensic Pipeline (Scrub/Verify/Promote)
 scrub:
@@ -93,9 +72,18 @@ run-llama:
 	  -p "The future of AI is" \
 	  -n 50
 
+# Clean: Remove build artifacts and environment
 clean:
-	@rm -rf venv/ *.scrubbed $(BUILD_DIR)
+	@rm -rf venv/ *.scrubbed $(BUILD_DIR) build.log
 	@echo "[+] Build artifacts and virtualenv removed."
 
+# Help: Display available targets
 help:
-	@echo "Targets: setup, build, scrub, verify, promote, run-llama, clean"
+	@echo "Available Targets:"
+	@echo "  setup   : Install python dependencies"
+	@echo "  build   : Run OOT CMake build using Intel oneAPI"
+	@echo "  scrub   : Run forensic scrubbing on config files"
+	@echo "  verify  : Compare against trusted baselines"
+	@echo "  promote : Update trusted baselines"
+	@echo "  run-llama : Run basic inference test"
+	@echo "  clean   : Remove artifacts and venv"
