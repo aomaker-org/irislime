@@ -29,7 +29,7 @@ venv/.installed: requirements.txt
 	@echo "[+] Environment setup complete."
 
 # Build: Out-of-Tree (OOT) build of llama.cpp
-build: setup
+build0: setup
 	@echo "--- Starting Out-of-Tree build in $(BUILD_DIR) ---"
 	@mkdir -p $(BUILD_DIR)
 	@cd $(BUILD_DIR) && cmake ../$(ENGINE_DIR) \
@@ -37,6 +37,33 @@ build: setup
 		-DCMAKE_BUILD_TYPE=Release
 	@cd $(BUILD_DIR) && $(MAKE) -j$(shell nproc)
 	@echo "[+] Build complete. Binary located at $(BUILD_DIR)/bin/"
+
+# Makefile
+LOG_FILE := build.log
+
+build1: setup
+	@echo "--- Starting Out-of-Tree build ---"
+	@mkdir -p $(BUILD_DIR)
+	@echo "[+] Logging to $(LOG_FILE)"
+	@cd $(BUILD_DIR) && cmake ../$(ENGINE_DIR) \
+		-DGGML_SYCL=ON \
+		-DCMAKE_BUILD_TYPE=Release 2>&1 | tee ../$(LOG_FILE)
+	@cd $(BUILD_DIR) && $(MAKE) -j$(shell nproc) 2>&1 | tee -a ../$(LOG_FILE)
+	@echo "[+] Build complete. Check $(LOG_FILE) for details."
+
+build: setup
+	@echo "--- Starting Out-of-Tree build ---"
+	@mkdir -p $(BUILD_DIR)
+	@cd $(BUILD_DIR) && \
+		CC=icx CXX=icpx cmake ../$(ENGINE_DIR) \
+		-DGGML_SYCL=ON \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_CXX_COMPILER=icpx \
+		-DCMAKE_C_COMPILER=icx
+	@cd $(BUILD_DIR) && $(MAKE) -j$(shell nproc)
+
+
+# the following is under review ...
 
 # Forensic Pipeline (Scrub/Verify/Promote)
 scrub:
