@@ -5,7 +5,6 @@
 #   2. make setup
 #   3. make verify  (Check for regressions)
 #   4. make build   (Run the orchestrator)
-
 .PHONY: build setup scrub verify promote clean help run-llama
 
 # --- STRICT ENVIRONMENT GUARD ---
@@ -18,11 +17,14 @@ endif
 FILES = config_env Makefile
 INSTALLED = venv/.installed
 
+# Default model configuration
+REPO ?= bartowski/Llama-3.2-1B-Instruct-GGUF
+FILE ?= Llama-3.2-1B-Instruct-Q4_K_M.gguf
+
 # --- TARGETS ---
 
 # Setup: Install/update dependencies only if needed
 setup: $(INSTALLED)
-
 $(INSTALLED): requirements.txt
 	@if [ ! -d "venv" ]; then python3 -m venv venv; fi
 	@./venv/bin/pip install --upgrade pip
@@ -52,7 +54,6 @@ promote: scrub
 		cp $$f.scrubbed $$f.trusted; \
 		echo "[+] Promoted $$f to trusted status."; \
 	done
-
 # Build: Run the orchestrator
 build: setup
 	@echo "--- Starting build ---"
@@ -70,3 +71,7 @@ clean:
 
 help:
 	@echo "Targets: setup, scrub, verify, promote, build, clean"
+
+get-model:
+	mkdir -p models
+	wget -q https://huggingface.co/$(REPO)/resolve/main/$(FILE) -O models/$(FILE)
