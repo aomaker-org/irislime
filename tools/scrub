@@ -1,0 +1,54 @@
+#!/bin/sh
+''''which python3 >/dev/null 2>&1 && exec "$(dirname "$0")/../venv/bin/python3" "$0" "$@" # '''
+# --- PORTABLE VENV WRAPPER ABOVE ---
+
+import os
+import re
+import time
+import datetime
+from pathlib import Path
+import subprocess
+
+def is_ignored(path):
+    result = subprocess.run(["git", "check-ignore", "-q", str(path)], capture_output=True)
+    return result.returncode == 0
+
+def scrub():
+    log_dir = Path(".security_scrub")
+    log_dir.mkdir(exist_ok=True)
+    
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file = log_dir / f"audit_{timestamp}.log"
+    
+    # Simple secret patterns
+    secret_pattern = re.compile(r"(API_KEY|SECRET|PASSWORD|TOKEN|PRIVATE_KEY)", re.IGNORECASE)
+    
+    print("[!] Starting git-aware audit...")
+    file_count = 0
+    last_update = time.time()
+    
+    with open(log_file, "w") as f:
+        f.write(f"--- IrisLime Forensic Audit: {timestamp} ---\n\n")
+        
+        for path in Path(".").rglob("*"):
+            if not path.is_file(): continue
+            if is_ignored(path): continue
+                
+            file_count += 1
+            if time.time() - last_update >= 5:
+                print(f"[...] Audited {file_count} files...")
+                last_update = time.time()
+                
+            try:
+                content = path.read_text(errors="ignore")
+                if secret_pattern.search(content):
+                    f.write(f"  [SECRET] Found in: {path}\n")
+                if str(Path.home()) in content:
+                    f.write(f"  [PATH LEAK] Found in: {path}\n")
+            except Exception:
+                continue
+
+    print(f"[+] Audit complete. Scanned {file_count} files. Log: {log_file}")
+
+if __name__ == "__main__":
+    scrub()
