@@ -1,0 +1,900 @@
+Test project /home/fekerr/src/irislime1/build/cpu_release
+  Test  #1: test-tokenizer-0-bert-bge
+  Test  #2: test-tokenizer-0-command-r
+  Test  #3: test-tokenizer-0-deepseek-coder
+  Test  #4: test-tokenizer-0-deepseek-llm
+  Test  #5: test-tokenizer-0-falcon
+  Test  #6: test-tokenizer-0-gemma-4
+  Test  #7: test-tokenizer-0-gpt-2
+  Test  #8: test-tokenizer-0-llama-bpe
+  Test  #9: test-tokenizer-0-llama-spm
+  Test #10: test-tokenizer-0-mpt
+  Test #11: test-tokenizer-0-phi-3
+  Test #12: test-tokenizer-0-qwen2
+  Test #13: test-tokenizer-0-qwen35
+  Test #14: test-tokenizer-0-refact
+  Test #15: test-tokenizer-0-starcoder
+  Test #16: test-tokenizers-ggml-vocabs
+  Test #17: test-sampling
+  Test #18: test-reasoning-budget
+  Test #19: test-grammar-parser
+  Test #20: test-grammar-integration
+  Test #21: test-llama-grammar
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-chat
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-chat
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-chat
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-chat
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-chat
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-chat
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-chat
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-chat
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-chat
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-chat
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-chat
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-chat
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-chat
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-chat
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-chat
+home/fekerr/src/irislime1/build/cpu_release/bin/test-chat
+home/fekerr/src/irislime1/build/cpu_release/bin/test-chat
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-chat
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-chat
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-chat
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-chat
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-chat
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-chat
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-chat
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-chat
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-chat
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-chat
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-chat
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-chat
+  Test #22: test-chat
+  Test #23: test-json-schema-to-grammar
+  Test #24: test-tokenizer-1-llama-spm
+  Test #25: test-llama-archs
+  Test #26: test-chat-peg-parser
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-jinja
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-jinja
+  Test #27: test-jinja
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-jinja
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-jinja
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-jinja
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-jinja
+  Test #28: test-jinja-py
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-chat-auto-parser
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-chat-auto-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-chat-auto-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-chat-auto-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-chat-auto-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-chat-auto-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-chat-auto-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-chat-auto-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-chat-auto-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-chat-auto-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-chat-auto-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-chat-auto-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-chat-auto-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-chat-auto-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-chat-auto-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/test-chat-auto-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/test-chat-auto-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-chat-auto-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-chat-auto-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-chat-auto-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-chat-auto-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-chat-auto-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-chat-auto-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-chat-auto-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-chat-auto-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-chat-auto-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-chat-auto-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-chat-auto-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-chat-auto-parser
+  Test #29: test-chat-auto-parser
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-chat-template
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-chat-template
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-chat-template
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-chat-template
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-chat-template
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-chat-template
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-chat-template
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-chat-template
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-chat-template
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-chat-template
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-chat-template
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-chat-template
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-chat-template
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-chat-template
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-chat-template
+home/fekerr/src/irislime1/build/cpu_release/bin/test-chat-template
+home/fekerr/src/irislime1/build/cpu_release/bin/test-chat-template
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-chat-template
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-chat-template
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-chat-template
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-chat-template
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-chat-template
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-chat-template
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-chat-template
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-chat-template
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-chat-template
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-chat-template
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-chat-template
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-chat-template
+  Test #30: test-chat-template
+  Test #31: test-json-partial
+  Test #32: test-log
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-peg-parser
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-peg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-peg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-peg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-peg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-peg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-peg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-peg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-peg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-peg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-peg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-peg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-peg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-peg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-peg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/test-peg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/test-peg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-peg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-peg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-peg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-peg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-peg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-peg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-peg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-peg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-peg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-peg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-peg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-peg-parser
+  Test #33: test-peg-parser
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-regex-partial
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-regex-partial
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-regex-partial
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-regex-partial
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-regex-partial
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-regex-partial
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-regex-partial
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-regex-partial
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-regex-partial
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-regex-partial
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-regex-partial
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-regex-partial
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-regex-partial
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-regex-partial
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-regex-partial
+home/fekerr/src/irislime1/build/cpu_release/bin/test-regex-partial
+home/fekerr/src/irislime1/build/cpu_release/bin/test-regex-partial
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-regex-partial
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-regex-partial
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-regex-partial
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-regex-partial
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-regex-partial
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-regex-partial
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-regex-partial
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-regex-partial
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-regex-partial
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-regex-partial
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-regex-partial
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-regex-partial
+  Test #34: test-regex-partial
+  Test #35: test-download-model
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-thread-safety
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-thread-safety
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-thread-safety
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-thread-safety
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-thread-safety
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-thread-safety
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-thread-safety
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-thread-safety
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-thread-safety
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-thread-safety
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-thread-safety
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-thread-safety
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-thread-safety
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-thread-safety
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-thread-safety
+home/fekerr/src/irislime1/build/cpu_release/bin/test-thread-safety
+home/fekerr/src/irislime1/build/cpu_release/bin/test-thread-safety
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-thread-safety
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-thread-safety
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-thread-safety
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-thread-safety
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-thread-safety
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-thread-safety
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-thread-safety
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-thread-safety
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-thread-safety
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-thread-safety
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-thread-safety
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-thread-safety
+  Test #36: test-thread-safety
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-arg-parser
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-arg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-arg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-arg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-arg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-arg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-arg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-arg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-arg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-arg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-arg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-arg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-arg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-arg-parser
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-arg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/test-arg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/test-arg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-arg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-arg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-arg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-arg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-arg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-arg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-arg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-arg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-arg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-arg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-arg-parser
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-arg-parser
+  Test #37: test-arg-parser
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-opt
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-opt
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-opt
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-opt
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-opt
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-opt
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-opt
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-opt
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-opt
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-opt
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-opt
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-opt
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-opt
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-opt
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-opt
+home/fekerr/src/irislime1/build/cpu_release/bin/test-opt
+home/fekerr/src/irislime1/build/cpu_release/bin/test-opt
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-opt
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-opt
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-opt
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-opt
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-opt
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-opt
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-opt
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-opt
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-opt
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-opt
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-opt
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-opt
+  Test #38: test-opt
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-gguf
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-gguf
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-gguf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-gguf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-gguf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-gguf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-gguf
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-gguf
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-gguf
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-gguf
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-gguf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-gguf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-gguf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-gguf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-gguf
+home/fekerr/src/irislime1/build/cpu_release/bin/test-gguf
+home/fekerr/src/irislime1/build/cpu_release/bin/test-gguf
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-gguf
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-gguf
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-gguf
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-gguf
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-gguf
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-gguf
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-gguf
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-gguf
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-gguf
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-gguf
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-gguf
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-gguf
+  Test #39: test-gguf
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-backend-ops
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-backend-ops
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-backend-ops
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-backend-ops
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-backend-ops
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-backend-ops
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-backend-ops
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-backend-ops
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-backend-ops
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-backend-ops
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-backend-ops
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-backend-ops
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-backend-ops
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-backend-ops
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-backend-ops
+home/fekerr/src/irislime1/build/cpu_release/bin/test-backend-ops
+home/fekerr/src/irislime1/build/cpu_release/bin/test-backend-ops
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-backend-ops
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-backend-ops
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-backend-ops
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-backend-ops
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-backend-ops
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-backend-ops
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-backend-ops
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-backend-ops
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-backend-ops
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-backend-ops
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-backend-ops
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-backend-ops
+  Test #40: test-backend-ops
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-model-load-cancel
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-model-load-cancel
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-model-load-cancel
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-model-load-cancel
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-model-load-cancel
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-model-load-cancel
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-model-load-cancel
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-model-load-cancel
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-model-load-cancel
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-model-load-cancel
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-model-load-cancel
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-model-load-cancel
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-model-load-cancel
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-model-load-cancel
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-model-load-cancel
+home/fekerr/src/irislime1/build/cpu_release/bin/test-model-load-cancel
+home/fekerr/src/irislime1/build/cpu_release/bin/test-model-load-cancel
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-model-load-cancel
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-model-load-cancel
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-model-load-cancel
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-model-load-cancel
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-model-load-cancel
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-model-load-cancel
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-model-load-cancel
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-model-load-cancel
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-model-load-cancel
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-model-load-cancel
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-model-load-cancel
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-model-load-cancel
+  Test #41: test-model-load-cancel
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-autorelease
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-autorelease
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-autorelease
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-autorelease
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-autorelease
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-autorelease
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-autorelease
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-autorelease
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-autorelease
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-autorelease
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-autorelease
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-autorelease
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-autorelease
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-autorelease
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-autorelease
+home/fekerr/src/irislime1/build/cpu_release/bin/test-autorelease
+home/fekerr/src/irislime1/build/cpu_release/bin/test-autorelease
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-autorelease
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-autorelease
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-autorelease
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-autorelease
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-autorelease
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-autorelease
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-autorelease
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-autorelease
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-autorelease
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-autorelease
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-autorelease
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-autorelease
+  Test #42: test-autorelease
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-backend-sampler
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-backend-sampler
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-backend-sampler
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-backend-sampler
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-backend-sampler
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-backend-sampler
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-backend-sampler
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-backend-sampler
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-backend-sampler
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-backend-sampler
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-backend-sampler
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-backend-sampler
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-backend-sampler
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-backend-sampler
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-backend-sampler
+home/fekerr/src/irislime1/build/cpu_release/bin/test-backend-sampler
+home/fekerr/src/irislime1/build/cpu_release/bin/test-backend-sampler
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-backend-sampler
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-backend-sampler
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-backend-sampler
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-backend-sampler
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-backend-sampler
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-backend-sampler
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-backend-sampler
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-backend-sampler
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-backend-sampler
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-backend-sampler
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-backend-sampler
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-backend-sampler
+  Test #43: test-backend-sampler
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-state-restore-fragmented
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-state-restore-fragmented
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-state-restore-fragmented
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-state-restore-fragmented
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-state-restore-fragmented
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-state-restore-fragmented
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-state-restore-fragmented
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-state-restore-fragmented
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-state-restore-fragmented
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-state-restore-fragmented
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-state-restore-fragmented
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-state-restore-fragmented
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-state-restore-fragmented
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-state-restore-fragmented
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-state-restore-fragmented
+home/fekerr/src/irislime1/build/cpu_release/bin/test-state-restore-fragmented
+home/fekerr/src/irislime1/build/cpu_release/bin/test-state-restore-fragmented
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-state-restore-fragmented
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-state-restore-fragmented
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-state-restore-fragmented
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-state-restore-fragmented
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-state-restore-fragmented
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-state-restore-fragmented
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-state-restore-fragmented
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-state-restore-fragmented
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-state-restore-fragmented
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-state-restore-fragmented
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-state-restore-fragmented
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-state-restore-fragmented
+  Test #44: test-state-restore-fragmented
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-recurrent-state-rollback
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-recurrent-state-rollback
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-recurrent-state-rollback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-recurrent-state-rollback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-recurrent-state-rollback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-recurrent-state-rollback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-recurrent-state-rollback
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-recurrent-state-rollback
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-recurrent-state-rollback
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-recurrent-state-rollback
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-recurrent-state-rollback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-recurrent-state-rollback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-recurrent-state-rollback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-recurrent-state-rollback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-recurrent-state-rollback
+home/fekerr/src/irislime1/build/cpu_release/bin/test-recurrent-state-rollback
+home/fekerr/src/irislime1/build/cpu_release/bin/test-recurrent-state-rollback
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-recurrent-state-rollback
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-recurrent-state-rollback
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-recurrent-state-rollback
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-recurrent-state-rollback
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-recurrent-state-rollback
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-recurrent-state-rollback
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-recurrent-state-rollback
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-recurrent-state-rollback
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-recurrent-state-rollback
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-recurrent-state-rollback
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-recurrent-state-rollback
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-recurrent-state-rollback
+  Test #45: test-recurrent-state-rollback
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-save-load-state
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-save-load-state
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-save-load-state
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-save-load-state
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-save-load-state
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-save-load-state
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-save-load-state
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-save-load-state
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-save-load-state
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-save-load-state
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-save-load-state
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-save-load-state
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-save-load-state
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-save-load-state
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-save-load-state
+home/fekerr/src/irislime1/build/cpu_release/bin/test-save-load-state
+home/fekerr/src/irislime1/build/cpu_release/bin/test-save-load-state
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-save-load-state
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-save-load-state
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-save-load-state
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-save-load-state
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-save-load-state
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-save-load-state
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-save-load-state
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-save-load-state
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-save-load-state
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-save-load-state
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-save-load-state
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-save-load-state
+  Test #46: test-save-load-state
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-barrier
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-barrier
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-barrier
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-barrier
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-barrier
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-barrier
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-barrier
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-barrier
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-barrier
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-barrier
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-barrier
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-barrier
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-barrier
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-barrier
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-barrier
+home/fekerr/src/irislime1/build/cpu_release/bin/test-barrier
+home/fekerr/src/irislime1/build/cpu_release/bin/test-barrier
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-barrier
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-barrier
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-barrier
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-barrier
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-barrier
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-barrier
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-barrier
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-barrier
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-barrier
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-barrier
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-barrier
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-barrier
+  Test #47: test-barrier
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-quantize-fns
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-quantize-fns
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-quantize-fns
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-quantize-fns
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-quantize-fns
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-quantize-fns
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-quantize-fns
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-quantize-fns
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-quantize-fns
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-quantize-fns
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-quantize-fns
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-quantize-fns
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-quantize-fns
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-quantize-fns
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-quantize-fns
+home/fekerr/src/irislime1/build/cpu_release/bin/test-quantize-fns
+home/fekerr/src/irislime1/build/cpu_release/bin/test-quantize-fns
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-quantize-fns
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-quantize-fns
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-quantize-fns
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-quantize-fns
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-quantize-fns
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-quantize-fns
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-quantize-fns
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-quantize-fns
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-quantize-fns
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-quantize-fns
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-quantize-fns
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-quantize-fns
+  Test #48: test-quantize-fns
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-quantize-perf
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-quantize-perf
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-quantize-perf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-quantize-perf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-quantize-perf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-quantize-perf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-quantize-perf
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-quantize-perf
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-quantize-perf
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-quantize-perf
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-quantize-perf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-quantize-perf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-quantize-perf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-quantize-perf
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-quantize-perf
+home/fekerr/src/irislime1/build/cpu_release/bin/test-quantize-perf
+home/fekerr/src/irislime1/build/cpu_release/bin/test-quantize-perf
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-quantize-perf
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-quantize-perf
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-quantize-perf
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-quantize-perf
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-quantize-perf
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-quantize-perf
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-quantize-perf
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-quantize-perf
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-quantize-perf
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-quantize-perf
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-quantize-perf
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-quantize-perf
+  Test #49: test-quantize-perf
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-rope
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-rope
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-rope
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-rope
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-rope
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-rope
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-rope
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-rope
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-rope
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-rope
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-rope
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-rope
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-rope
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-rope
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-rope
+home/fekerr/src/irislime1/build/cpu_release/bin/test-rope
+home/fekerr/src/irislime1/build/cpu_release/bin/test-rope
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-rope
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-rope
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-rope
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-rope
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-rope
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-rope
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-rope
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-rope
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-rope
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-rope
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-rope
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-rope
+  Test #50: test-rope
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-col2im-1d
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-col2im-1d
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-col2im-1d
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-col2im-1d
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-col2im-1d
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-col2im-1d
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-col2im-1d
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-col2im-1d
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-col2im-1d
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-col2im-1d
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-col2im-1d
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-col2im-1d
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-col2im-1d
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-col2im-1d
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-col2im-1d
+home/fekerr/src/irislime1/build/cpu_release/bin/test-col2im-1d
+home/fekerr/src/irislime1/build/cpu_release/bin/test-col2im-1d
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-col2im-1d
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-col2im-1d
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-col2im-1d
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-col2im-1d
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-col2im-1d
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-col2im-1d
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-col2im-1d
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-col2im-1d
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-col2im-1d
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-col2im-1d
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-col2im-1d
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-col2im-1d
+  Test #51: test-col2im-1d
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-mtmd-c-api
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-mtmd-c-api
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-mtmd-c-api
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-mtmd-c-api
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-mtmd-c-api
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-mtmd-c-api
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-mtmd-c-api
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-mtmd-c-api
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-mtmd-c-api
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-mtmd-c-api
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-mtmd-c-api
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-mtmd-c-api
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-mtmd-c-api
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-mtmd-c-api
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-mtmd-c-api
+home/fekerr/src/irislime1/build/cpu_release/bin/test-mtmd-c-api
+home/fekerr/src/irislime1/build/cpu_release/bin/test-mtmd-c-api
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-mtmd-c-api
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-mtmd-c-api
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-mtmd-c-api
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-mtmd-c-api
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-mtmd-c-api
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-mtmd-c-api
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-mtmd-c-api
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-mtmd-c-api
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-mtmd-c-api
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-mtmd-c-api
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-mtmd-c-api
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-mtmd-c-api
+  Test #52: test-mtmd-c-api
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-gguf-model-data
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-gguf-model-data
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-gguf-model-data
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-gguf-model-data
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-gguf-model-data
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-gguf-model-data
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-gguf-model-data
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-gguf-model-data
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-gguf-model-data
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-gguf-model-data
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-gguf-model-data
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-gguf-model-data
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-gguf-model-data
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-gguf-model-data
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-gguf-model-data
+home/fekerr/src/irislime1/build/cpu_release/bin/test-gguf-model-data
+home/fekerr/src/irislime1/build/cpu_release/bin/test-gguf-model-data
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-gguf-model-data
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-gguf-model-data
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-gguf-model-data
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-gguf-model-data
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-gguf-model-data
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-gguf-model-data
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-gguf-model-data
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-gguf-model-data
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-gguf-model-data
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-gguf-model-data
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-gguf-model-data
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-gguf-model-data
+  Test #53: test-gguf-model-data
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-quant-type-selection
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-quant-type-selection
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-quant-type-selection
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-quant-type-selection
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-quant-type-selection
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-quant-type-selection
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-quant-type-selection
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-quant-type-selection
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-quant-type-selection
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-quant-type-selection
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-quant-type-selection
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-quant-type-selection
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-quant-type-selection
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-quant-type-selection
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-quant-type-selection
+home/fekerr/src/irislime1/build/cpu_release/bin/test-quant-type-selection
+home/fekerr/src/irislime1/build/cpu_release/bin/test-quant-type-selection
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-quant-type-selection
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-quant-type-selection
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-quant-type-selection
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-quant-type-selection
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-quant-type-selection
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-quant-type-selection
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-quant-type-selection
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-quant-type-selection
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-quant-type-selection
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-quant-type-selection
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-quant-type-selection
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-quant-type-selection
+  Test #54: test-quant-type-selection
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/test-alloc
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-alloc
+/home/fekerr/src/irislime1/build/cpu_release/bin/test-alloc
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-alloc
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-alloc
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-alloc
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-alloc
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-alloc
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-alloc
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-alloc
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-alloc
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-alloc
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-alloc
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-alloc
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-alloc
+home/fekerr/src/irislime1/build/cpu_release/bin/test-alloc
+home/fekerr/src/irislime1/build/cpu_release/bin/test-alloc
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-alloc
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/test-alloc
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-alloc
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/test-alloc
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-alloc
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/test-alloc
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-alloc
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/test-alloc
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-alloc
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/test-alloc
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-alloc
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/test-alloc
+  Test #55: test-alloc
+  Test #56: test-eval-callback-download-model
+Could not find executable /home/fekerr/src/irislime1/build/cpu_release/bin/llama-eval-callback
+Looked in the following places:
+/home/fekerr/src/irislime1/build/cpu_release/bin/llama-eval-callback
+/home/fekerr/src/irislime1/build/cpu_release/bin/llama-eval-callback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/llama-eval-callback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Release/llama-eval-callback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/llama-eval-callback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Debug/llama-eval-callback
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/llama-eval-callback
+/home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/llama-eval-callback
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/llama-eval-callback
+/home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/llama-eval-callback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/llama-eval-callback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/llama-eval-callback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/llama-eval-callback
+/home/fekerr/src/irislime1/build/cpu_release/bin/Development/llama-eval-callback
+home/fekerr/src/irislime1/build/cpu_release/bin/llama-eval-callback
+home/fekerr/src/irislime1/build/cpu_release/bin/llama-eval-callback
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/llama-eval-callback
+home/fekerr/src/irislime1/build/cpu_release/bin/Release/llama-eval-callback
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/llama-eval-callback
+home/fekerr/src/irislime1/build/cpu_release/bin/Debug/llama-eval-callback
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/llama-eval-callback
+home/fekerr/src/irislime1/build/cpu_release/bin/MinSizeRel/llama-eval-callback
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/llama-eval-callback
+home/fekerr/src/irislime1/build/cpu_release/bin/RelWithDebInfo/llama-eval-callback
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/llama-eval-callback
+home/fekerr/src/irislime1/build/cpu_release/bin/Deployment/llama-eval-callback
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/llama-eval-callback
+home/fekerr/src/irislime1/build/cpu_release/bin/Development/llama-eval-callback
+  Test #57: test-eval-callback
+
+Total Tests: 57

@@ -62,3 +62,4 @@ cmake_install.cmake
 Thumbs.db
 *~
 models/
+.config/gemini/

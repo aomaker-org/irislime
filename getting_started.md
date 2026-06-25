@@ -68,8 +68,16 @@ Always initialize the local environment variables before building or running:
 
 ```bash
 source config_env
-
 ```
+
+**For VS Code:** Source `config_env` in your terminal *before* launching `code .` so that VS Code's integrated terminal inherits the environment:
+
+```bash
+source config_env
+code .
+```
+
+This ensures that all build commands, tasks, and extensions run with the correct compiler, paths, and Intel oneAPI settings.
 
 ## 5. Architectural Rationale
 

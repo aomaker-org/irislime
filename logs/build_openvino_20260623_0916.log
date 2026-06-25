@@ -1,0 +1,137 @@
+============================================================
+🔨 STARTING ATOMIC BUILD RUN: 20260623_0916
+PROJECT ROOT: /home/fekerr/src/irislime1
+============================================================
+CMAKE_BUILD_TYPE=Release
+-- ccache found, compilation results will be cached. Disable with GGML_CCACHE=OFF.
+-- CMAKE_SYSTEM_PROCESSOR: x86_64
+-- GGML_SYSTEM_ARCH: x86
+-- Including CPU backend
+-- x86 detected
+-- Adding CPU backend variant ggml-cpu: -march=native 
+-- Including OPENVINO backend
+-- ggml version: 0.15.2
+-- ggml commit:  84de01a1f-dirty
+-- OpenSSL found: 3.0.13
+-- Generating embedded license file for target: llama-app
+-- Configuring done (0.9s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/fekerr/src/irislime1/build/openvino_release
+============================================================
+🚀 RUNNING COMPILATION PASS...
+============================================================
+[  0%] Building CXX object common/CMakeFiles/llama-common-base.dir/build-info.cpp.o
+[  0%] Building CXX object vendor/cpp-httplib/CMakeFiles/cpp-httplib.dir/httplib.cpp.o
+[  0%] Building C object ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o
+[  0%] Building CXX object tools/ui/CMakeFiles/llama-ui-embed.dir/embed.cpp.o
+[  0%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml.cpp.o
+[  0%] Linking CXX static library libllama-common-base.a
+[  1%] Building C object ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o
+[  1%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o
+[  2%] Linking CXX executable llama-ui-embed
+[  2%] Built target llama-common-base
+[  2%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml-backend-meta.cpp.o
+[  2%] Building CXX object tools/mtmd/CMakeFiles/llama-llava-cli.dir/deprecation-warning.cpp.o
+[  3%] Linking CXX executable ../../bin/llama-llava-cli
+[  3%] Linking CXX static library libcpp-httplib.a
+[  3%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml-opt.cpp.o
+[  3%] Built target cpp-httplib
+[  3%] Building CXX object tools/mtmd/CMakeFiles/llama-gemma3-cli.dir/deprecation-warning.cpp.o
+[  3%] Linking CXX executable ../../bin/llama-gemma3-cli
+[  4%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml-threading.cpp.o
+[  4%] Built target llama-ui-embed
+[  4%] Building CXX object tools/mtmd/CMakeFiles/llama-minicpmv-cli.dir/deprecation-warning.cpp.o
+[  4%] Linking CXX executable ../../bin/llama-minicpmv-cli
+[  4%] Building C object ggml/src/CMakeFiles/ggml-base.dir/ggml-quants.c.o
+[  4%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/gguf.cpp.o
+[  4%] Built target llama-llava-cli
+[  4%] Building CXX object tools/mtmd/CMakeFiles/llama-qwen2vl-cli.dir/deprecation-warning.cpp.o
+[  4%] Linking CXX shared library ../../bin/libggml-base.so
+[  5%] Linking CXX executable ../../bin/llama-qwen2vl-cli
+[  5%] Built target llama-gemma3-cli
+[  5%] Built target llama-minicpmv-cli
+[  5%] Provisioning UI assets
+-- UI: running npm install
+[  5%] Built target llama-qwen2vl-cli
+[  5%] Built target ggml-base
+[  6%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/ggml-decoder.cpp.o
+[  6%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/ggml-openvino-extra.cpp.o
+[  7%] Building C object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.c.o
+[  7%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o
+[  7%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/repack.cpp.o
+[  7%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/ggml-openvino.cpp.o
+[  7%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/hbm.cpp.o
+[  8%] Building C object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/quants.c.o
+[  8%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/traits.cpp.o
+[  8%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o
+[  8%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o
+[  9%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/binary-ops.cpp.o
+[  9%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/unary-ops.cpp.o
+-- UI: npm install failed (1)
+--   stderr: npm ERR! code EBADENGINE
+npm ERR! engine Unsupported engine
+npm ERR! engine Not compatible with your version of node/npm: @chromatic-com/storybook@5.0.0
+npm ERR! notsup Not compatible with your version of node/npm: @chromatic-com/storybook@5.0.0
+npm ERR! notsup Required: {"node":">=20.0.0","yarn":">=1.22.18"}
+npm ERR! notsup Actual:   {"npm":"9.2.0"}
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/fekerr/.npm/_logs/2026-06-23T16_16_57_055Z-debug-0.log
+
+-- UI: HF stamp 'b9741' matches version, skipping HF fetch
+[  9%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/vec.cpp.o
+[  9%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ops.cpp.o
+-- UI: gzip compression applied (/home/fekerr/src/irislime1/build/openvino_release/tools/ui/dist/_gzip)
+[ 10%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile/sgemm.cpp.o
+[ 10%] Built target llama-ui-assets
+[ 10%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/ggml-quants.cpp.o
+[ 10%] Building C object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/quants.c.o
+[ 10%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/repack.cpp.o
+[ 10%] Linking CXX shared library ../../bin/libggml-cpu.so
+[ 10%] Built target ggml-cpu
+[ 11%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/frontend.cpp.o
+In file included from /home/fekerr/src/openvino/src/inference/include/openvino/runtime/intel_gpu/ocl/ocl_wrapper.hpp:50,
+                 from /home/fekerr/src/openvino/src/inference/include/openvino/runtime/intel_gpu/ocl/ocl.hpp:17,
+                 from /home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/ggml-openvino-extra.cpp:8:
+/usr/include/CL/cl2.hpp:18:151: note: ‘#pragma message: cl2.hpp has been renamed to opencl.hpp to make it clear that it supports all versions of OpenCL. Please include opencl.hpp directly.’
+   18 | #pragma message("cl2.hpp has been renamed to opencl.hpp to make it clear that it supports all versions of OpenCL. Please include opencl.hpp directly.")
+      |                                                                                                                                                       ^
+[ 12%] Building CXX object tools/ui/CMakeFiles/llama-ui.dir/ui.cpp.o
+[ 12%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/input_model.cpp.o
+[ 12%] Linking CXX static library libllama-ui.a
+[ 12%] Built target llama-ui
+[ 12%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/add_id.cpp.o
+In file included from /home/fekerr/src/openvino/src/core/include/openvino/runtime/tensor.hpp:18,
+                 from /home/fekerr/src/openvino/src/core/include/openvino/core/descriptor/tensor.hpp:19,
+                 from /home/fekerr/src/openvino/src/core/include/openvino/core/descriptor/input.hpp:11,
+                 from /home/fekerr/src/openvino/src/core/include/openvino/core/node.hpp:24,
+                 from /home/fekerr/src/openvino/src/core/include/openvino/core/model.hpp:18,
+                 from /home/fekerr/src/openvino/src/inference/include/openvino/runtime/core.hpp:19,
+                 from /home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/ggml-openvino-extra.h:4,
+                 from /home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/ggml-quants.h:2,
+                 from /home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/ggml-quants.cpp:1:
+/home/fekerr/src/openvino/src/core/include/openvino/runtime/allocator.hpp: In instantiation of ‘void* ov::Allocator::Impl<A>::allocate(size_t, size_t) [with A = const void*; size_t = long unsigned int]’:
+/home/fekerr/src/openvino/src/core/include/openvino/runtime/allocator.hpp:64:15:   required from here
+/home/fekerr/src/openvino/src/core/include/openvino/runtime/allocator.hpp:65:22: error: request for member ‘allocate’ in ‘((ov::Allocator::Impl<const void*>*)this)->ov::Allocator::Impl<const void*>::a’, which is of non-class type ‘const void*’
+   65 |             return a.allocate(bytes, alignment);
+      |                    ~~^~~~~~~~
+/home/fekerr/src/openvino/src/core/include/openvino/runtime/allocator.hpp: In instantiation of ‘void ov::Allocator::Impl<A>::deallocate(void*, size_t, size_t) [with A = const void*; size_t = long unsigned int]’:
+/home/fekerr/src/openvino/src/core/include/openvino/runtime/allocator.hpp:67:14:   required from here
+/home/fekerr/src/openvino/src/core/include/openvino/runtime/allocator.hpp:68:15: error: request for member ‘deallocate’ in ‘((ov::Allocator::Impl<const void*>*)this)->ov::Allocator::Impl<const void*>::a’, which is of non-class type ‘const void*’
+   68 |             a.deallocate(handle, bytes, alignment);
+      |             ~~^~~~~~~~~~
+/home/fekerr/src/openvino/src/core/include/openvino/runtime/allocator.hpp: In instantiation of ‘bool ov::Allocator::Impl<A>::is_equal(const ov::Allocator::Base&) const [with A = const void*]’:
+/home/fekerr/src/openvino/src/core/include/openvino/runtime/allocator.hpp:70:14:   required from here
+/home/fekerr/src/openvino/src/core/include/openvino/runtime/allocator.hpp:72:26: error: request for member ‘is_equal’ in ‘((const ov::Allocator::Impl<const void*>*)this)->ov::Allocator::Impl<const void*>::a’, which is of non-class type ‘const void* const’
+   72 |                 return a.is_equal(*static_cast<const A*>(other.addressof()));
+      |                        ~~^~~~~~~~
+make[2]: *** [ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/build.make:118: ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/ggml-quants.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+In file included from /home/fekerr/src/openvino/src/inference/include/openvino/runtime/intel_gpu/ocl/ocl_wrapper.hpp:50,
+                 from /home/fekerr/src/openvino/src/inference/include/openvino/runtime/intel_gpu/ocl/ocl.hpp:17,
+                 from /home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/ggml-openvino.cpp:21:
+/usr/include/CL/cl2.hpp:18:151: note: ‘#pragma message: cl2.hpp has been renamed to opencl.hpp to make it clear that it supports all versions of OpenCL. Please include opencl.hpp directly.’
+   18 | #pragma message("cl2.hpp has been renamed to opencl.hpp to make it clear that it supports all versions of OpenCL. Please include opencl.hpp directly.")
+      |                                                                                                                                                       ^
+make[1]: *** [CMakeFiles/Makefile2:681: ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/all] Error 2
+make: *** [Makefile:136: all] Error 2

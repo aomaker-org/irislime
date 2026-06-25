@@ -1,0 +1,52 @@
+=== CASE: openvino_release ===
+timestamp: 2026-06-24T02:07:53-07:00
+binary: /home/fekerr/src/irislime1/build/openvino_release/bin/llama-cli
+model: /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+prompt: The quick brown fox jumps over the lazy dog.
+extra_args: --n-gpu-layers 99
+
+
+Loading model... 
+
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b9741-84de01a1f
+model      : /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+> 
+0.13.503.837 E GGML OpenVINO backend ov::Exception: Exception from src/inference/src/cpp/infer_request.cpp:103:
+Exception from src/inference/src/cpp/infer_request.cpp:66:
+Check 'shape.compatible(ov::PartialShape(tensor->get_shape())) || tensor->get_shape() == ov::Shape {0} || port.get_partial_shape().is_dynamic()' failed at src/plugins/intel_gpu/src/plugin/sync_infer_request.cpp:167:
+[GPU] The tensor size is not equal to model, can't set input tensor with index: 0, because model input (shape=[1,2,4,64]) and tensor (shape=[1,29,4,64]) are incompatible
+
+
+
+0.13.503.881 E graph_compute: ggml_backend_sched_graph_compute_async failed with error -1
+0.13.503.881 E process_ubatch: failed to compute graph, compute status: -1
+0.13.503.898 E llama_decode: failed to decode, ret = -3
+0.13.503.907 E srv  update_slots: Compute error. i = 0, n_batch = 2048, ret = -3
+0.13.503.910 E srv    send_error: task id = 0, error: Compute error.
+Error: Compute error.
+
+
+[ Prompt: 0.0 t/s | Generation: 0.0 t/s ]
+
+> 
+
+Exiting...

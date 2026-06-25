@@ -1,0 +1,213 @@
+CMAKE_BUILD_TYPE=Release
+-- ccache found, compilation results will be cached. Disable with GGML_CCACHE=OFF.
+-- CMAKE_SYSTEM_PROCESSOR: x86_64
+-- GGML_SYSTEM_ARCH: x86
+-- Including CPU backend
+-- x86 detected
+-- Adding CPU backend variant ggml-cpu: -march=native 
+-- Including OPENVINO backend
+-- ggml version: 0.15.2
+-- ggml commit:  84de01a1f-dirty
+-- OpenSSL found: 3.0.13
+-- Generating embedded license file for target: llama-app
+-- Configuring done (1.0s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/fekerr/src/irislime1/build/openvino_release
+============================================================
+🚀 RUNNING COMPILATION PASS...
+============================================================
+[  0%] Building CXX object common/CMakeFiles/llama-common-base.dir/build-info.cpp.o
+[  0%] Building CXX object vendor/cpp-httplib/CMakeFiles/cpp-httplib.dir/httplib.cpp.o
+[  0%] Building C object ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o
+[  0%] Building CXX object tools/ui/CMakeFiles/llama-ui-embed.dir/embed.cpp.o
+[  0%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml.cpp.o
+[  0%] Linking CXX static library libllama-common-base.a
+[  1%] Building C object ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o
+[  2%] Linking CXX executable llama-ui-embed
+[  2%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o
+[  2%] Built target llama-common-base
+[  2%] Building CXX object tools/mtmd/CMakeFiles/llama-llava-cli.dir/deprecation-warning.cpp.o
+[  2%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml-backend-meta.cpp.o
+[  3%] Linking CXX executable ../../bin/llama-llava-cli
+[  3%] Linking CXX static library libcpp-httplib.a
+[  3%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml-opt.cpp.o
+[  3%] Built target llama-ui-embed
+[  3%] Built target cpp-httplib
+[  3%] Building CXX object tools/mtmd/CMakeFiles/llama-gemma3-cli.dir/deprecation-warning.cpp.o
+[  3%] Building CXX object tools/mtmd/CMakeFiles/llama-minicpmv-cli.dir/deprecation-warning.cpp.o
+[  3%] Linking CXX executable ../../bin/llama-gemma3-cli
+[  3%] Linking CXX executable ../../bin/llama-minicpmv-cli
+[  4%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml-threading.cpp.o
+[  4%] Building C object ggml/src/CMakeFiles/ggml-base.dir/ggml-quants.c.o
+[  4%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/gguf.cpp.o
+[  4%] Built target llama-llava-cli
+[  4%] Building CXX object tools/mtmd/CMakeFiles/llama-qwen2vl-cli.dir/deprecation-warning.cpp.o
+[  5%] Linking CXX executable ../../bin/llama-qwen2vl-cli
+[  5%] Linking CXX shared library ../../bin/libggml-base.so
+[  5%] Built target llama-minicpmv-cli
+[  5%] Built target llama-gemma3-cli
+[  5%] Provisioning UI assets
+-- UI: running npm install
+[  5%] Built target llama-qwen2vl-cli
+[  5%] Built target ggml-base
+[  6%] Building C object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.c.o
+[  6%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o
+[  6%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/repack.cpp.o
+[  7%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/ggml-decoder.cpp.o
+[  7%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/ggml-openvino-extra.cpp.o
+[  7%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/hbm.cpp.o
+[  8%] Building C object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/quants.c.o
+[  8%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/traits.cpp.o
+[  8%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/ggml-openvino.cpp.o
+In file included from /home/fekerr/src/openvino/src/inference/include/openvino/runtime/intel_gpu/ocl/ocl_wrapper.hpp:50,
+                 from /home/fekerr/src/openvino/src/inference/include/openvino/runtime/intel_gpu/ocl/ocl.hpp:17,
+                 from /home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/ggml-openvino-extra.cpp:8:
+/usr/include/CL/cl2.hpp:18:151: note: ‘#pragma message: cl2.hpp has been renamed to opencl.hpp to make it clear that it supports all versions of OpenCL. Please include opencl.hpp directly.’
+   18 | #pragma message("cl2.hpp has been renamed to opencl.hpp to make it clear that it supports all versions of OpenCL. Please include opencl.hpp directly.")
+      |                                                                                                                                                       ^
+[  8%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o
+[  8%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/ggml-quants.cpp.o
+In file included from /home/fekerr/src/openvino/src/inference/include/openvino/runtime/intel_gpu/ocl/ocl_wrapper.hpp:50,
+                 from /home/fekerr/src/openvino/src/inference/include/openvino/runtime/intel_gpu/ocl/ocl.hpp:17,
+                 from /home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/ggml-openvino.cpp:21:
+/usr/include/CL/cl2.hpp:18:151: note: ‘#pragma message: cl2.hpp has been renamed to opencl.hpp to make it clear that it supports all versions of OpenCL. Please include opencl.hpp directly.’
+   18 | #pragma message("cl2.hpp has been renamed to opencl.hpp to make it clear that it supports all versions of OpenCL. Please include opencl.hpp directly.")
+      |                                                                                                                                                       ^
+[  8%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o
+[  9%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/binary-ops.cpp.o
+[ 10%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/frontend.cpp.o
+[ 10%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/unary-ops.cpp.o
+[ 10%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/vec.cpp.o
+[ 10%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/input_model.cpp.o
+[ 10%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ops.cpp.o
+[ 11%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile/sgemm.cpp.o
+[ 11%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/add_id.cpp.o
+[ 11%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/argsort.cpp.o
+[ 11%] Building C object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/quants.c.o
+[ 12%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/clamp.cpp.o
+[ 12%] Building CXX object ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/repack.cpp.o
+-- UI: npm install failed (1)
+--   stderr: npm ERR! code EBADENGINE
+npm ERR! engine Unsupported engine
+npm ERR! engine Not compatible with your version of node/npm: @chromatic-com/storybook@5.0.0
+npm ERR! notsup Not compatible with your version of node/npm: @chromatic-com/storybook@5.0.0
+npm ERR! notsup Required: {"node":">=20.0.0","yarn":">=1.22.18"}
+npm ERR! notsup Actual:   {"npm":"9.2.0"}
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/fekerr/.npm/_logs/2026-06-23T16_40_01_589Z-debug-0.log
+
+-- UI: HF stamp 'b9741' matches version, skipping HF fetch
+[ 12%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/concat.cpp.o
+[ 12%] Linking CXX shared library ../../bin/libggml-cpu.so
+[ 12%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/cont.cpp.o
+[ 12%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/cpy.cpp.o
+[ 13%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/div.cpp.o
+[ 13%] Built target ggml-cpu
+[ 13%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/flash_attn_ext.cpp.o
+-- UI: gzip compression applied (/home/fekerr/src/irislime1/build/openvino_release/tools/ui/dist/_gzip)
+[ 13%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/gated_delta_net.cpp.o
+[ 13%] Built target llama-ui-assets
+[ 14%] Building CXX object tools/ui/CMakeFiles/llama-ui.dir/ui.cpp.o
+[ 14%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/get_rows.cpp.o
+[ 15%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/glu_geglu.cpp.o
+[ 15%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/glu_swiglu.cpp.o
+[ 15%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/im2col.cpp.o
+[ 15%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/l2_norm.cpp.o
+[ 16%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/mul_mat_id.cpp.o
+[ 16%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/mulmat.cpp.o
+[ 16%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/norm.cpp.o
+[ 16%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/pad.cpp.o
+[ 16%] Linking CXX static library libllama-ui.a
+[ 17%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/permute.cpp.o
+[ 17%] Built target llama-ui
+[ 17%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/repeat.cpp.o
+[ 17%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/reshape.cpp.o
+[ 17%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/rms_norm.cpp.o
+[ 18%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/rope.cpp.o
+[ 18%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/scale.cpp.o
+[ 18%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/set_rows.cpp.o
+[ 18%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/softmax.cpp.o
+[ 19%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/ssm_conv.cpp.o
+[ 19%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/sum_rows.cpp.o
+[ 19%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/transpose.cpp.o
+[ 20%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/unary_silu.cpp.o
+[ 20%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/unary_softplus.cpp.o
+[ 20%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op/view.cpp.o
+[ 20%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/op_table.cpp.o
+[ 21%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/pass/fuse_to_sdpa.cpp.o
+[ 21%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/pass/squeeze_matmul.cpp.o
+[ 21%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/translate_session.cpp.o
+[ 21%] Building CXX object ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/utils.cpp.o
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/fuse_to_sdpa.h:10:32: error: expected identifier before string constant
+   10 |     OPENVINO_MATCHER_PASS_RTTI("ov::frontend::ggml::pass::FuseToSDPA")
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<command-line>: note: in definition of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/fuse_to_sdpa.h:10:32: error: expected ‘,’ or ‘...’ before string constant
+   10 |     OPENVINO_MATCHER_PASS_RTTI("ov::frontend::ggml::pass::FuseToSDPA")
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<command-line>: note: in definition of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+<command-line>: error: ISO C++ forbids declaration of ‘OPENVINO_RTTI_BASE’ with no type [-fpermissive]
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/fuse_to_sdpa.h:10:5: note: in expansion of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+   10 |     OPENVINO_MATCHER_PASS_RTTI("ov::frontend::ggml::pass::FuseToSDPA")
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+<command-line>: error: expected ‘;’ at end of member declaration
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/fuse_to_sdpa.h:10:5: note: in expansion of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+   10 |     OPENVINO_MATCHER_PASS_RTTI("ov::frontend::ggml::pass::FuseToSDPA")
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+make[2]: *** [ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/build.make:622: ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/pass/fuse_to_sdpa.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/squeeze_matmul.h:10:32: error: expected identifier before string constant
+   10 |     OPENVINO_MATCHER_PASS_RTTI("ov::frontend::ggml::pass::SqueezeMatmul")
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<command-line>: note: in definition of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/squeeze_matmul.h:10:32: error: expected ‘,’ or ‘...’ before string constant
+   10 |     OPENVINO_MATCHER_PASS_RTTI("ov::frontend::ggml::pass::SqueezeMatmul")
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<command-line>: note: in definition of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+<command-line>: error: ISO C++ forbids declaration of ‘OPENVINO_RTTI_BASE’ with no type [-fpermissive]
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/squeeze_matmul.h:10:5: note: in expansion of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+   10 |     OPENVINO_MATCHER_PASS_RTTI("ov::frontend::ggml::pass::SqueezeMatmul")
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+<command-line>: error: expected ‘;’ at end of member declaration
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/squeeze_matmul.h:10:5: note: in expansion of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+   10 |     OPENVINO_MATCHER_PASS_RTTI("ov::frontend::ggml::pass::SqueezeMatmul")
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+make[2]: *** [ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/build.make:636: ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/pass/squeeze_matmul.cpp.o] Error 1
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/mark_decompression_convert_constant_folding.h:27:32: error: expected identifier before string constant
+   27 |     OPENVINO_MATCHER_PASS_RTTI("MarkCompressedFloatConstants")
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<command-line>: note: in definition of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/mark_decompression_convert_constant_folding.h:27:32: error: expected ‘,’ or ‘...’ before string constant
+   27 |     OPENVINO_MATCHER_PASS_RTTI("MarkCompressedFloatConstants")
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<command-line>: note: in definition of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+<command-line>: error: ISO C++ forbids declaration of ‘OPENVINO_RTTI_BASE’ with no type [-fpermissive]
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/mark_decompression_convert_constant_folding.h:27:5: note: in expansion of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+   27 |     OPENVINO_MATCHER_PASS_RTTI("MarkCompressedFloatConstants")
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+<command-line>: error: expected ‘;’ at end of member declaration
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/mark_decompression_convert_constant_folding.h:27:5: note: in expansion of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+   27 |     OPENVINO_MATCHER_PASS_RTTI("MarkCompressedFloatConstants")
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/squeeze_matmul.h:10:32: error: expected identifier before string constant
+   10 |     OPENVINO_MATCHER_PASS_RTTI("ov::frontend::ggml::pass::SqueezeMatmul")
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<command-line>: note: in definition of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/squeeze_matmul.h:10:32: error: expected ‘,’ or ‘...’ before string constant
+   10 |     OPENVINO_MATCHER_PASS_RTTI("ov::frontend::ggml::pass::SqueezeMatmul")
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<command-line>: note: in definition of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+<command-line>: error: ISO C++ forbids declaration of ‘OPENVINO_RTTI_BASE’ with no type [-fpermissive]
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/squeeze_matmul.h:10:5: note: in expansion of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+   10 |     OPENVINO_MATCHER_PASS_RTTI("ov::frontend::ggml::pass::SqueezeMatmul")
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+<command-line>: error: expected ‘;’ at end of member declaration
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-openvino/openvino/pass/squeeze_matmul.h:10:5: note: in expansion of macro ‘OPENVINO_MATCHER_PASS_RTTI’
+   10 |     OPENVINO_MATCHER_PASS_RTTI("ov::frontend::ggml::pass::SqueezeMatmul")
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+make[2]: *** [ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/build.make:650: ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/openvino/translate_session.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:681: ggml/src/ggml-openvino/CMakeFiles/ggml-openvino.dir/all] Error 2
+make: *** [Makefile:136: all] Error 2
+
+🔴 BUILD FAILED (Exit Code: 2)

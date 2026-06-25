@@ -1,0 +1,22 @@
+=== Test Execution ===
+Timestamp: 2026-06-24T01:36:03-07:00
+Model: ./models/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
+CLI: ./build/sycl_release/bin/llama-cli
+Prompt: Hello, how are you today?
+
+=== Inference Output ===
+0.00.189.406 W SYCL GPU device 0 does not use Level Zero backend, disabling Level Zero memory API
+error while handling argument "--device": invalid device: sycl
+
+usage:
+-dev,  --device <dev1,dev2,..>          comma-separated list of devices to use for offloading (none = don't
+                                        offload)
+                                        use --list-devices to see a list of available devices
+                                        (env: LLAMA_ARG_DEVICE)
+
+
+to show complete usage, run with -h
+
+=== Inference Result ===
+Exit Code: 1
+❌ FAILURE: Model inference failed (see logs above)

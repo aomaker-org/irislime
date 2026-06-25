@@ -1,0 +1,18 @@
+=== CASE: openvino_release ===
+timestamp: 2026-06-24T02:01:02-07:00
+binary: /home/fekerr/src/irislime1/build/openvino_release/bin/llama-cli
+model: /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+prompt: The quick brown fox jumps over the lazy dog.
+extra_args: --n-gpu-layers 99
+
+0.00.223.083 W GGML OpenVINO Backend: device CPU is not available, fallback to CPU
+
+0.01.251.095 E GGML OpenVINO backend ov::Exception: Exception from src/inference/src/cpp/core.cpp:104:
+Exception from src/inference/src/dev/core_impl.cpp:567:
+Device with "CPU" name is not registered in the OpenVINO Runtime
+
+
+0.01.251.165 E graph_compute: ggml_backend_sched_graph_compute_async failed with error -1
+0.01.251.166 E process_ubatch: failed to compute graph, compute status: -1
+0.01.251.175 E llama_decode: failed to decode, ret = -3
+timeout: the monitored command dumped core

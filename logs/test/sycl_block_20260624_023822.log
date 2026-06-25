@@ -1,0 +1,23 @@
+run_block_ts=20260624_023822
+IRISLIME_READY=1
+sycl_bin=build/sycl_release/bin/llama-cli
+model=models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+--- list_devices_start 2026-06-24T02:38:22-07:00 ---
+0.00.116.775 W SYCL GPU device 0 does not use Level Zero backend, disabling Level Zero memory API
+Available devices:
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+  SYCL0: Intel(R) Graphics [0x46a8] (7096 MiB, 7096 MiB free)
+--- list_devices_end 2026-06-24T02:38:22-07:00 ---
+detected_device=SYCL0
+--- run_1_start 2026-06-24T02:38:22-07:00 ---
+run_1_exit=0
+run_1_log=logs/test/sycl_run_1_20260624_023822.log
+--- run_1_end 2026-06-24T02:38:27-07:00 ---
+--- run_2_start 2026-06-24T02:38:27-07:00 ---
+run_2_exit=0
+run_2_log=logs/test/sycl_run_2_20260624_023822.log
+--- run_2_end 2026-06-24T02:38:33-07:00 ---
+--- run_3_start 2026-06-24T02:38:33-07:00 ---
+run_3_exit=0
+run_3_log=logs/test/sycl_run_3_20260624_023822.log
+--- run_3_end 2026-06-24T02:38:38-07:00 ---

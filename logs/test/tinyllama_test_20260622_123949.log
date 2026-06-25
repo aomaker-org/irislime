@@ -1,0 +1,7 @@
+=== Test Execution ===
+Timestamp: 2026-06-22T12:39:49-07:00
+Model: ./models/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
+CLI: ./build/sycl_release/bin/llama-cli
+Prompt: Smoke test after script fix.
+
+=== Inference Output ===

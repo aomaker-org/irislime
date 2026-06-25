@@ -54,4 +54,8 @@ fi
 
 # 6. Set the marker
 export IRISLIME_READY=1
+
+# 7. Set the device selector for oneAPI (see docs for details)
+export ONEAPI_DEVICE_SELECTOR=opencl:gpu
+
 echo "[+] IrisLime environment is ready."

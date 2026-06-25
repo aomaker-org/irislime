@@ -1,0 +1,14 @@
+Test project /home/fekerr/src/irislime1/build/cpu_release
+    Start  9: test-tokenizer-0-llama-spm
+1/3 Test  #9: test-tokenizer-0-llama-spm .......   Passed    0.09 sec
+    Start 24: test-tokenizer-1-llama-spm
+2/3 Test #24: test-tokenizer-1-llama-spm .......   Passed    0.43 sec
+    Start 32: test-log
+3/3 Test #32: test-log .........................   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Label Time Summary:
+main    =   0.54 sec*proc (3 tests)
+
+Total Test time (real) =   0.55 sec

@@ -1,0 +1,14 @@
+============================================================
+TINY MODEL CPU SAFE RUN
+timestamp: 2026-06-24T01:44:55-07:00
+model: /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+binary: /home/fekerr/src/irislime1/build/cpu_release/bin/llama-cli
+prompt: Write one short sentence about stable CPU inference.
+strategy: force CPU path (--n-gpu-layers 0) to avoid BF16/GPU path instability
+============================================================
+
+warning: no usable GPU found, --gpu-layers option will be ignored
+warning: one possible reason is that llama.cpp was compiled without GPU support
+warning: consult docs/build.md for compilation instructions
+[!] TIMEOUT: CPU-safe run timed out
+log_file: logs/test/tiny_q2_cpu_safe_20260624_014455.log

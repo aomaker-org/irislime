@@ -1,0 +1,18 @@
+=== CASE: sycl_release_device0 ===
+timestamp: 2026-06-24T01:44:53-07:00
+binary: /home/fekerr/src/irislime1/build/sycl_release/bin/llama-cli
+model: /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+prompt: The quick brown fox jumps over the lazy dog.
+extra_args: --n-gpu-layers 99 --device 0
+
+0.00.134.886 W SYCL GPU device 0 does not use Level Zero backend, disabling Level Zero memory API
+error while handling argument "--device": invalid device: 0
+
+usage:
+-dev,  --device <dev1,dev2,..>          comma-separated list of devices to use for offloading (none = don't
+                                        offload)
+                                        use --list-devices to see a list of available devices
+                                        (env: LLAMA_ARG_DEVICE)
+
+
+to show complete usage, run with -h

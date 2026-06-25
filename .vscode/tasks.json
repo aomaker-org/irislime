@@ -48,6 +48,21 @@
                 "showReuseMessage": false,
                 "clear": true
             }
+        },
+        {
+            "label": "🧪 SYCL SMOKE",
+            "type": "shell",
+            "command": "set -euo pipefail; mkdir -p logs/test; TS=$(date +%Y%m%d_%H%M%S); LOG=logs/test/sycl_smoke_task_${TS}.log; set +u; source config_env; set -u; DEV=$(build/sycl_release/bin/llama-cli --list-devices 2>/dev/null | sed -n 's/^\\s*\\(SYCL[0-9]\\+\\):.*/\\1/p' | head -1); test -n \"$DEV\"; { echo \"task_ts=$TS\"; echo \"device=$DEV\"; timeout --signal=KILL 90s build/sycl_release/bin/llama-cli --model models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf --conversation --simple-io --n-predict 16 --n-gpu-layers 99 --device \"$DEV\" < <(printf 'VSCode task SYCL smoke run.\\n/exit\\n'); } 2>&1 | tee \"$LOG\"; echo \"task_log=$LOG\"",
+            "problemMatcher": [],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            }
         }
     ]
 }

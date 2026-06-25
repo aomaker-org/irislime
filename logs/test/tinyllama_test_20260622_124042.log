@@ -1,0 +1,11 @@
+=== Test Execution ===
+Timestamp: 2026-06-22T12:40:42-07:00
+Model: ./models/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
+CLI: ./build/sycl_release/bin/llama-cli
+Prompt: Final status check run.
+
+=== Inference Output ===
+
+=== Inference Result ===
+Exit Code: 139
+❌ FAILURE: Model inference failed (see logs above)

@@ -1,0 +1,155 @@
+run_block_ts=20260624_023437
+cwd=/home/fekerr/src/irislime1
+IRISLIME_READY=1
+--- run_1_start 2026-06-24T02:34:37-07:00 ---
+[!] IrisLime environment is already loaded.
+============================================================
+TINY MODEL CPU SAFE RUN
+timestamp: 2026-06-24T02:34:37-07:00
+model: /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+binary: /home/fekerr/src/irislime1/build/cpu_release/bin/llama-cli
+prompt: CPU baseline run 1: one short stable sentence.
+strategy: force CPU path (--n-gpu-layers 0) to avoid BF16/GPU path instability
+============================================================
+
+warning: no usable GPU found, --gpu-layers option will be ignored
+warning: one possible reason is that llama.cpp was compiled without GPU support
+warning: consult docs/build.md for compilation instructions
+
+Loading model... 
+
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b9741-84de01a1f
+model      : /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+> 
+To calculate the base line of a given text using the given text as input, the code uses the following steps:
+
+1. Extract the text to
+
+[ Prompt: 35.1 t/s | Generation: 21.0 t/s ]
+
+> 
+
+Exiting...
+[+] PASS: CPU-safe tiny-model inference succeeded
+log_file: logs/test/tiny_q2_cpu_safe_20260624_023437.log
+run_1_elapsed_s=2.84 run_1_maxrss_kb=503456
+--- run_1_end 2026-06-24T02:34:40-07:00 ---
+--- run_2_start 2026-06-24T02:34:40-07:00 ---
+[!] IrisLime environment is already loaded.
+============================================================
+TINY MODEL CPU SAFE RUN
+timestamp: 2026-06-24T02:34:40-07:00
+model: /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+binary: /home/fekerr/src/irislime1/build/cpu_release/bin/llama-cli
+prompt: CPU baseline run 2: one short stable sentence.
+strategy: force CPU path (--n-gpu-layers 0) to avoid BF16/GPU path instability
+============================================================
+
+warning: no usable GPU found, --gpu-layers option will be ignored
+warning: one possible reason is that llama.cpp was compiled without GPU support
+warning: consult docs/build.md for compilation instructions
+
+Loading model... 
+
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b9741-84de01a1f
+model      : /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+> 
+The article "CPU BaseLine Run 1: One Short Stable Sentence" discusses the benefits of using stable sentences in writing, such as clar
+
+[ Prompt: 30.6 t/s | Generation: 21.9 t/s ]
+
+> 
+
+Exiting...
+[+] PASS: CPU-safe tiny-model inference succeeded
+log_file: logs/test/tiny_q2_cpu_safe_20260624_023440.log
+run_2_elapsed_s=2.93 run_2_maxrss_kb=503264
+--- run_2_end 2026-06-24T02:34:43-07:00 ---
+--- run_3_start 2026-06-24T02:34:43-07:00 ---
+[!] IrisLime environment is already loaded.
+============================================================
+TINY MODEL CPU SAFE RUN
+timestamp: 2026-06-24T02:34:43-07:00
+model: /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+binary: /home/fekerr/src/irislime1/build/cpu_release/bin/llama-cli
+prompt: CPU baseline run 3: one short stable sentence.
+strategy: force CPU path (--n-gpu-layers 0) to avoid BF16/GPU path instability
+============================================================
+
+warning: no usable GPU found, --gpu-layers option will be ignored
+warning: one possible reason is that llama.cpp was compiled without GPU support
+warning: consult docs/build.md for compilation instructions
+
+Loading model... 
+
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b9741-84de01a1f
+model      : /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+> 
+To add a short stable sentence to the previous output, we can use the "@" operator in the `map` function. This will add a stable sentence ("
+
+[ Prompt: 38.5 t/s | Generation: 24.0 t/s ]
+
+> 
+
+Exiting...
+[+] PASS: CPU-safe tiny-model inference succeeded
+log_file: logs/test/tiny_q2_cpu_safe_20260624_023443.log
+run_3_elapsed_s=2.57 run_3_maxrss_kb=503328
+--- run_3_end 2026-06-24T02:34:45-07:00 ---

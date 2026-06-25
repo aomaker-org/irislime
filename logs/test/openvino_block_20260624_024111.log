@@ -1,0 +1,156 @@
+run_block_ts=20260624_024111
+IRISLIME_READY=1
+GGML_OPENVINO_DEVICE=GPU
+--- run_1_start 2026-06-24T02:41:11-07:00 ---
+[!] IrisLime environment is already loaded.
+============================================================
+OPENVINO HEALTHCHECK
+timestamp: 2026-06-24T02:41:11-07:00
+model: /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+binary: /home/fekerr/src/irislime1/build/openvino_release/bin/llama-cli
+openvino_device: GPU
+openvino_disable_cache: 1
+timeout_sec: 45
+============================================================
+
+
+Note: Several threading libraries could use Thread Composability Manager.
+Hint: If CPUs are overutilized, setting the TCM_ENABLE environment variable to 1
+may improve performance. For more details, search for "avoid cpu overutilization"
+at https://uxlfoundation.github.io/oneTBB/
+To suppress this message, set TCM_ENABLE to either 0 or 1.
+Loading model... 
+
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b9741-84de01a1f
+model      : /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+> 
+Autres
+
+[ Prompt: 4.7 t/s | Generation: 1000000.0 t/s ]
+
+Exiting...
+[+] OPENVINO HEALTHCHECK PASS
+log_file: logs/test/openvino_healthcheck_20260624_024111.log
+run_1_elapsed_s=13.72 run_1_maxrss_kb=1035460
+--- run_1_end 2026-06-24T02:41:25-07:00 ---
+--- run_2_start 2026-06-24T02:41:25-07:00 ---
+[!] IrisLime environment is already loaded.
+============================================================
+OPENVINO HEALTHCHECK
+timestamp: 2026-06-24T02:41:25-07:00
+model: /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+binary: /home/fekerr/src/irislime1/build/openvino_release/bin/llama-cli
+openvino_device: GPU
+openvino_disable_cache: 1
+timeout_sec: 45
+============================================================
+
+
+Note: Several threading libraries could use Thread Composability Manager.
+Hint: If CPUs are overutilized, setting the TCM_ENABLE environment variable to 1
+may improve performance. For more details, search for "avoid cpu overutilization"
+at https://uxlfoundation.github.io/oneTBB/
+To suppress this message, set TCM_ENABLE to either 0 or 1.
+Loading model... 
+
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b9741-84de01a1f
+model      : /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+> 
+pois
+
+[ Prompt: 4.5 t/s | Generation: 1000000.0 t/s ]
+
+Exiting...
+[+] OPENVINO HEALTHCHECK PASS
+log_file: logs/test/openvino_healthcheck_20260624_024125.log
+run_2_elapsed_s=16.02 run_2_maxrss_kb=1035392
+--- run_2_end 2026-06-24T02:41:41-07:00 ---
+--- run_3_start 2026-06-24T02:41:41-07:00 ---
+[!] IrisLime environment is already loaded.
+============================================================
+OPENVINO HEALTHCHECK
+timestamp: 2026-06-24T02:41:41-07:00
+model: /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+binary: /home/fekerr/src/irislime1/build/openvino_release/bin/llama-cli
+openvino_device: GPU
+openvino_disable_cache: 1
+timeout_sec: 45
+============================================================
+
+
+Note: Several threading libraries could use Thread Composability Manager.
+Hint: If CPUs are overutilized, setting the TCM_ENABLE environment variable to 1
+may improve performance. For more details, search for "avoid cpu overutilization"
+at https://uxlfoundation.github.io/oneTBB/
+To suppress this message, set TCM_ENABLE to either 0 or 1.
+Loading model... 
+
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b9741-84de01a1f
+model      : /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+> 
+ Biografia
+
+[ Prompt: 4.5 t/s | Generation: 1000000.0 t/s ]
+
+Exiting...
+[+] OPENVINO HEALTHCHECK PASS
+log_file: logs/test/openvino_healthcheck_20260624_024141.log
+run_3_elapsed_s=13.28 run_3_maxrss_kb=1035484
+--- run_3_end 2026-06-24T02:41:54-07:00 ---

@@ -1,0 +1,11 @@
+0.00.358.552 W GGML OpenVINO Backend: device NPU is not available, fallback to CPU
+
+0.02.576.835 E GGML OpenVINO backend ov::Exception: Exception from src/inference/src/cpp/core.cpp:104:
+Exception from src/inference/src/dev/core_impl.cpp:567:
+Device with "CPU" name is not registered in the OpenVINO Runtime
+
+
+0.02.576.895 E graph_compute: ggml_backend_sched_graph_compute_async failed with error -1
+0.02.576.896 E process_ubatch: failed to compute graph, compute status: -1
+0.02.576.908 E llama_decode: failed to decode, ret = -3
+timeout: the monitored command dumped core

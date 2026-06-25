@@ -1,0 +1,9 @@
+=== CASE: sycl_release_auto ===
+timestamp: 2026-06-24T02:36:35-0700
+binary: /home/fekerr/src/irislime1/build/sycl_release/bin/llama-cli
+model: /home/fekerr/src/irislime/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+args: --n-gpu-layers 99
+env_overrides: (none)
+[STDERR]
+/home/fekerr/src/irislime1/build/sycl_release/bin/llama-cli: error while loading shared libraries: libsvml.so: cannot open shared object file: No such file or directory
+[RESULT] status=FAIL exit=127

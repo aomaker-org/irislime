@@ -1,0 +1,261 @@
+SYCL GPU device 0 does not use Level Zero backend, disabling Level Zero memory API
+Build with Macros:
+  GGML_SYCL_FORCE_MMQ: no
+  GGML_SYCL_F16: no
+  GGML_SYCL_GRAPH: yes
+  GGML_SYCL_DNNL: yes
+  GGML_SYCL_SUPPORT_LEVEL_ZERO_API: yes
+  GGML_SYCL_USE_VMM: yes
+Running with Environment Variables:
+  GGML_SYCL_DEBUG: 0
+  GGML_SYCL_DISABLE_OPT: 0
+  GGML_SYCL_DISABLE_GRAPH: 1
+  GGML_SYCL_USE_LEVEL_ZERO_API: 0
+  GGML_SYCL_DEV2DEV_MEMCPY: 0
+  GGML_SYCL_DISABLE_DNN: 0
+  GGML_SYCL_ENABLE_VMM: 1
+  GGML_SYCL_PRIORITIZE_DMMV: 0
+  GGML_SYCL_USE_ASYNC_MEM_OP: 1
+  GGML_SYCL_ENABLE_FLASH_ATTN: 1
+  GGML_SYCL_USM_SYSTEM: 0
+Found 1 SYCL devices:
+|  |                   |                                       |       |Max    |        |Max  |Global |                     |
+|  |                   |                                       |       |compute|Max work|sub  |mem    |                     |
+|ID|        Device Type|                                   Name|Version|units  |group   |group|size   |       Driver version|
+|--|-------------------|---------------------------------------|-------|-------|--------|-----|-------|---------------------|
+| 0|     [opencl:gpu:0]|                Intel Graphics [0x46a8]|    3.0|     96|     512|   32|  7440M|         23.43.027642|
+SYCL Optimization Feature:
+|ID|        Device Type|Reorder|
+|--|-------------------|-------|
+| 0|     [opencl:gpu:0]|      Y|
+Testing 2 devices
+
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+Backend 1/2: SYCL0
+  Device description: Intel(R) Graphics [0x46a8]
+  Device memory: 7096 MB (7096 MB free)
+
+  ABS(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  ABS(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  SGN(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  SGN(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  NEG(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  NEG(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  STEP(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  STEP(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  TANH(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  TANH(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  ELU(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  ELU(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  RELU(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  RELU(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  SIGMOID(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  SIGMOID(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  GELU(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  GELU(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  GELU_QUICK(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  GELU_QUICK(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  SILU(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  SILU(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  HARDSWISH(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  HARDSWISH(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  HARDSIGMOID(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  HARDSIGMOID(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  EXP(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  EXP(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  EXPM1(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  EXPM1(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  SOFTPLUS(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  SOFTPLUS(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  GELU_ERF(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  GELU_ERF(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  FLOOR(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  FLOOR(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  CEIL(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  CEIL(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  ROUND(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  ROUND(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  TRUNC(type=f16,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  TRUNC(type=f16,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  ABS(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  ABS(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  SGN(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  SGN(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  NEG(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  NEG(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  STEP(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  STEP(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  TANH(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  TANH(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  ELU(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  ELU(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  RELU(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  RELU(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  SIGMOID(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  SIGMOID(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  GELU(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  GELU(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  GELU_QUICK(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  GELU_QUICK(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  SILU(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  SILU(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  HARDSWISH(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  HARDSWISH(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  HARDSIGMOID(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  HARDSIGMOID(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  EXP(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  EXP(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  EXPM1(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  EXPM1(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  SOFTPLUS(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  SOFTPLUS(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  GELU_ERF(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  GELU_ERF(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  FLOOR(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  FLOOR(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  CEIL(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  CEIL(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  ROUND(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  ROUND(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  TRUNC(type=f16,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  TRUNC(type=f16,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  ABS(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  ABS(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  SGN(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  SGN(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  NEG(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  NEG(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  STEP(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  STEP(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  TANH(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  TANH(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  ELU(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  ELU(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  RELU(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  RELU(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  SIGMOID(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  SIGMOID(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  GELU(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  GELU(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  GELU_QUICK(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  GELU_QUICK(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  SILU(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  SILU(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  HARDSWISH(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  HARDSWISH(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  HARDSIGMOID(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  HARDSIGMOID(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  EXP(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  EXP(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  EXPM1(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  EXPM1(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  SOFTPLUS(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  SOFTPLUS(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  GELU_ERF(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  GELU_ERF(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  FLOOR(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  FLOOR(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  CEIL(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  CEIL(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  ROUND(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  ROUND(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  TRUNC(type=f32,ne_a=[128,2,2,2],v=0): [1;32mOK[0m
+  TRUNC(type=f32,ne_a=[5,7,11,13],v=0): [1;32mOK[0m
+  ABS(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  ABS(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  SGN(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  SGN(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  NEG(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  NEG(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  STEP(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  STEP(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  TANH(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  TANH(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  ELU(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  ELU(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  RELU(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  RELU(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  SIGMOID(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  SIGMOID(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  GELU(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  GELU(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  GELU_QUICK(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  GELU_QUICK(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  SILU(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  SILU(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  HARDSWISH(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  HARDSWISH(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  HARDSIGMOID(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  HARDSIGMOID(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  EXP(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  EXP(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  EXPM1(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  EXPM1(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  SOFTPLUS(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  SOFTPLUS(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  GELU_ERF(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  GELU_ERF(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  FLOOR(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  FLOOR(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  CEIL(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  CEIL(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  ROUND(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  ROUND(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  TRUNC(type=f32,ne_a=[128,2,2,2],v=1): [1;32mOK[0m
+  TRUNC(type=f32,ne_a=[5,7,11,13],v=1): [1;32mOK[0m
+  RELU_SQR(type=f16,ne=[128,2,2,2]): [1;32mOK[0m
+  RELU_SQR(type=f16,ne=[5,7,11,13]): [1;32mOK[0m
+  RELU_SQR(type=f32,ne=[128,2,2,2]): [1;32mOK[0m
+  RELU_SQR(type=f32,ne=[5,7,11,13]): [1;32mOK[0m
+  SNAKE_FUSE(type=f32,ne=[5,7,1,1]): [1;32mOK[0m
+  SNAKE_FUSE(type=f32,ne=[33,32,1,1]): [1;32mOK[0m
+  SNAKE_FUSE(type=f32,ne=[1025,13,1,1]): [1;32mOK[0m
+  SNAKE_FUSE(type=f32,ne=[128,16,1,1]): [1;32mOK[0m
+  SNAKE_FUSE(type=f32,ne=[256,192,1,1]): [1;32mOK[0m
+  SNAKE_FUSE(type=f32,ne=[64,32,2,1]): [1;32mOK[0m
+  SNAKE_FUSE(type=f32,ne=[64,32,1,2]): [1;32mOK[0m
+  SNAKE_FUSE(type=f32,ne=[64,32,2,3]): [1;32mOK[0m
+  SNAKE_FUSE(type=f16,ne=[5,7,1,1]): [1;32mOK[0m
+  SNAKE_FUSE(type=f16,ne=[33,32,1,1]): [1;32mOK[0m
+  SNAKE_FUSE(type=f16,ne=[1025,13,1,1]): [1;32mOK[0m
+  SNAKE_FUSE(type=f16,ne=[128,16,1,1]): [1;32mOK[0m
+  SNAKE_FUSE(type=f16,ne=[256,192,1,1]): [1;32mOK[0m
+  SNAKE_FUSE(type=f16,ne=[64,32,2,1]): [1;32mOK[0m
+  SNAKE_FUSE(type=f16,ne=[64,32,1,2]): [1;32mOK[0m
+  SNAKE_FUSE(type=f16,ne=[64,32,2,3]): ggml_sycl_op_bin_bcast: unsupported types: dst: bf16, src0: bf16, src1: f32
+[1;32mOK[0m
+/home/fekerr/src/irislime1/llama.cpp/ggml/src/ggml-sycl/binbcast.cpp:300: fatal error
+/home/fekerr/.gdbinit:3: Error in sourced command file:
+Undefined set debuginfod command: "download-directory /home/fekerr/.cache/gdb_symbols".  Try "help set debuginfod".
+[New LWP 118230]
+[New LWP 118229]
+[New LWP 118228]
+[New LWP 117819]
+warning: File "/opt/intel/oneapi/compiler/2026.0/lib/libsycl.so.9.0.0-gdb.py" auto-loading has been declined by your `auto-load safe-path' set to "$debugdir:$datadir/auto-load".
+To enable execution of this file add
+	add-auto-load-safe-path /opt/intel/oneapi/compiler/2026.0/lib/libsycl.so.9.0.0-gdb.py
+line to your configuration file "/home/fekerr/.gdbinit".
+To completely disable this security protection add
+	set auto-load safe-path /
+line to your configuration file "/home/fekerr/.gdbinit".
+For more information about this security protection see the
+"Auto-loading safe path" section in the GDB manual.  E.g., run from the shell:
+	info "(gdb)Auto-loading safe path"
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+Download failed: Invalid argument.  Continuing without source file ./posix/../sysdeps/unix/sysv/linux/wait4.c.
+0x00007e7fbcb10813 in __GI___wait4 (pid=123039, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+warning: 30	../sysdeps/unix/sysv/linux/wait4.c: No such file or directory
+#0  0x00007e7fbcb10813 in __GI___wait4 (pid=123039, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	in ../sysdeps/unix/sysv/linux/wait4.c
+#1  0x00007e7fc08e2bba in ggml_print_backtrace () from /home/fekerr/src/irislime1/build/sycl_release/bin/libggml-base.so.0
+#2  0x00007e7fc08e1d29 in ggml_abort () from /home/fekerr/src/irislime1/build/sycl_release/bin/libggml-base.so.0
+#3  0x00007e7fbd3f5ee1 in void ggml_sycl_op_bin_bcast<bin_bcast_sycl<&(op_mul(float, float))> >(ggml_backend_sycl_context&, ggml_tensor const*, ggml_tensor const*, ggml_tensor*) () from /home/fekerr/src/irislime1/build/sycl_release/bin/libggml-sycl.so.0
+#4  0x00007e7fbd3e4ccc in ggml_sycl_mul(ggml_backend_sycl_context&, ggml_tensor*) () from /home/fekerr/src/irislime1/build/sycl_release/bin/libggml-sycl.so.0
+#5  0x00007e7fbd397770 in ggml_backend_sycl_graph_compute_impl(ggml_backend_sycl_context*, ggml_cgraph*) () from /home/fekerr/src/irislime1/build/sycl_release/bin/libggml-sycl.so.0
+#6  0x00007e7fbd3962f7 in ggml_backend_sycl_graph_compute(ggml_backend*, ggml_cgraph*) () from /home/fekerr/src/irislime1/build/sycl_release/bin/libggml-sycl.so.0
+#7  0x00007e7fc090a74c in ggml_backend_compare_graph_backend () from /home/fekerr/src/irislime1/build/sycl_release/bin/libggml-base.so.0
+#8  0x0000000000507e26 in test_case::eval(ggml_backend*, ggml_backend*, char const*, printer*) ()
+#9  0x000000000045b15d in test_backend(ggml_backend*, ggml_backend_device*, test_mode, char const*, char const*, printer*, char const*, int)::$_4::operator()(ggml_backend*, ggml_backend*) const ()
+#10 0x0000000000417b78 in main ()
+[Inferior 1 (process 117818) detached]

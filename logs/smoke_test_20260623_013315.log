@@ -1,0 +1,16 @@
+============================================================
+🚀 IRISLIME SANITY CHECK RUNNER & TELEMETRY LOG (v002)
+🏠 Project Root: /home/fekerr/src/irislime1
+🎯 Model Location: models/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
+============================================================
+
+| Target Configuration | Status  | Latency | Log Details / Error Trace Snippet |
+| :--- | :--- | :--- | :--- |
+| CPU (Debug)          | CRASHED |    65ms | error: invalid argument: --non-interactive... |
+| CPU (Release)        | CRASHED |    21ms | error: invalid argument: --non-interactive... |
+| OpenVINO             | EMPTY   | N/A     | Checked: build/openvino_release |
+| SYCL (Release)       | CRASHED |  1483ms | Non-zero exit status... |
+| SYCL (DebugInfo)     | CRASHED |  1215ms | Non-zero exit status... |
+| Vulkan               | EMPTY   | N/A     | Checked: build/vulkan_release |
+
+============================================================

@@ -1,0 +1,44 @@
+=== CASE: openvino_release ===
+timestamp: 2026-06-24T02:43:37-0700
+binary: /home/fekerr/src/irislime1/build/openvino_release/bin/llama-cli
+model: /home/fekerr/src/irislime/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+args: --n-gpu-layers 99 --single-turn --n-predict 1
+env_overrides: {'GGML_OPENVINO_DEVICE': 'GPU', 'GGML_OPENVINO_DISABLE_CACHE': '1'}
+[STDOUT]
+
+Loading model... 
+
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b9741-84de01a1f
+model      : /home/fekerr/src/irislime/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+> 
+Autres
+
+[ Prompt: 5.4 t/s | Generation: 1000000.0 t/s ]
+
+Exiting...
+[STDERR]
+Note: Several threading libraries could use Thread Composability Manager.
+Hint: If CPUs are overutilized, setting the TCM_ENABLE environment variable to 1
+may improve performance. For more details, search for "avoid cpu overutilization"
+at https://uxlfoundation.github.io/oneTBB/
+To suppress this message, set TCM_ENABLE to either 0 or 1.
+[RESULT] status=PASS exit=0

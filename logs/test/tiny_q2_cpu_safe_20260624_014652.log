@@ -1,0 +1,46 @@
+============================================================
+TINY MODEL CPU SAFE RUN
+timestamp: 2026-06-24T01:46:52-07:00
+model: /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+binary: /home/fekerr/src/irislime1/build/cpu_release/bin/llama-cli
+prompt: Write one short sentence about stable CPU inference.
+strategy: force CPU path (--n-gpu-layers 0) to avoid BF16/GPU path instability
+============================================================
+
+warning: no usable GPU found, --gpu-layers option will be ignored
+warning: one possible reason is that llama.cpp was compiled without GPU support
+warning: consult docs/build.md for compilation instructions
+
+Loading model... 
+
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b9741-84de01a1f
+model      : /home/fekerr/src/irislime1/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+> 
+Stable CPU inference refers to a process where a computer searches for the most efficient way to perform a specific operation without causing unnecessary errors or wasted computation. It
+
+[ Prompt: 37.4 t/s | Generation: 21.7 t/s ]
+
+> 
+
+Exiting...
+[+] PASS: CPU-safe tiny-model inference succeeded
+log_file: logs/test/tiny_q2_cpu_safe_20260624_014652.log

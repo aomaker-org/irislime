@@ -12,45 +12,67 @@ import pyperclip
 MAX_TRUNCATE_SIZE = 1024 * 1024  # 1MB limit per file
 
 def get_tracked_files():
-    """Uses Git to quickly identify all files we should care about."""
-    result = subprocess.run(
-        ["git", "ls-files"],
-        capture_output=True, text=True
-    )
-    # Return a set of paths for O(1) lookup
-    return set(result.stdout.splitlines())
+    """Uses Git to identify all tracked files, normalizing them to absolute paths
+
+    to guarantee cross-directory execution safety.
+    """
+    try:
+        # Determine the definitive root of the repository tracking branch
+        repo_root = subprocess.run(
+            ["git", "rev-parse", "--show-toplevel"],
+            capture_output=True, text=True, check=True
+        ).stdout.strip()
+        
+        # Force paths to output relative to project top directory (--full-name)
+        result = subprocess.run(
+            ["git", "ls-files", "--full-name"],
+            capture_output=True, text=True, check=True
+        )
+        
+        # Build an absolute path tracking set for definitive O(1) cross-referencing
+        return {os.path.normpath(os.path.join(repo_root, line)) for line in result.stdout.splitlines()}
+    except subprocess.CalledProcessError as e:
+        print(f"[!] Git Error: Unable to determine repository architecture. Verification failed: {e}")
+        sys.exit(1)
 
 def read_file(file_path):
-    """Reads and formats a file for the clipboard/LLM."""
+    """Reads and formats a file for the clipboard/LLM context window."""
     try:
         size = os.path.getsize(file_path)
         with open(file_path, 'r', errors='ignore') as f:
             content = f.read(MAX_TRUNCATE_SIZE)
-            header = f"\n--- BEGIN FILE: {file_path} | Size: {size} bytes ---\n"
+            
+            # Explicit warning within context if file is hard-truncated
+            truncation_flag = ""
+            if size > MAX_TRUNCATE_SIZE:
+                truncation_flag = f" | [WARNING: CONTENT TRUNCATED AT {MAX_TRUNCATE_SIZE} BYTES]"
+                
+            header = f"\n--- BEGIN FILE: {file_path} | Size: {size} bytes{truncation_flag} ---\n"
             return f"{header}{content}"
     except Exception as e:
-        return f"\n[!] Error reading {file_path}: {e}"
+        return f"\n[!] Error reading structural path {file_path}: {e}"
 
 def process_path(target):
-    """Recursively processes a file or directory using Git tracking."""
+    """Recursively processes a file or directory utilizing absolute path validation."""
     output = []
     tracked = get_tracked_files()
+    
+    # Absolute resolution of target to guarantee uniform string matching
+    abs_target = os.path.normpath(os.path.abspath(target))
 
-    if os.path.isdir(target):
-        for root, _, files in os.walk(target):
+    if os.path.isdir(abs_target):
+        for root, _, files in os.walk(abs_target):
             for file in files:
                 full_path = os.path.join(root, file)
-                # Normalize path to match git-ls-files output
-                normalized_path = os.path.normpath(full_path)
+                abs_file_path = os.path.normpath(os.path.abspath(full_path))
                 
-                if normalized_path in tracked:
-                    output.append(read_file(full_path))
+                if abs_file_path in tracked:
+                    output.append(read_file(abs_file_path))
     else:
-        # If user targeted a specific file, check if it's tracked
-        if os.path.normpath(target) in tracked:
-            output.append(read_file(target))
+        if abs_target in tracked:
+            output.append(read_file(abs_target))
         else:
-            return f"[!] Path '{target}' is not tracked by Git or is ignored."
+            return f"[!] Path '{target}' is not explicitly tracked by Git or is actively ignored."
         
     return "\n".join(output)
 
@@ -58,20 +80,25 @@ def main():
     target = sys.argv[1] if len(sys.argv) > 1 else "."
     
     if not os.path.exists(target):
-        print(f"[!] Error: {target} does not exist.")
+        print(f"[!] Error: Target path '{target}' does not exist on filesystem.")
         sys.exit(1)
         
     content = process_path(target)
     
-    # Context Health Check
+    if not content or content.startswith("[!]"):
+        print(content)
+        sys.exit(1)
+        
     char_count = len(content)
-    print(f"[+] Bundle generated: {char_count} characters.")
+    print(f"[+] Bundle compiled: {char_count} characters.")
     
     try:
         pyperclip.copy(content)
-        print("[+] Successfully copied to clipboard.")
+        print("[+] Content successfully staged to the host clipboard.")
     except Exception as e:
-        print(f"[!] Clipboard error (possible size limit): {e}")
+        print(f"[!] Clipboard operational failure: {e}")
+        print("[*] Architecture Note: Headless or WSL environment detected. If clipboard utilities ")
+        print("    are missing, pipe command output directly via standard output hooks.")
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,44 @@
+=== CASE: cpu_release_ngl0 ===
+timestamp: 2026-06-24T02:43:19-0700
+binary: /home/fekerr/src/irislime1/build/cpu_release/bin/llama-cli
+model: /home/fekerr/src/irislime/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+args: --n-gpu-layers 0
+env_overrides: (none)
+[STDOUT]
+
+Loading model... 
+
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b9741-84de01a1f
+model      : /home/fekerr/src/irislime/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+> 
+Enjoy a warm bowl of
+
+[ Prompt: 33.8 t/s | Generation: 29.3 t/s ]
+
+> 
+
+Exiting...
+[STDERR]
+warning: no usable GPU found, --gpu-layers option will be ignored
+warning: one possible reason is that llama.cpp was compiled without GPU support
+warning: consult docs/build.md for compilation instructions
+[RESULT] status=PASS exit=0

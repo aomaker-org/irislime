@@ -1,0 +1,19 @@
+============================================================
+LLAMA MULTI CAPTURE RUN (PY)
+timestamp: 2026-06-24T02:12:33-0700
+model: /home/fekerr/src/irislime/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+prompt: The quick brown fox jumps over the lazy dog.
+n_predict: 16
+timeout_sec: 45
+openvino_device: GPU
+============================================================
+
+| Method | Status | Exit | Log |
+| :--- | :--- | :--- | :--- |
+| cpu_release_ngl0 | PASS | 0 | logs/test/cpu_release_ngl0_20260624_021233.log |
+| cpu_debug_ngl0 | PASS | 0 | logs/test/cpu_debug_ngl0_20260624_021233.log |
+| sycl_release_SYCL0 | PASS | 0 | logs/test/sycl_release_SYCL0_20260624_021233.log |
+| openvino_release | PASS | 0 | logs/test/openvino_release_20260624_021233.log |
+| vulkan_release | EMPTY | N/A | logs/test/vulkan_release_20260624_021233.log |
+
+summary_log: logs/test/llama_multi_capture_20260624_021233.log

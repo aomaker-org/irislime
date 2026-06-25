@@ -1,0 +1,16 @@
+============================================================
+S_LAUNCH: IRISLIME SANITY CHECK RUNNER & TELEMETRY LOG (v005)
+Project Root: /home/fekerr/src/irislime1
+Model Location: models/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
+============================================================
+
+| Target Configuration | Status  | Latency | Log Details / Error Trace Snippet |
+| :--- | :--- | :--- | :--- |
+| CPU (Debug)          | TIMEOUT | N/A     | Process exceeded runtime ceiling |
+| CPU (Release)        | TIMEOUT | N/A     | Process exceeded runtime ceiling |
+| OpenVINO             | EMPTY   | N/A     | Checked: build/openvino_release |
+| SYCL (Release)       | CRASHED |   638ms | Non-zero exit status... |
+| SYCL (DebugInfo)     | CRASHED |   664ms | Non-zero exit status... |
+| Vulkan               | EMPTY   | N/A     | Checked: build/vulkan_release |
+
+============================================================

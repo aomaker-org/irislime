@@ -1,0 +1,16 @@
+============================================================
+🚀 IRISLIME SANITY CHECK RUNNER & TELEMETRY LOG
+🏠 Project Root: /home/fekerr/src/irislime1
+🎯 Model Location: models/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
+============================================================
+
+| Target Configuration | Status | Latency | Log Details / Error Snip |
+| :--- | :--- | :--- | :--- |
+| CPU (Debug)          | ⏳ Hang   | N/A     | Timeout loop |
+| CPU (Release)        | ⏳ Hang   | N/A     | Timeout loop |
+| OpenVINO             | ❌ Empty  | N/A     | Checked: build/openvino_release |
+| SYCL (Release)       | 💥 Fail   |   767ms | Exit failure... |
+| SYCL (DebugInfo)     | 💥 Fail   |   903ms | Exit failure... |
+| Vulkan               | ❌ Empty  | N/A     | Checked: build/vulkan_release |
+
+============================================================

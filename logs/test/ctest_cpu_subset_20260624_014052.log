@@ -1,0 +1,22 @@
+Test project /home/fekerr/src/irislime1/build/cpu_release
+    Start 17: test-sampling
+1/7 Test #17: test-sampling ....................   Passed    1.31 sec
+    Start 18: test-reasoning-budget
+2/7 Test #18: test-reasoning-budget ............   Passed    0.01 sec
+    Start 19: test-grammar-parser
+3/7 Test #19: test-grammar-parser ..............   Passed    0.01 sec
+    Start 25: test-llama-archs
+4/7 Test #25: test-llama-archs .................   Passed   13.42 sec
+    Start 26: test-chat-peg-parser
+5/7 Test #26: test-chat-peg-parser .............   Passed    0.04 sec
+    Start 31: test-json-partial
+6/7 Test #31: test-json-partial ................   Passed    0.01 sec
+    Start 32: test-log
+7/7 Test #32: test-log .........................   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 7
+
+Label Time Summary:
+main    =  14.81 sec*proc (7 tests)
+
+Total Test time (real) =  14.82 sec
