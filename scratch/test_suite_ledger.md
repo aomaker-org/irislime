@@ -5,3 +5,6 @@
 | 2026-06-25 12:55:48 | SYCL Hardware Device Discovery (Level Zero Default) | FAULT | 139 | ./build/bin/llama-ls-sycl-device |
 | 2026-06-25 12:55:53 | SYCL Hardware Device Discovery (OpenCL Backend Bypass) | PASS | 0 | ./build/bin/llama-ls-sycl-device |
 | 2026-06-25 12:55:59 | Llama CLI Engine Version Initialization | PASS | 0 | ./build/bin/llama-cli |
+| 2026-06-27 09:31:25 | SYCL Hardware Device Discovery (Level Zero Default) | FAULT | 139 | ./build/bin/llama-ls-sycl-device |
+| 2026-06-27 09:31:29 | SYCL Hardware Device Discovery (OpenCL Backend Bypass) | PASS | 0 | ./build/bin/llama-ls-sycl-device |
+| 2026-06-27 09:31:35 | Llama CLI Engine Version Initialization | PASS | 0 | ./build/bin/llama-cli |

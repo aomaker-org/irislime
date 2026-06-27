@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scratch/publish_workspace_audit.sh
+# scratch/publish_audit.sh
 # Portably aggregates remote branch configurations for portfolio tracking.
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -14,20 +14,20 @@ TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
     echo "Per architectural mandates, historical development branches are preserved to maintain a forensic audit trail but are classified below by status."
     echo ""
     echo "## 1. IrisLime Remote Branches (\`irislime\`)"
-    echo "```text"
+    echo '```text'
     cd "$PROJECT_ROOT"
     git ls-remote --heads origin
-    echo "```"
+    echo '```'
     echo ""
     echo "## 2. Inference Engine Remote Branches (\`llama.cpp\`)"
-    echo "```text"
+    echo '```text'
     if [ -d "../llama.cpp" ]; then
         cd ../llama.cpp
         git ls-remote --heads origin
     else
         echo "[!] Sibling tree llama.cpp missing."
     fi
-    echo "```"
+    echo '```'
 } > "$AUDIT_LOG"
 
 cat "$AUDIT_LOG"
