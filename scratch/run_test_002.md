@@ -8,3 +8,4 @@
 | Date/Time (PDT) | Machine Signature Profile | Status | Exit Code | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | 2026-06-25 19:14:37 | 12th Gen Intel(R) Core(TM) i7-1255U (4 Threads) | PASS | 0 | OpenCL platform discovery cleared cleanly. |
+| 2026-06-27 16:59:06 | 12th Gen Intel(R) Core(TM) i7-1255U (4 Threads) | PASS | 0 | OpenCL platform discovery cleared cleanly. |
