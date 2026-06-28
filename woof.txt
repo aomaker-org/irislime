@@ -1,0 +1,326 @@
+Good catch hitting `^C` to abort. Terminal emulator paste buffers can occasionally drop characters or interleave background text registers during high-volume multi-line pastes, especially across the host-to-guest virtualization layer.
+
+Since the `cat` transaction was interrupted, `deploy_docs.sh` is either un-instantiated or incomplete. You can safely overwrite it.
+
+Here is **Step 2** again, isolated cleanly. Copy this block and paste it directly into prompt **`[2035]`**:
+
+```bash
+cat << 'EOF' > deploy_docs.sh
+#!/usr/bin/env bash
+set -euo pipefail
+mkdir -p training
+echo "[+] Structuring file: README.md"
+cat << 'FILE_EOF' > README.md
+# IrisLime: Edge AI Exploration Sandbox
+
+**IrisLime** (Iris + SLM) is a research environment optimized for executing local, small-scale Large Language Model (LLM) inference on Intel Iris Xe integrated graphics. It establishes a secure compute bridge between a Windows 11 host GPU driver layer and a virtualized Linux workspace using WSL2 and the Intel oneAPI developer toolkit.
+
+## Repository Vision
+To preserve a lean, forensic-ready project footprint, this environment rigorously decouples tracking infrastructure from upstream inference engine source repositories and high-density binary model weights using isolated file allocation bounds and directory symlinks.
+
+## Document Stratum Map
+Before executing local builds or validation testing sequences, orient yourself with the authoritative documentation layers:
+
+1. **Quick Start Deployment Recipe** (quick_start.md): The streamlined copy-paste terminal checklist for first-time instance initialization on target developer hardware.
+2. **Deep Dive Getting Started Guide** (getting_started.md): Comprehensive guide outlining host kernel graphics modprobe parameters, environmental gate criteria, and isolated debugging harnesses.
+3. **Training and Onboarding Repository** (training/README.md): Architectural reference center documenting team Git workflow models, squash-merge rationales, and cross-OS encoding troubleshooting.
+
+## Core Workspace Taxonomy
+* \`config_env\`: Idempotent session environment gate loader. Initializes localized Python virtual environments and maps Intel system variables.
+* \`scratch/\`: Engineering sandbox workspace. Holds point-in-time snapshot utilities, local backlog indices, and validation scripts (\`run_test000.sh\`, \`run_test002.sh\`).
+* \`tools/\`: Maintained background orchestration utilities and automated headless text extraction engines.
+* \`models/\`: Filesystem symlink pointing to your centralized local storage directory for GGUF model binaries.
+* \`llama.cpp/\`: Filesystem symlink pointing to your active, custom-patched C++ inference engine fork repository.
+
+---
+*Verily, thou shalt hoard data.*
+FILE_EOF
+
+echo "[+] Structuring file: quick_start.md"
+cat << 'FILE_EOF' > quick_start.md
+# IrisLime Quick Start Deployment Recipe
+
+This guide provides the streamlined installation sequence for bringing up the IrisLime exploration environment on a newly cloned machine. Follow these terminal steps sequentially to link your source trees, activate the shell session variables, and run your baseline driver validation check.
+
+## Step 1: Establish Sibling Tree Architecture
+The workspace requires your custom \`llama.cpp\` inference engine fork to reside as a direct directory sibling to the \`irislime\` project root workspace. 
+
+Execute this terminal block to verify directory structures and establish the required development symlinks:
+
+\`\`\`bash
+# Navigate to your central development root
+cd ~/src
+
+# Clone the custom organization engine fork if not already cached on disk
+git clone git@github.com:aomaker-org/llama.cpp.git
+
+# Enter the active project repository space
+cd ~/src/irislime
+
+# Link the sibling engine repository into the active workspace
+ln -sf ../llama.cpp llama.cpp
+
+# Create a centralized local folder for high-density model binaries and link it
+mkdir -p ~/src/ai_models
+ln -sf ~/src/ai_models models
+\`\`\`
+
+## Step 2: Initialize Virtual Environment Dependencies
+Initialize the localized Python virtual environment and ingest required orchestration libraries using the master Makefile:
+
+\`\`\`bash
+cd ~/src/irislime
+
+# Instantiate the local .venv allocation and update pip packages
+make setup
+\`\`\`
+
+## Step 3: Activate the Environment Session Gate
+Always source the system boot utility before executing compilation targets or running hardware validation loops. This evaluates the Intel toolchain environment variables, mounts your local python paths, and updates your prompt text to monitor history command counters:
+
+\`\`\`bash
+. scratch/boot.sh
+\`\`\`
+
+## Step 4: Execute the Hardware Validation Check
+Run the automated hardware interrogation script to verify that the SYCL toolchain can safely map your integrated GPU silicon through the stable driver bypass path:
+
+\`\`\`bash
+bash scratch/run_test002.sh
+\`\`\`
+
+## Step 5: Verify Telemetry Output Ledgers
+Once the test pipeline concludes, verify that the runtime environment successfully compiled your point-in-time metrics records:
+
+1. **Raw Terminal Log**: Review the latest timestamped console capture under \`scratch/run_test_002_console_*.log\` to view the unfiltered GDB debugger trace streams.
+2. **The Result Ledger**: Review \`scratch/run_test_002.md\` to confirm your machine's CPU model name and execution exit codes (\`0\` for success) have been cleanly appended to the tracking table matrix.
+FILE_EOF
+
+echo "[+] Structuring file: getting_started.md"
+cat << 'FILE_EOF' > getting_started.md
+# Getting Started: System Configuration & Architectural Principles
+
+This document provides a deep dive into the underlying system dependencies, host-to-guest virtualization mechanics, and validation principles governing the IrisLime research sandbox.
+
+## 1. Host Infrastructure Prerequisites
+
+Prior to initializing the workspace orchestration scripts, the target host machine environment must satisfy the following hardware and toolchain baselines:
+
+* **Operating System**: Windows 11 (Version 22H2 or higher, or Insider Preview tracks) with an active WSL2 (Windows Subsystem for Linux) Ubuntu 24.04 LTS instance.
+* **Toolchain Stack**: Intel oneAPI Base Toolkit installed natively inside the WSL2 guest container (Version 2026 recommended).
+* **Graphics Infrastructure**: Current Intel Graphics Compute Runtime installation on the Windows host to expose execution device slices to the virtualization container.
+
+## 2. Kernel Graphics Virtualization Bridge
+
+To allow the virtualized Linux guest shell to communicate directly with your physical Intel Iris Xe integrated graphics cores, you must instantiate the kernel graphics interface mapping node.
+
+Execute the following commands within your WSL2 terminal session:
+
+```bash
+# 1. Expose the virtual graphics driver module to the guest kernel
+sudo modprobe vgem
+
+# 2. Verify hardware device node accessibility
+ls -l /dev/dri/renderD128
+
+```
+
+## 3. The Isolated Environment Gating Model
+
+To achieve absolute repeatability and protect the host workspace against configuration drift, this repository strictly avoids writing permanent modifications to your global user profile configurations (such as `~/.bashrc`). Instead, toolchain bindings are loaded dynamically inside your active shell session terminal.
+
+Sourcing the environment gate evaluates two operational layers:
+
+```bash
+source config_env
+
+```
+
+1. **Intel oneAPI Compilation Variables**: Automatically evaluates `/opt/intel/oneapi/setvars.sh` to arm the native `icx` and `icpx` compilers within the active session.
+2. **Python Process Isolation**: Kills any active external virtual environments and binds your shell strictly to the local project `.venv` space.
+
+The system validates environment readiness via an explicit environmental marker (`IRISLIME_READY=1`). If this sentinel is missing from your active process context, the compilation Makefiles will halt execution immediately to block unoptimized compilation passes.
+
+## 4. Crash Containment & Forensic Logging
+
+When debugging low-level hardware memory allocations or driver translation layers across different hardware lines, running unbuffered binaries directly can drop dead with unhandled exceptions, leaving zero telemetry behind.
+
+This workspace mandates that all memory-unsafe execution binaries pass through non-interactive, automated GDB wrappers (`scratch/run_gdb.sh`):
+
+* **Crash Containment**: If a segmentation fault surfaces, the parent shell loop catches the true POSIX signal code (`139`), auto-extracts the full backtrace (`bt`), and terminates gracefully without hanging your terminal panel.
+* **Privacy Protections**: Before logging tools rewrite active clipboard buffers, incoming clipboard states are securely archived as read-only snapshots inside the untracked ".security_scrub/" workspace folder to insulate local developer states against data overwrites.
+FILE_EOF
+
+echo "[+] Structuring file: training/README.md"
+cat << 'FILE_EOF' > training/README.md
+
+# IrisLime Training & Onboarding Center
+
+Welcome to the IrisLime engineering training center. This repository serves as the central knowledge management node for onboarding software developers, systems validation engineers, and automated execution agents into the project workspace environment.
+
+## Training Modules
+
+* 🌿 **[Git Workflows & Trunk Protection Manual](https://www.google.com/search?q=git_workflow.md)**: Comprehensive training guide on the project's single-operator commit model, branch preservation mandates, and the technical rationale behind squash-merge linear histories.
+* 👾 **[Cross-OS Encoding Interoperability Guide](https://www.google.com/search?q=encoding_interop.md)**: Deep dive documentation analyzing the CP437 ANSI vs UTF-8 character encoding collision encountered during Windows-to-WSL clipboard redirection pipelines.
+* 🧱 **[Forensic Snapshot Architecture Manual](https://www.google.com/search?q=snapshot_architecture.md)**: Technical overview of the point-in-time environment snapshot engine, file verification layers, and immutable annotated tag recovery protocols.
+
+## Core Onboarding Rule
+
+Before introducing structural changes or running verification matrices, every team member—both human and machine autonomous model—must read and adhere to the explicit logging, attribution, and staging criteria documented within these modules.
+FILE_EOF
+
+echo "[+] Structuring file: training/git_workflow.md"
+cat << 'FILE_EOF' > training/git_workflow.md
+
+# Git Workflows, Branch Retention, & Trunk Protection
+
+This module documents the authoritative version control methodology, branching constraints, and merge strategies governing development tracking within the IrisLime ecosystem.
+
+## 1. The Branch Retention Mandate
+
+This project enforces a strict architectural policy: **Historical development and feature branches are never deleted from the remote origin server.**
+
+In Git, a branch is merely a mutable pointer file containing a 40-character SHA hash referencing a specific node in the commit graph. Deleting a branch pointer eliminates the human-readable index referencing that line of development. Over time, unreferenced commits are permanently scanned by Git's garbage collection subroutines (`git gc`).
+
+By completely retaining all feature branches on the remote server, we maintain an immutable, non-destructive audit trail of every validation sprint, intermediate experiment, and configuration failure. This ensures that the low-level workspace history is fully discoverable. To prevent branch clutter, completed feature heads are systematically isolated within structural folder paths on the server:
+
+* `archive/feature-onboarding-and-testing-harness`
+* `checkpoint/20260625-sycl-patch`
+
+## 2. Technical Rationale for the Squash Merge
+
+When a feature branch passes validation testing, it is consolidated into the production trunk (`main`) strictly using the **Squash and Merge** primitive (`gh pr merge  --squash`).
+
+During local development iterations, engineers and automated execution blocks generate numerous granular micro-commits. These often represent incomplete states of the codebase—debugging hooks, trial-and-error compiler fixes, or intermediate log failures. Injecting these raw micro-commits directly into the primary tracking tree introduces historical pollution.
+
+A squash merge takes the entire aggregated delta of the feature branch and condenses it into a *single, brand-new commit* applied directly to the head of the production branch.
+
+### Why We Squash: Four Core Engineering Objectives
+
+1. **Strictly Linear History**: It eliminates multi-parent merge web topologies. The production history remains a straight, easily read line.
+2. **Guaranteed Atomic Commit Boundaries**: Every single commit on `main` is guaranteed to represent a completely stable, fully compiling software state. The production branch transitions instantly from working pre-feature code to working post-feature code.
+3. **Optimized Troubleshooting via `git bisect`**: When looking for an engine regression, `git bisect` utilizes a binary search through the timeline. If the branch history contains broken, non-compiling micro-commits, `git bisect` frequently halts on intermediate broken states where test suites cannot execute. Squashing ensures every search hop lands on a clean, valid compilation milestone.
+4. **Separation of Concerns**: High-level intent is documented on `main`, while low-level step-by-step developer implementation metrics remain safely archived on the un-deleted feature branches.
+
+## 3. Automated Validation Gates (Trunk Protection)
+
+To scale the repository safely from a single human operator to multiple automated agents, the production branch (`main`) is locked behind strict branch protection boundaries:
+
+* **No Direct Pushes**: All code insertions must transition through a verified Pull Request canvas.
+* **Mandatory Squash Linearization**: Disallows standard 3-way merges to prevent history fractures.
+* **Force-Push Prohibition**: Direct blocks are placed against `git push --force` strings, ensuring the underlying historical graph cannot be modified or overwritten.
+FILE_EOF
+
+echo "[+] Structuring file: training/encoding_interop.md"
+cat << 'FILE_EOF' > training/encoding_interop.md
+
+# Cross-OS Redirection & Character Encoding Faults (CP437 vs UTF-8)
+
+This training module provides a forensic case study of the data translation anomalies and character-mangling bugs encountered when routing text streams across different host-guest operating system layers.
+
+## 1. The Incident: Character Fracturing (Mojibake)
+
+During early text deployment sequences using headless clipboard interception routines over the WSL2 bridge interface, text rendering strings containing Unicode box-drawing characters (such as `├──`, `└──`, or `└─`) suffered severe formatting regressions inside the Linux terminal panel, manifesting as mangled Greek symbol strings:
+
+```text
+
+# Problematic CP437 Telemetry Rendering:
+
+ΓööΓöÇ Telemetry: Computed Size = 3555 bytes
+Γö£ΓöÇΓöÇ [PASS] Payload size validation cleared successfully.
+```
+
+## 2. Root Cause Analysis
+
+This specific structural regression represents a classic **Mojibake** encoding mismatch, occurring at the boundary intersection between the host OS clipboard management API and the guest Linux kernel shell:
+
+1. **Host-Side Encoding (Code Page 437)**: When high-fidelity Unicode string elements are placed onto the Windows host clipboard buffer and intercepted via the PowerShell proxy sub-process wrapper (`powershell.exe -Command Get-Clipboard`), the text stream is frequently translated into the standard legacy OEM character set layout—**Code Page 437 (DOS ANSI)**.
+2. **Guest-Side Interpretation (UTF-8)**: When this byte sequence transits the WSL boundary layer directly into the Linux guest terminal environment, the active shell interpreter evaluates those incoming hexadecimal byte groups according to native **UTF-8** multi-byte code point parameters.
+3. **The Collision**: Hexadecimal values representing the CP437 ANSI box-drawing indices map directly to completely different graphical characters inside the UTF-8 definition table, causing the text output to display corrupted characters down the terminal pane.
+
+## 3. Engineering Remediation & Defensive Coding Standard
+
+To protect the development workspace from character-encoding vulnerabilities and syntax errors in automated scripts, the project enforces a strict, cross-platform coding guideline:
+
+* **Elimination of Non-ASCII Primitives**: All core orchestration utilities, logging engines, and text telemetry outputs must completely avoid utilizing multi-byte Unicode box-drawing structures for status representation.
+* **Enforcement of Standard ASCII Tokens**: Status and hierarchy trees must be constructed strictly using hardened, single-byte universal ASCII character chains:
+* `├──` is completely replaced by `|--`
+* `└──` or `└─` is completely replaced by `\--` or `\----`
+
+
+
+By adhering to this standard, text transmission vectors remain deterministic, robust, and clean across all operating system interfaces, shell instances, and clipboard buffers.
+FILE_EOF
+
+echo "[+] Structuring file: training/snapshot_architecture.md"
+cat << 'FILE_EOF' > training/snapshot_architecture.md
+
+# Forensic Snapshot Architecture & Disaster Recovery Primitives
+
+This module details the design patterns, execution constraints, and implementation logic behind the workspace's point-in-time environment tracking and disaster recovery systems.
+
+## 1. Automated Telemetry Harvesting Model
+
+To guarantee absolute traceability before code consolidations execute, the environment integrates a dedicated snapshot engine located at `scratch/gather_snapshot.sh`.
+
+This script functions as a non-destructive logging harness that aggregates environmental state variables, local file status indices (`git status --short`), and exact repository commit pointers (`git rev-parse HEAD`) for both the parent project tree and the child inference submodules.
+
+### Output Encapsulation Mechanics
+
+The script aggregates its entire data capture payload within a strict command block structure, funneling the stdout stream directly to an immutable markdown ledger file located under `logs/test/`:
+
+```bash
+{
+echo "# Forensic Workspace Snapshot Ledger"
+# ... [Telemetry Extraction Logic] ...
+} > "$SNAPSHOT_LOG"
+```
+
+Because output is routed using hard file redirection (`>`), the data is funneled directly to the disk subsystem, leaving the active clipboard registers completely isolated. This protects host memory space against pollution during multi-stage code reviews.
+
+## 2. The Immutable Tag Recovery Layer
+
+While branch names (like `main`) are mutable pointers that advance automatically with commits or can be altered via administrative changes, an **Annotated Git Tag** creates a permanent, immutable object directly inside the Git database (`.git/objects/`).
+
+We anchor today's stable framework baseline using an explicit annotated milestone stamp:
+```bash
+git tag -a v1.0.0-onboarding-stable -m "Baseline Stable Onboarding Release."
+```
+
+This tag preserves an unalterable record of a known-good configuration state, capturing the specific developer signature, timestamp, and precise parent commit hash.
+
+## 3. Emergency Disaster Recovery Protocol
+
+If an automated testing execution script or an unverified experimental pass corrupts your shell variables, fractures the commit graph, or breaks the compilation paths tomorrow, you can restore your workspace byte-for-byte using this recovery protocol.
+
+Execute this single-stroke alignment sequence to clear out local entropy and force-reset the tree back to today's verified state:
+
+```bash
+
+# 1. Force-reset your active local history to the immutable tag baseline
+
+git checkout main
+git reset --hard tags/v1.0.0-onboarding-stable
+
+# 2. Force-align the remote server trunk back to the pristine anchor point
+
+git push origin main --force
+```
+FILE_EOF
+
+echo "[SUCCESS] Technical documentation stratum fully written to workspace topology."
+rm deploy_docs.sh
+EOF
+chmod +x deploy_docs.sh
+./deploy_docs.sh
+
+```
+
+Once the script completes, you can proceed directly to staging and force-syncing your clean, linear timeline upstream:
+
+```bash
+git add README.md quick_start.md getting_started.md scratch/run_test_002.md training/
+git commit -m "Docs: Deploy core training manuals and verified hardware ledgers"
+git push origin main --force
+
+```
