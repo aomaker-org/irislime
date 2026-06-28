@@ -54,4 +54,8 @@ fi
 
 # 6. Set the marker
 export IRISLIME_READY=1
+
+# 7. Other environmental settings:
+
+export DEBUGINFOD_CACHE_PATH="$HOME/.cache/gdb_symbols"
 echo "[+] IrisLime environment is ready."

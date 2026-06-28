@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+# ==========================================================================
+# INGESTION HEADER: tools/clip2file
+# Purpose: Headless multi-file manifest extraction with integrity validation.
+# ==========================================================================
+
+import sys
+import re
+import hashlib
+import subprocess
+from pathlib import Path
+
+def harvest_stream() -> str:
+    """Harvests raw text stream from standard input pipe or Windows clipboard."""
+    if not sys.stdin.isatty():
+        return sys.stdin.read()
+    try:
+        proc = subprocess.run(
+            ["powershell.exe", "-NoProfile", "-Command", "Get-Clipboard"],
+            capture_output=True, text=True, check=True
+        )
+        return proc.stdout
+    except Exception as e:
+        print(f"[X] Bridge Fault: Unable to intercept host clipboard: {e}")
+        sys.exit(1)
+
+def main():
+    raw_data = harvest_stream()
+    
+    # Resilient pattern matching for path, explicit byte size, and checksum strings
+    pattern = re.compile(
+        r"--- BEGIN FILE:\s*(\S+?)\s*(?:\|\s*Size:\s*(\d+)\s*bytes\s*)?(?:\|\s*SHA256:\s*(\S+)\s*)?---\n(.*?)\n--- END FILE ---",
+        re.DOTALL
+    )
+    
+    matches = pattern.findall(raw_data)
+    if not matches:
+        print("[!] Validation Halt: Zero structured manifest boundaries discovered in current stream.")
+        sys.exit(0)
+        
+    print(f"[+] Integrity Audit: Discovered {len(matches)} target descriptors in transaction log.")
+    
+    for path_str, exp_size, exp_hash, content in matches:
+        target_path = Path(path_str.strip())
+        
+        # Normalize line endings to Linux standard (LF) to maintain deterministic cross-OS byte footprints
+        clean_content = content.replace('\r\n', '\n')
+        actual_bytes = len(clean_content.encode('utf-8'))
+        computed_hash = hashlib.sha256(clean_content.encode('utf-8')).hexdigest()
+        
+        print(f"\n[*] Processing Asset Node: {target_path}")
+        print(f"    \\-- Telemetry: Computed Size = {actual_bytes} bytes | SHA256 = {computed_hash[:16]}...")
+        
+        # Integrity Layer 1: Validate Size Footprint
+        if exp_size:
+            expected_bytes = int(exp_size)
+            if actual_bytes != expected_bytes:
+                print(f"    [!] WARNING: Size discrepancy detected! Expected: {expected_bytes} | Got: {actual_bytes}")
+            else:
+                print("    |-- [PASS] Payload size validation cleared successfully.")
+                
+        # Integrity Layer 2: Validate Cryptographic Checksum
+        if exp_hash:
+            hash_str = exp_hash.strip()
+            if hash_str.upper() == "TODO":
+                print("    |-- [TODO] Cryptographic integrity verification deferred (Bypass enabled).")
+            elif computed_hash != hash_str.lower():
+                print(f"    [!] REGRESSION: Checksum mismatch!\n        Expected: {hash_str}\n        Computed: {computed_hash}")
+            else:
+                print("    |-- [PASS] SHA256 cryptographic signature validated.")
+                
+        # Write to drive
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        target_path.write_text(clean_content + "\n", encoding="utf-8")
+        print(f"    \\---- [SUCCESS] Asset committed to track tree: {target_path}")
+
+if __name__ == "__main__":
+    main()
+
+# ==========================================================================
+# EPILOG: End of File Descriptor for tools/clip2file
+# ==========================================================================

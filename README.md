@@ -1,20 +1,21 @@
-# IrisLime: Edge AI Exploration
+# IrisLime: Edge AI Exploration Sandbox
 
-**IrisLime** (Iris + SLM) is a research-focused environment designed to facilitate local, small-scale Large Language Model (LLM) inference on Intel Iris Xe integrated graphics, leveraging WSL2 and the Intel oneAPI toolkit.
+**IrisLime** (Iris + SLM) is a research environment designed for running local, small-scale Large Language Model (LLM) inference on Intel Iris Xe integrated graphics. It bridges Windows-hosted GPU hardware to a virtualized Linux workspace using WSL2 and the Intel oneAPI toolkit.
 
-## Vision
-To provide a replicable, self-documenting workflow for running GGUF-based models on Intel hardware, bridging the gap between Windows-hosted GPU resources and Linux-based AI inference.
+## Repository Vision
+To maintain a lean, forensic-ready project footprint, this environment decouples application tracking from upstream inference engine source code and heavy binary model weights using clean directory boundaries.
 
-## Key Features
-- **Modular Orchestration:** A Python-based `config_env.py` conductor handles hardware diagnostics and inference engine builds.
-- **Hardware-First:** Validates the WSL2/GPU bridge (Level Zero/OpenCL) before any workload begins.
-- **Portable Setup:** Decoupled from user-specific shell configurations (e.g., `.bashrc`) to ensure reproducibility.
+## Target Onboarding Matrix
+If you are setting up a newly cloned instance of this workspace on a machine (such as a Core12 or Core11 laptop), skip the theory and jump directly to the fast-track recipe:
 
-## Project Structure
-- `config_env.py`: The root orchestrator for the environment.
-- `tools/`: Modular library containing hardware diagnostics and build logic.
-- `models/`: Placeholder for your GGUF model files.
-- `docs/`: Research notes and performance logs.
+👉 **[Quick Start Deployment Recipe](quick_start.md)**
 
-## Getting Started
-See [getting_started.md](getting_started.md) to begin your setup.
+## Core Workspace Architecture
+- `config_env`: The primary environment gate loader. Idempotently initializes Python virtual environments and hooks into the Intel toolchain.
+- `scratch/`: The local engineering sandbox. Contains incremental validation harnesses (`run_test000.sh`, `run_test002.sh`) and append-only performance ledgers.
+- `tools/`: Maintained background orchestration utilities and automated diagnostic scripts.
+- `models/`: Symlink pointing to your centralized local storage for GGUF model binaries.
+- `llama.cpp/`: Symlink pointing to your active, custom-patched inference engine fork.
+
+## Architectural Documentation
+For a deep dive into the hardware validation pipeline, security trust model, and step-by-step environmental requirements, see the full **[Getting Started Guide](getting_started.md)**.
