@@ -3,8 +3,8 @@
 This guide is the friction-free installation sequence for bringing up the IrisLime development environment on a newly cloned machine. Follow these exact terminal steps to link your trees, arm the environment, and execute your first hardware validation test.
 
 # Create a centralized local storage directory for model binaries and link it
-mkdir -p ~/src/ai_models
-ln -sf ~/src/ai_models models
+mkdir -p ~/src/models
+ln -sf ~/src/models models
 ```
 
 ## Step 2: Initialize the Environment & Dependencies

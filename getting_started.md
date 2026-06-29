@@ -34,7 +34,7 @@ cd irislime
 2. **Clone the inference engine (fork):**
 Clone the fork of `llama.cpp` as a sibling directory, then link it to the project:
 This step may be optional if no changes are needed to the engine, but it is recommended for research flexibility.
-The fork of the engine is loaded as a git submodule.
+The fork of the engine is loaded as a git submodule in irislime.
 ```bash
 cd ~/src
 git clone https://github.com/aomaker-org/llama.cpp.git
@@ -46,17 +46,18 @@ cd ~/src/irislime
 3. **Configure Model Storage:**
 Store large binary model files in a central location to prevent Git repository bloat:
 ```bash
-mkdir -p ~/src/ai_models
+mkdir -p ~/src/models
 # Link the central storage to your current project
-ln -s ~/src/ai_models models
+ln -s ~/src/models models
 
 ```
 
 
 4. **Acquire a Model:**
 Download a baseline model (e.g., Llama-3-8B-Instruct) into your central store:
+(There is also the "hf" command line tool for downloading models from Hugging Face.)
 ```bash
-wget https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf -O ~/src/ai_models/llama-3-8b.Q4_K_M.gguf
+wget https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf -O ~/src/models/llama-3-8b.Q4_K_M.gguf
 
 ```
 

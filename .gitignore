@@ -22,8 +22,8 @@ build/
 # Cargo.lock
 
 # --- SLM / LLM / Edge Computing Artifacts ---
-# Do not track large model weights
-/models/
+# Do not track large model weights (note it's a symlink outside the repo)
+/models
 *.gguf
 *.bin
 *.pt
