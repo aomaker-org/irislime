@@ -1,78 +1,52 @@
-# Getting Started with IrisLime
 
-**IrisLime** is a research-focused environment designed to facilitate local, small-scale Large Language Model (LLM) inference on Intel Iris Xe integrated graphics, leveraging WSL2 and the Intel oneAPI toolkit.
+# Getting Started: System Configuration & Architectural Principles
 
-## 1. Prerequisites
+This document provides a deep dive into the underlying system dependencies, host-to-guest virtualization mechanics, and validation principles governing the IrisLime research sandbox.
 
-* **Windows 11** with WSL2 enabled.
-* [Intel oneAPI Base Toolkit](https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit.html) installed (v2026 recommended).
-* Ensure Windows host GPU drivers are current.
+## 1. Host Infrastructure Prerequisites
 
-## 2. System Configuration (Manual)
+Prior to initializing the workspace orchestration scripts, the target host machine environment must satisfy the following hardware and toolchain baselines:
 
-To bridge your Windows GPU to the WSL2 environment:
+* **Operating System**: Windows 11 (Version 22H2 or higher, or Insider Preview tracks) with an active WSL2 (Windows Subsystem for Linux) Ubuntu 24.04 LTS instance.
+* **Toolchain Stack**: Intel oneAPI Base Toolkit installed natively inside the WSL2 guest container (Version 2026 recommended).
+* **Graphics Infrastructure**: Current Intel Graphics Compute Runtime installation on the Windows host to expose execution device slices to the virtualization container.
 
-1. **Enable the vgem bridge:** Run `sudo modprobe vgem` to enable the virtual graphics module.
-2. **Verification:** Check for the render node: `ls -l /dev/dri/renderD128`.
-*(If not present, ensure you have initialized your WSL2 instance after driver updates).*
+## 2. Kernel Graphics Virtualization Bridge
 
-## 3. Workspace Setup (The Dependency Injection Model)
+To allow the virtualized Linux guest shell to communicate directly with your physical Intel Iris Xe integrated graphics cores, you must instantiate the kernel graphics interface mapping node.
 
-We follow an architecture that isolates the application code, engine fork, and model weights to maintain a lean, forensic-ready repository.
+Execute the following commands within your WSL2 terminal session:
 
-### Step-by-Step Initialization
-
-1. **Clone the project:**
 ```bash
-cd ~/src
-git clone https://github.com/aomaker-org/irislime.git
-cd irislime
+# 1. Expose the virtual graphics driver module to the guest kernel
+sudo modprobe vgem
+
+# 2. Verify hardware device node accessibility
+ls -l /dev/dri/renderD128
 
 ```
 
+## 3. The Isolated Environment Gating Model
 
-2. **Clone and link the inference engine:**
-Clone your fork of `llama.cpp` as a sibling directory, then link it to the project:
-```bash
-cd ~/src
-git clone https://github.com/aomaker-org/llama.cpp.git
-cd ~/src/irislime
-# Link the engine fork
-ln -s ../llama.cpp llama.cpp
+To achieve absolute repeatability and protect the host workspace against configuration drift, this repository strictly avoids writing permanent modifications to your global user profile configurations (such as `~/.bashrc`). Instead, toolchain bindings are loaded dynamically inside your active shell session terminal.
 
-```
-
-
-3. **Configure Model Storage:**
-Store large binary model files in a central location to prevent Git repository bloat:
-```bash
-mkdir -p ~/src/ai_models
-# Link the central storage to your current project
-ln -s ~/src/ai_models models
-
-```
-
-
-4. **Acquire a Model:**
-Download a baseline model (e.g., Llama-3-8B-Instruct) into your central store:
-```bash
-wget https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf -O ~/src/ai_models/llama-3-8b.Q4_K_M.gguf
-
-```
-
-
-
-## 4. Initialization
-
-Always initialize the local environment variables before building or running:
+Sourcing the environment gate evaluates two operational layers:
 
 ```bash
 source config_env
 
 ```
 
-## 5. Architectural Rationale
+1. **Intel oneAPI Compilation Variables**: Automatically evaluates `/opt/intel/oneapi/setvars.sh` to arm the native `icx` and `icpx` compilers within the active session.
+2. **Python Process Isolation**: Kills any active external virtual environments and binds your shell strictly to the local project `.venv` space.
 
-* **Repository Isolation:** By using symlinks for `llama.cpp` and `models`, we prevent Git index pollution and ensure binary files remain outside the version control system.
-* **Modular Evolution:** The `llama.cpp` engine can be branched or updated independently of the application logic.
-* **Portability:** You can rebuild the `irislime` environment on any machine, point the symlinks to your existing `ai_models` folder, and resume research immediately.
+The system validates environment readiness via an explicit environmental marker (`IRISLIME_READY=1`). If this sentinel is missing from your active process context, the compilation Makefiles will halt execution immediately to block unoptimized compilation passes.
+
+## 4. Crash Containment & Forensic Logging
+
+When debugging low-level hardware memory allocations or driver translation layers across different hardware lines, running unbuffered binaries directly can drop dead with unhandled exceptions, leaving zero telemetry behind.
+
+This workspace mandates that all memory-unsafe execution binaries pass through non-interactive, automated GDB wrappers (`scratch/run_gdb.sh`):
+
+* **Crash Containment**: If a segmentation fault surfaces, the parent shell loop catches the true POSIX signal code (`139`), auto-extracts the full backtrace (`bt`), and terminates gracefully without hanging your terminal panel.
+* **Privacy Protections**: Before logging tools rewrite active clipboard buffers, incoming clipboard states are securely archived as read-only snapshots inside the untracked `.security_scrub/` workspace folder to insulate local developer states against data overwrites.
