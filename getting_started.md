@@ -25,20 +25,20 @@ We follow an architecture that isolates the application code, engine fork, and m
 1. **Clone the project:**
 ```bash
 cd ~/src
-git clone https://github.com/aomaker-org/irislime.git
+git clone --recurse-submodules https://github.com/aomaker-org/irislime.git
 cd irislime
 
 ```
 
 
-2. **Clone and link the inference engine:**
-Clone your fork of `llama.cpp` as a sibling directory, then link it to the project:
+2. **Clone the inference engine (fork):**
+Clone the fork of `llama.cpp` as a sibling directory, then link it to the project:
+This step may be optional if no changes are needed to the engine, but it is recommended for research flexibility.
+The fork of the engine is loaded as a git submodule.
 ```bash
 cd ~/src
 git clone https://github.com/aomaker-org/llama.cpp.git
 cd ~/src/irislime
-# Link the engine fork
-ln -s ../llama.cpp llama.cpp
 
 ```
 
@@ -73,6 +73,5 @@ source config_env
 
 ## 5. Architectural Rationale
 
-* **Repository Isolation:** By using symlinks for `llama.cpp` and `models`, we prevent Git index pollution and ensure binary files remain outside the version control system.
-* **Modular Evolution:** The `llama.cpp` engine can be branched or updated independently of the application logic.
+* **Repository Isolation:** By using a symlink for `models`, we prevent Git index pollution and ensure binary files remain outside the version control system.
 * **Portability:** You can rebuild the `irislime` environment on any machine, point the symlinks to your existing `ai_models` folder, and resume research immediately.
