@@ -1,56 +1,64 @@
 # IrisLime Quick Start Deployment Recipe
 
-This guide is the friction-free installation sequence for bringing up the IrisLime development environment on a newly cloned machine. Follow these exact terminal steps to link your trees, arm the environment, and execute your first hardware validation test.
+This guide provides the streamlined installation sequence for bringing up the IrisLime exploration environment on a newly cloned machine. Follow these terminal steps sequentially to link your source trees, activate the shell session variables, and run your baseline driver validation check.
 
-## Step 1: Establish Sibling Tree Structure
-The workspace requires your custom `llama.cpp` engine fork to sit as a direct sibling to the `irislime` project directory. 
+## Step 1: Establish Sibling Tree Architecture
+The workspace requires your custom `llama.cpp` inference engine fork to reside as a direct directory sibling to the `irislime` project root workspace.
 
-Execute this block to verify your pathing and establish the required development symlinks:
+Execute this terminal block to verify directory structures and establish the required development symlinks:
 
 ```bash
-# Navigate to your central development directory
+# Navigate to your central development root
 cd ~/src
 
-# Clone the custom engine fork if it is not already present on this machine
+# Clone the custom organization engine fork if not already cached on disk
 git clone git@github.com:aomaker-org/llama.cpp.git
 
-# Enter your active project workspace
+# Enter the active project repository space
 cd ~/src/irislime
 
-# Link the sibling engine fork into the workspace
+# Link the sibling engine repository into the active workspace
 ln -sf ../llama.cpp llama.cpp
 
-# Create a centralized local storage directory for model binaries and link it
+# Create a centralized local folder for high-density model binaries and link it
 mkdir -p ~/src/ai_models
 ln -sf ~/src/ai_models models
+
 ```
 
-## Step 2: Initialize the Environment & Dependencies
-Initialize the Python virtual environment and pull in required orchestration assets using the master Makefile:
+## Step 2: Initialize Virtual Environment Dependencies
+
+Initialize the localized Python virtual environment and ingest required orchestration libraries using the master Makefile:
 
 ```bash
 cd ~/src/irislime
 
-# Initialize the virtual environment and install dependencies
+# Instantiate the local .venv allocation and update pip packages
 make setup
+
 ```
 
-## Step 3: Boot the Shell Session
-Always source the private boot utility before compiling or running tests. This loads the Intel oneAPI toolchain compiler variables, activates the Python environment, and transforms your prompt to display active execution history counters:
+## Step 3: Activate the Environment Session Gate
+
+Always source the system boot utility before executing compilation targets or running hardware validation loops. This evaluates the Intel toolchain environment variables, mounts your local python paths, and updates your prompt text to monitor history command counters:
 
 ```bash
 . scratch/boot.sh
-```
-*Note: You must **source** this script using `.` or `source`. Do not execute it directly.*
 
-## Step 4: Fire the Hardware Validation Test
-Run the latest unfiltered validation script to verify that your host machine's hardware profile is recognized and that the graphics layer can be reached safely via the OpenCL driver bypass:
+```
+
+## Step 4: Execute the Hardware Validation Check
+
+Run the automated hardware interrogation script to verify that the SYCL toolchain can safely map your integrated GPU silicon through the stable driver bypass path:
 
 ```bash
 bash scratch/run_test002.sh
+
 ```
 
-## Step 5: Verify the Execution Output
-Once the test concludes, check that your environment successfully generated your unique hardware logs:
-1. **The Raw Log:** Review `scratch/run_test_002_console_*.log` to see the complete, unfiltered GDB terminal stream.
-2. **The Results Ledger:** Review `scratch/run_test_002.md` to see your machine's specific CPU identifier and execution status cleanly appended to the tracking table.
+## Step 5: Verify Telemetry Output Ledgers
+
+Once the test pipeline concludes, verify that the runtime environment successfully compiled your point-in-time metrics records:
+
+1. **Raw Terminal Log**: Review the latest timestamped console capture under `scratch/run_test_002_console_*.log` to view the unfiltered GDB debugger trace streams.
+2. **The Result Ledger**: Review `scratch/run_test_002.md` to confirm your machine's CPU model name and execution exit codes (`0` for success) have been cleanly appended to the tracking table matrix.
