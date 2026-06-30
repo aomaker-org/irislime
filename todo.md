@@ -63,3 +63,6 @@ echo "hmm"
 - Action: Execute all memory-unsafe binaries and discovery primitives through batch-mode debugging to auto-extract core dump backtraces (`bt`) immediately upon memory fault occurrences.
 
 # EPILOG: Expected filename on drive: scratch/todo_001.md
+
+## TODO: 20260630_1116 Updates
+* [ ] Fix `tools/files2clip`: Enhance script logic to accept and cleanly process multiple explicit filenames via command-line arguments simultaneously rather than processing just a single file target.

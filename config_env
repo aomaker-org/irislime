@@ -1,21 +1,36 @@
-#!/bin/bash
-# config_env - Idempotent environment loader
-# Usage: source config_env [unset]
+#!/usr/bin/env bash
+# ==============================================================================
+# Filename:    config_env
+# Purpose:     Idempotent environment loader with force-reload capabilities
+# Type:        Sourced
+# Attribution: fekerr & Gemini (20260630_1215 / flash 3.5 extended)
+# Timestamp:   20260630_1215
+# ==============================================================================
 
-# 1. Guard: Prevent execution as a sub-shell
+# 1. Guard: Prevent direct subshell execution
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    echo "[!] ERROR: You must SOURCE this file, not execute it."
-    return 1 # return instead of exit for sourcing safety
+    echo "[!] ERROR: You must SOURCE this file, not execute it." >&2
+    exit 1
 fi
 
-# 2. Handle explicit unset
-if [ "$1" == "unset" ]; then
+# 2. Intercept Force Flag to trigger a clean environment tear-down first
+if [ "${1:-}" == "force" ] || [ "${1:-}" == "--force" ]; then
+    echo "[!] Force reload detected. Cycling environment state..."
+    unset IRISLIME_READY
+fi
+
+# 3. Handle explicit environment unsetting
+if [ "${1:-}" == "unset" ]; then
     echo "[!] Unsetting IrisLime environment..."
     unset IRISLIME_READY
     unset ONEAPI_ROOT
     unset MKLROOT
+    unset ONEAPI_DEVICE_SELECTOR
+    unset OpenVINO_DIR
+    unset INTEL_OPENVINO_DIR
+    unset IRISLIME_TEST_MODEL
     
-    if command -v deactivate &> /dev/null; then
+    if command -v deactivate >/dev/null 2>&1; then
         deactivate
         echo "[+] Virtual environment deactivated."
     fi
@@ -23,25 +38,24 @@ if [ "$1" == "unset" ]; then
     return 0
 fi
 
-# 3. Idempotency check
-if [ -n "$IRISLIME_READY" ]; then
-    echo "[!] IrisLime environment is already loaded."
+# 4. Idempotency Check
+if [ -n "${IRISLIME_READY:-}" ]; then
+    echo "[!] IrisLime environment is already loaded. Use 'source config_env force' to re-verify."
     return 0
 fi
 
-# 4. Activate venv (Robustly)
+# 5. Activate Python Virtual Environment Robustly
 if [ -f "venv/bin/activate" ]; then
-    # Ensure any active venv is killed first
-    if [[ "$VIRTUAL_ENV" != "" ]]; then
-        deactivate 2>/dev/null || unset VIRTUAL_ENV
+    if [[ "${VIRTUAL_ENV:-}" != "" ]]; then
+        deactivate >/dev/null 2>&1 || unset VIRTUAL_ENV
     fi
     source venv/bin/activate
     echo "[+] Virtual environment activated."
 else
-    echo "[!] Virtual environment not found. Run 'make setup' first."
+    echo "[!] Virtual environment not found. Run 'make setup' first." >&2
 fi
 
-# 5. Source Intel oneAPI
+# 6. Source Intel oneAPI Baseline Environment
 INTEL_ROOT="/opt/intel/oneapi"
 if [ -f "$INTEL_ROOT/setvars.sh" ]; then
     source "$INTEL_ROOT/setvars.sh" --force > /dev/null
@@ -52,17 +66,27 @@ else
     echo "[!] Intel oneAPI setvars.sh not found at $INTEL_ROOT."
 fi
 
-# 6. Set the marker
-export IRISLIME_READY=1
+# 7. Set IrisLime Compilation Matrix & Runtime Variables
+export OpenVINO_DIR="/usr/lib/cmake/openvino2024.6.0"
+export INTEL_OPENVINO_DIR="/usr"
 
-# 7. Other environmental settings:
+# Hypervisor Layer Override: Route to stable OpenCL framework to prevent Level Zero SIGSEGV
+export ONEAPI_DEVICE_SELECTOR="opencl:1"
 
+# Centralized Model Target Interpolation
+export IRISLIME_MODELS_DIR="../models"
+export IRISLIME_TEST_MODEL="${IRISLIME_TEST_MODEL:-$IRISLIME_MODELS_DIR/tinyllama-1.1b-chat-v1.0.Q4_0.gguf}"
+
+# Hardware Acceleration and Debugging Settings
+export ZES_ENABLE_SYSMAN=1
 export DEBUGINFOD_CACHE_PATH="$HOME/.cache/gdb_symbols"
 
-# Sourced Hardware Acceleration Tuning Parameters
-export ZES_ENABLE_SYSMAN=1
+# Suppress oneTBB composability warnings and balance thread core scaling
+export TCM_ENABLE=1
 
-# External Central Asset Location Settings
-export IRISLIME_MODELS_DIR="../models"
-
+export IRISLIME_READY=1
 echo "[+] IrisLime environment is ready."
+
+# ==============================================================================
+# Footer:      config_env
+# ==============================================================================
