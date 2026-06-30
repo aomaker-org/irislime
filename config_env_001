@@ -5,7 +5,7 @@
 # 1. Guard: Prevent execution as a sub-shell
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     echo "[!] ERROR: You must SOURCE this file, not execute it."
-    return 1 # return instead of exit for sourcing safety
+    return 1
 fi
 
 # 2. Handle explicit unset
@@ -14,29 +14,27 @@ if [ "$1" == "unset" ]; then
     unset IRISLIME_READY
     unset ONEAPI_ROOT
     unset MKLROOT
+    unset IRISLIME_MODELS_DIR
+    unset ONEAPI_DEVICE_SELECTOR
     
     if command -v deactivate &> /dev/null; then
         deactivate
         echo "[+] Virtual environment deactivated."
     fi
-    echo "[+] IrisLime environment unset."
     return 0
 fi
 
 # 3. Idempotency check
 if [ -n "$IRISLIME_READY" ]; then
-    echo "[!] IrisLime environment is already loaded."
     return 0
 fi
 
-# 4. Activate venv (Robustly)
+# 4. Activate venv
 if [ -f "venv/bin/activate" ]; then
-    # Ensure any active venv is killed first
     if [[ "$VIRTUAL_ENV" != "" ]]; then
         deactivate 2>/dev/null || unset VIRTUAL_ENV
     fi
     source venv/bin/activate
-    echo "[+] Virtual environment activated."
 else
     echo "[!] Virtual environment not found. Run 'make setup' first."
 fi
@@ -47,22 +45,15 @@ if [ -f "$INTEL_ROOT/setvars.sh" ]; then
     source "$INTEL_ROOT/setvars.sh" --force > /dev/null
     export ONEAPI_ROOT="$INTEL_ROOT"
     export MKLROOT="$INTEL_ROOT/mkl/latest"
-    echo "[+] Intel oneAPI environment sourced (Root: $ONEAPI_ROOT)."
 else
     echo "[!] Intel oneAPI setvars.sh not found at $INTEL_ROOT."
 fi
 
-# 6. Set the marker
-export IRISLIME_READY=1
-
-# 7. Other environmental settings:
-
-export DEBUGINFOD_CACHE_PATH="$HOME/.cache/gdb_symbols"
-
-# Sourced Hardware Acceleration Tuning Parameters
-export ZES_ENABLE_SYSMAN=1
-
-# External Central Asset Location Settings
+# 6. Dedicated Asset Cache Paths & Driver Bypass Settings
 export IRISLIME_MODELS_DIR="../models"
+export ONEAPI_DEVICE_SELECTOR="opencl:1"
 
+# 7. Set the marker
+export IRISLIME_READY=1
+export DEBUGINFOD_CACHE_PATH="$HOME/.cache/gdb_symbols"
 echo "[+] IrisLime environment is ready."

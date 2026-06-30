@@ -1,0 +1,9 @@
+# .gitattributes
+
+# Routes through the custom irislime telemetry filter:
+# Model bootstrapper: Get initial models in an external repo and connect to local repo.
+scripts/bootstrap_models.sh filter=irislime_telemetry
+
+# Route the model configuration environment through the custom irislime telemetry filter
+# bash "source config_env" to configure environment variable settings for the project
+config_env filter=irislime_telemetry

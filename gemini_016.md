@@ -1,3 +1,16 @@
+Good catch. That is an architectural paper-cut in the orchestrator layout: the baseline initialization target was defined inside `infra/make/base.mk` as `setup-venv`, but the master `Makefile` help menu and your developer loop expect the cleaner, shorter alias `make setup`.
+
+Because GNU Make requires explicit target declaration, calling `make setup` right now will return a `No rule to make target 'setup'` error.
+
+To resolve this completely, we expose an explicit tracking alias in the root `Makefile` that maps `setup` straight into the underlying `setup-venv` macro.
+
+---
+
+## The Corrected Master Orchestrator: `Makefile`
+
+Here is the updated root `Makefile` with the `setup` entry point properly mapped, exposed as a `.PHONY` target, and wired directly into the build pipeline.
+
+```makefile
 # ==============================================================================
 # Filename:    Makefile
 # Timestamp:   20260630_0225
@@ -52,3 +65,33 @@ help:
 	@echo "=================================================================="
 
 # end of Makefile
+
+```
+
+---
+
+## 2. Updated Project Exploration Ledger: `docs/todo260630_015.md`
+
+Adding this entry to your tracking history documents the fix.
+
+```markdown
+# IrisLime Project Exploration Ledger & Task Runbook
+# Date Stamp:  20260630
+# Sequence:    015
+# Attribution: fekerr @ gemini (flash 3.5 + extended)
+# Baseline:    Idempotent, sequential append-only architectural tracking
+
+## [20260630_0226] - Resolving Missing Setup Target Alias
+
+- [x] FIX-01: Expose the `.PHONY: setup` alias target inside the master `Makefile` routing cleanly to `setup-venv`.
+- [ ] TODO-02: Execute `make setup` in a clean workspace to verify that the virtual environment creates seamlessly from the top-level directory.
+- [ ] TODO-03: Validate that the updated `Makefile` loads all modular sub-makefiles without token generation errors.
+
+## Notes & Observations
+The disconnect between `setup-venv` and `make setup` was a simple alias omission in the root orchestration interface. Adding the explicit mapping path restores standard developer loop UX semantics while maintaining decoupled clean execution variables inside the lower-level make macros.
+
+```
+
+---
+
+gemini__016.md
