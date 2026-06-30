@@ -1,24 +1,38 @@
 #!/usr/bin/env python3
 # ==============================================================================
 # Filename:    tools/test_runner.py
-# Purpose:     Decoupled non-interactive validation and automated tracking dumps
+# Purpose:     Profile and control-aware dynamic validation engine
 # Type:        Executable Script
-# Attribution: fekerr & Gemini (20260630_1351 / flash 3.5 extended)
+# Attribution: fekerr & Gemini (20260630_1625 / flash 3.5 extended)
 # ==============================================================================
 
 import sys
 import os
+import json
 import subprocess
 
 def run_evaluation_pass():
-    print("\n[+] Launching Non-Interactive Acceleration Smoke Test...")
+    print("\n[+] Launching Control-Aware Dynamic Smoke Test...")
     print("------------------------------------------------------------------")
     
-    binary_target = "build/openvino/bin/llama-cli"
+    status_path = "build/build_status.json"
+    control_path = "matrix_control.json"
+    
+    if not os.path.exists(status_path) or not os.path.exists(control_path):
+        print("[!] Abort: Missing build status or control config targets.")
+        return False
+        
+    with open(status_path, "r") as sf, open(control_path, "r") as cf:
+        status_data = json.load(sf)
+        control_data = json.load(cf)
+        
+    backend = status_data.get("last_built_target", "openvino")
+    target_dir = status_data.get("target_directory")
+    binary_target = f"{target_dir}/bin/llama-cli"
     model_target = os.environ.get("IRISLIME_TEST_MODEL", "models/tinyllama-1.1b-chat-v1.0.Q4_0.gguf")
     
     if not os.path.exists(binary_target):
-        print(f"[!] Target Verification Failed: Binary missing at {binary_target}.")
+        print(f"[!] Verification Error: Expected binary missing at {binary_target}.")
         return False
 
     args = [
@@ -30,26 +44,24 @@ def run_evaluation_pass():
     ]
     
     env = os.environ.copy()
-    env["GGML_OPEN_VINO_DEVICE"] = "GPU"
-    env["DEBUGINFOD_URLS"] = "" 
+    env["DEBUGINFOD_URLS"] = ""
     
-    prompt_stream_payload = "Verify framework register initialization.\n/exit\n"
+    # Pull dynamic runtime variables straight out of user control file parameters
+    backend_settings = control_data.get("backend_overrides", {}).get(backend, {})
+    custom_env_vars = backend_settings.get("env_vars", {})
     
-    print("[Exec] Dispatching prompt sequences and control termination vectors...")
+    print(f"[Env] Injecting user-defined variables for backend: {backend}")
+    for var_key, var_val in custom_env_vars.items():
+        env[var_key] = str(var_val)
+        
+    prompt_stream_payload = f"Verify agnostic user control hooks for {backend}.\n/exit\n"
+    
+    print(f"[Exec] Testing target binary: {binary_target}")
     process = subprocess.run(
-        args, 
-        env=env, 
-        input=prompt_stream_payload, 
-        text=True, 
-        capture_output=False
+        args, env=env, input=prompt_stream_payload, text=True, capture_output=False
     )
     
-    if process.returncode != 0:
-        print(f"\n[!] ANOMALY DETECTED: Execution step returned error code: {process.returncode}")
-        return False
-        
-    print("\n[+] INFERENCE SUCCESS: Target process resolved execution blocks normally.")
-    return True
+    return process.returncode == 0
 
 if __name__ == "__main__":
     success = run_evaluation_pass()
