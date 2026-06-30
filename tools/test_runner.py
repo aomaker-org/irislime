@@ -3,7 +3,7 @@
 # Filename:    tools/test_runner.py
 # Purpose:     Decoupled non-interactive validation and automated tracking dumps
 # Type:        Executable Script
-# Attribution: fekerr & Gemini (20260630_1350 / flash 3.5 extended)
+# Attribution: fekerr & Gemini (20260630_1351 / flash 3.5 extended)
 # ==============================================================================
 
 import sys
@@ -21,7 +21,6 @@ def run_evaluation_pass():
         print(f"[!] Target Verification Failed: Binary missing at {binary_target}.")
         return False
 
-    # Extracting parameters validated by your cpu_safe script
     args = [
         binary_target,
         "--model", model_target,
@@ -34,7 +33,6 @@ def run_evaluation_pass():
     env["GGML_OPEN_VINO_DEVICE"] = "GPU"
     env["DEBUGINFOD_URLS"] = "" 
     
-    # Construct your targeted execution payload block matching: printf '%s\n/exit\n'
     prompt_stream_payload = "Verify framework register initialization.\n/exit\n"
     
     print("[Exec] Dispatching prompt sequences and control termination vectors...")
@@ -56,3 +54,5 @@ def run_evaluation_pass():
 if __name__ == "__main__":
     success = run_evaluation_pass()
     sys.exit(0 if success else 1)
+
+# --- END OF FILE: tools/test_runner.py ---

@@ -1,0 +1,34 @@
+{
+  "global_settings": {
+    "min_required_disk_space_gb": 5.0,
+    "default_parallel_jobs": 1
+  },
+  "backend_overrides": {
+    "openvino": {
+      "enabled": true,
+      "profiles": ["RelWithDebInfo", "Debug"],
+      "parallel_jobs": 1,
+      "cmake_cxx_flags": "-DCL_EXTERNAL_MEMORY_HANDLE_D3D11_TEXTURE_KHR=0x406E -DCL_EXTERNAL_MEMORY_HANDLE_D3D11_TEXTURE_KMT_KHR=0x406F -DCL_EXTERNAL_MEMORY_HANDLE_D3D12_HEAP_KHR=0x4070 -DCL_EXTERNAL_MEMORY_HANDLE_D3D12_RESOURCE_KHR=0x4071",
+      "env_vars": {
+        "GGML_OPEN_VINO_DEVICE": "GPU",
+        "TCM_ENABLE": "1"
+      }
+    },
+    "sycl": {
+      "enabled": false,
+      "profiles": ["RelWithDebInfo"],
+      "parallel_jobs": 1,
+      "env_vars": {
+        "CXX": "icpx",
+        "CC": "icx",
+        "ONEAPI_DEVICE_SELECTOR": "level_zero:gpu"
+      }
+    },
+    "vulkan": {
+      "enabled": false,
+      "profiles": ["Release"],
+      "parallel_jobs": 4,
+      "cmake_flags": "-DGGML_VULKAN=ON"
+    }
+  }
+}
