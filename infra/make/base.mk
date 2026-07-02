@@ -1,10 +1,12 @@
 # ==============================================================================
 # Filename:    infra/make/base.mk
-# Timestamp:   20260630_0015
-# Attribution: fekerr @ gemini (flash 3.5 + extended)
-# Purpose:     RAM-Aware Topology Parsing & Safe Stream Filters
+# Timestamp:   20260701_111500
+# Purpose:     RAM-Aware Topology Parsing & Safe Toolchain Pre-flight Sanity Check
+# Type:        Makefile Component Include
+# Attribution: fekerr & Gemini (20260701_1115 / flash 3.5 extended)
 # ==============================================================================
 
+# Strict Environment Guard Interlock
 ifndef IRISLIME_READY
   $(error [!] IrisLime environment context not detected! Run 'source config_env')
 endif
@@ -25,35 +27,33 @@ TOTAL_RAM_KB  := $(shell grep MemTotal /proc/meminfo | awk '{print $$2}')
 TOTAL_RAM_GB  := $(shell echo $$(( $(TOTAL_RAM_KB) / 1024 / 1024 )))
 RAM_SAFE_JOBS := $(shell echo $$(( $(TOTAL_RAM_GB) / 4 )))
 
+# Calculate CPU Build Capacity and Physical Inference Cores
 ifeq ($(NUM_P_THREADS),0)
-  CPU_BUILD_JOBS := $(TOTAL_THREADS)
-  NUM_INF_THREADS := $(shell echo $$(( $(TOTAL_THREADS) / 2 )))
+  CALIBRATED_CPU_JOBS := $(TOTAL_THREADS)
+  NUM_INF_THREADS     := $(shell echo $$(( $(TOTAL_THREADS) / 2 )))
 else
-  CPU_BUILD_JOBS := $(shell echo $$(( $(NUM_P_THREADS) + ($(NUM_E_THREADS) / 2) )))
-  NUM_INF_THREADS := $(shell echo $$(( $(NUM_P_THREADS) / 2 )))
+  CALIBRATED_CPU_JOBS := $(shell echo $$(( $(NUM_P_THREADS) + ($(NUM_E_THREADS) / 2) )))
+  NUM_INF_THREADS     := $(shell echo $$(( $(NUM_P_THREADS) / 2 )))
 endif
 
-# Ensure RAM constraints take precedence if memory is tight
-NUM_BUILD_JOBS := $(shell if [ $(RAM_SAFE_JOBS) -lt $(CPU_BUILD_JOBS) ] && [ $(RAM_SAFE_JOBS) -gt 0 ]; then echo $(RAM_SAFE_JOBS); else echo $(CPU_BUILD_JOBS); fi)
+# Ensure RAM constraints take precedence if memory space is tight
+CALIBRATED_BUILD_JOBS := $(shell if [ $(RAM_SAFE_JOBS) -lt $(CALIBRATED_CPU_JOBS) ] && [ $(RAM_SAFE_JOBS) -gt 0 ]; then echo $(RAM_SAFE_JOBS); else echo $(CALIBRATED_CPU_JOBS); fi)
+
 # Enforce a hard baseline floor of at least 2 jobs to guarantee execution
-ifeq ($(NUM_BUILD_JOBS),0)
-  NUM_BUILD_JOBS := 2
+ifeq ($(CALIBRATED_BUILD_JOBS),0)
+  CALIBRATED_BUILD_JOBS := 2
 endif
+
+# --- VARIABLE INTERPOLATION GATES (PRESERVES CALLER OVERRIDES) ---
+# Use ?= so command-line or build_runner.py environment parameters override defaults
+NUM_BUILD_JOBS ?= $(CALIBRATED_BUILD_JOBS)
 
 # --- SHARED CONFIGURATION MATRIX ---
-ENGINE_DIR      := llama.cpp
-MODELS_DIR      := models
-BUILD_ROOT      := build
-TIMESTAMP       := $(shell date +%Y%m%d_%H%M%S)
-METRICS_FILE    := telemetry_builds.csv
-
-ifeq ($(QUIET),1)
-  INIT_STREAM   = > $(1) 2>&1
-  APPEND_STREAM = >> $(1) 2>&1
-else
-  INIT_STREAM   = 2>&1 | tee $(1)
-  APPEND_STREAM = 2>&1 | tee -a $(1)
-endif
+ENGINE_DIR    := llama.cpp
+MODELS_DIR    := models
+BUILD_ROOT    := build
+TIMESTAMP     := $(shell date +%Y%m%d_%H%M%S)
+METRICS_FILE  := telemetry_builds.csv
 
 define log_telemetry
 	echo "$(TIMESTAMP),$(1),$(2),$(3)" >> $(METRICS_FILE)
@@ -71,7 +71,8 @@ show-topology:
 	@echo "  Performance Core Threads Detected  : $(NUM_P_THREADS) (Physical P-Cores: $(NUM_INF_THREADS))"
 	@echo "  Efficient Core Threads Detected    : $(NUM_E_THREADS)"
 	@echo "------------------------------------------------------------------"
-	@echo "  CALIBRATED BUILD CONCURRENCY (-j)  : $(NUM_BUILD_JOBS)"
+	@echo "  CALIBRATED CONCURRENCY CAPACITY   : $(CALIBRATED_BUILD_JOBS)"
+	@echo "  ACTIVE RUNNER CONCURRENCY VALUE    : $(NUM_BUILD_JOBS)"
 	@echo "  CALIBRATED INFERENCE THREADS (-t)  : $(NUM_INF_THREADS)"
 	@echo "=================================================================="
 
@@ -92,11 +93,11 @@ venv/.installed: requirements.txt
 
 track-workspace:
 	@echo ""
-	@echo "[+] Mapping current IrisLime compilation and telemetry tree structures:"
+	@echo "[+] Mapping current IrisLime variant tree structure for: $(BUILD_DIR)"
 	@if command -v tree &> /dev/null; then \
-		tree -f $(BUILD_ROOT); \
+		tree -f $(BUILD_DIR); \
 	else \
-		find $(BUILD_ROOT) -type f -name "*.log" -o -name "llama-cli"; \
+		find $(BUILD_DIR) -type f -name "*.log" -o -name "llama-cli"; \
 	fi
 
-# end of infra/make/base.mk
+# --- END OF FILE: infra/make/base.mk ---

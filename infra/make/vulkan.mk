@@ -1,37 +1,38 @@
 # ==============================================================================
 # Filename:    infra/make/vulkan.mk
 # Purpose:     Portable Vulkan Cross-Platform Graphics Engine Blueprint
+# Type:        Makefile Component (Dynamic Build-Isolation Compliant)
+# Attribution: fekerr & Gemini (20260701_1028 / flash 3.5 extended)
 # ==============================================================================
 
-BUILD_DIR_VK := $(BUILD_ROOT)/vulkan
-LOG_VK       := build_vulkan_$(TIMESTAMP).log
+BUILD_DIR     ?= build/vulkan_release
+LOG_FILE_PATH ?= $(BUILD_DIR)/logs/build_manual.log
 
-.PHONY: build-vulkan run-vulkan
+.PHONY: build-vulkan clean-vulkan
 
-build-vulkan: setup-venv verify-infra
-	@echo "[+] Launching Cross-Platform Vulkan Out-of-Tree Build Matrix..."
-	@mkdir -p $(BUILD_DIR_VK)
+build-vulkan:
+	@echo "[Make] Initializing Vulkan SPIR-V compilation inside: $(BUILD_DIR)"
+	@mkdir -p $(BUILD_DIR) $(dir $(LOG_FILE_PATH))
+	@echo "==================================================================" >> $(LOG_FILE_PATH)
+	@echo "[Make Session] Launching Build at $$(date)" >> $(LOG_FILE_PATH)
+	@echo "==================================================================" >> $(LOG_FILE_PATH)
+	@echo "[Make] Log Target Destination: $(LOG_FILE_PATH)"
 	@START_TIME=$$(date +%s); \
-	cd $(BUILD_DIR_VK) && \
+	cd $(BUILD_DIR) && \
 	cmake ../../$(ENGINE_DIR) \
 		-DGGML_VULKAN=ON \
-		-DCMAKE_BUILD_TYPE=Release > ../../$(LOG_VK) 2>&1 && \
-	$(MAKE) -j$$(shell nproc) >> ../../$(LOG_VK) 2>&1; \
+		-DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) \
+		$(CMAKE_FLAGS) >> $(LOG_FILE_PATH) 2>&1 && \
+	$(MAKE) -j$(NUM_BUILD_JOBS) >> $(LOG_FILE_PATH) 2>&1; \
 	STATUS=$$?; \
 	END_TIME=$$(date +%s); \
 	DURATION=$$((END_TIME - START_TIME)); \
 	if [ $$STATUS -ne 0 ]; then \
-		echo "[!] Vulkan Compilation Macro Failed. Inspect $(LOG_VK)"; \
-		$(call log_telemetry,VULKAN,$$DURATION,FAILURE); \
+		echo "[!] Vulkan Compilation Macro Failed. Inspect $(LOG_FILE_PATH)"; \
 		exit $$STATUS; \
-	fi; \
-	$(call log_telemetry,VULKAN,$$DURATION,SUCCESS); \
-	echo "[+] Vulkan target compiled successfully in $$DURATION seconds -> $(BUILD_DIR_VK)/bin/"
-
-run-vulkan:
-	@if [ ! -f "$(BUILD_DIR_VK)/bin/llama-cli" ]; then \
-		echo "[!] Target binary missing. Execute 'make build-vulkan' first."; exit 3; \
 	fi
-	@$(BUILD_DIR_VK)/bin/llama-cli -m $(MODELS_DIR)/llama3.2-3b-q4.gguf -p "Vulkan runtime test:" -n 30 -ngl 99
+
+clean-vulkan:
+	rm -rf $(BUILD_DIR)
 
 # end of infra/make/vulkan.mk

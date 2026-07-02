@@ -5,7 +5,7 @@
   },
   "backend_overrides": {
     "openvino": {
-      "enabled": true,
+      "enabled": false,
       "profiles": ["RelWithDebInfo", "Debug"],
       "parallel_jobs": 1,
       "cmake_cxx_flags": "-DCL_EXTERNAL_MEMORY_HANDLE_D3D11_TEXTURE_KHR=0x406E -DCL_EXTERNAL_MEMORY_HANDLE_D3D11_TEXTURE_KMT_KHR=0x406F -DCL_EXTERNAL_MEMORY_HANDLE_D3D12_HEAP_KHR=0x4070 -DCL_EXTERNAL_MEMORY_HANDLE_D3D12_RESOURCE_KHR=0x4071",
@@ -15,9 +15,9 @@
       }
     },
     "sycl": {
-      "enabled": false,
+      "enabled": true,
       "profiles": ["RelWithDebInfo"],
-      "parallel_jobs": 1,
+      "parallel_jobs": 4,
       "env_vars": {
         "CXX": "icpx",
         "CC": "icx",
@@ -25,7 +25,7 @@
       }
     },
     "vulkan": {
-      "enabled": false,
+      "enabled": true,
       "profiles": ["Release"],
       "parallel_jobs": 4,
       "cmake_flags": "-DGGML_VULKAN=ON"

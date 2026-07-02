@@ -1,0 +1,24 @@
+build-openvino_broken:
+	@echo "[Make] Initializing OpenVINO compilation inside: $(BUILD_DIR)"
+	@mkdir -p $(BUILD_DIR) $(dir $(LOG_FILE_PATH))
+	@echo "==================================================================" >> $(LOG_FILE_PATH)
+	@echo "[Make Session] Launching Build at $$(date)" >> $(LOG_FILE_PATH)
+	@echo "==================================================================" >> $(LOG_FILE_PATH)
+	@echo "[Make] Log Target Destination: $(LOG_FILE_PATH)"
+	@START_TIME=$$(date +%s); \
+	cd $(BUILD_DIR) && \
+	cmake ../../$(ENGINE_DIR) \
+		-DGGML_OPENVINO=ON \
+		-DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) \
+		-DOpenVINO_DIR=$(TARGET_OV_DIR) \
+		$(CMAKE_FLAGS_CLEAN) >> $(LOG_FILE_PATH) 2>&1 && \
+	$(MAKE) -j$(NUM_BUILD_JOBS) >> $(LOG_FILE_PATH) 2>&1; \
+	STATUS=$$?; \
+	END_TIME=$$(date +%s); \
+	DURATION=$$((END_TIME - START_TIME)); \
+	if [ $$STATUS -ne 0 ]; then \
+		echo "[!] OpenVINO Compilation Macro Failed. Inspect $(LOG_FILE_PATH)"; \
+		exit $$STATUS; \
+	fi
+
+

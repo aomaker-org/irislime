@@ -1,0 +1,29 @@
+
+if __name__ == "__main__":
+    run_purge_sequence()
+
+# --- END OF FILE: tools/distclean.py ---
+EOF
+
+ 2800  chmod +x tools/distclean.py
+ 2801  git status
+ 2802  git add tools/distclean.py
+ 2803  . config_env unset
+ 2804  tools/distclean.py
+ 2805  . config_env
+ 2806  tools/distclean.py
+ 2807  ls -rtla tools
+ 2808  git status
+ 2809  tools/build_runner.py
+ 2810  git status
+ 2811  git add .
+ 2812  less logs/intel_setvars.log
+ 2813  git status
+ 2814  ls build
+ 2815  ls build/openvino/
+ 2816  ls logs/builds/openvino_debug
+ 2817  vim scratch/20260701_2809-2817.log
+ 2818  history
+(venv)
+■ [2819] | ~/src/irislime
+;
