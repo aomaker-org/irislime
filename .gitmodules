@@ -1,3 +1,6 @@
 [submodule "llama.cpp"]
 	path = llama.cpp
 	url = git@github.com:aomaker-org/llama.cpp.git
+[submodule "deps/litert-lm"]
+	path = deps/litert-lm
+	url = https://github.com/aomaker-org/LiteRT-LM.git

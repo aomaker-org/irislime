@@ -1,0 +1,148 @@
+{
+  "models_root_override": "",
+  "available_assets": {
+    "tinyllama-1.1b-chat-v1.0.Q8_0": {
+      "filename": "tinyllama-1.1b-chat-v1.0.Q8_0.gguf",
+      "format": "gguf",
+      "architecture": "llama",
+      "recommended_backends": [
+        "openvino",
+        "sycl",
+        "vulkan",
+        "cpu"
+      ]
+    },
+    "tinyllama-1.1b-chat-v1.0.Q5_K_M": {
+      "filename": "tinyllama-1.1b-chat-v1.0.Q5_K_M.gguf",
+      "format": "gguf",
+      "architecture": "llama",
+      "recommended_backends": [
+        "openvino",
+        "sycl",
+        "vulkan",
+        "cpu"
+      ]
+    },
+    "tinyllama-1.1b-chat-v1.0.Q5_0": {
+      "filename": "tinyllama-1.1b-chat-v1.0.Q5_0.gguf",
+      "format": "gguf",
+      "architecture": "llama",
+      "recommended_backends": [
+        "openvino",
+        "sycl",
+        "vulkan",
+        "cpu"
+      ]
+    },
+    "tinyllama-1.1b-chat-v1.0.Q4_0": {
+      "filename": "tinyllama-1.1b-chat-v1.0.Q4_0.gguf",
+      "format": "gguf",
+      "architecture": "llama",
+      "recommended_backends": [
+        "openvino",
+        "sycl",
+        "vulkan",
+        "cpu"
+      ]
+    },
+    "tinyllama-1.1b-chat-v1.0.Q3_K_M": {
+      "filename": "tinyllama-1.1b-chat-v1.0.Q3_K_M.gguf",
+      "format": "gguf",
+      "architecture": "llama",
+      "recommended_backends": [
+        "openvino",
+        "sycl",
+        "vulkan",
+        "cpu"
+      ]
+    },
+    "tinyllama-1.1b-chat-v1.0.Q4_K_S": {
+      "filename": "tinyllama-1.1b-chat-v1.0.Q4_K_S.gguf",
+      "format": "gguf",
+      "architecture": "llama",
+      "recommended_backends": [
+        "openvino",
+        "sycl",
+        "vulkan",
+        "cpu"
+      ]
+    },
+    "tinyllama-1.1b-chat-v1.0.Q3_K_L": {
+      "filename": "tinyllama-1.1b-chat-v1.0.Q3_K_L.gguf",
+      "format": "gguf",
+      "architecture": "llama",
+      "recommended_backends": [
+        "openvino",
+        "sycl",
+        "vulkan",
+        "cpu"
+      ]
+    },
+    "tinyllama-1.1b-chat-v1.0.Q6_K": {
+      "filename": "tinyllama-1.1b-chat-v1.0.Q6_K.gguf",
+      "format": "gguf",
+      "architecture": "llama",
+      "recommended_backends": [
+        "openvino",
+        "sycl",
+        "vulkan",
+        "cpu"
+      ]
+    },
+    "Llama-3.2-1B-Instruct-Q4_K_M": {
+      "filename": "Llama-3.2-1B-Instruct-Q4_K_M.gguf",
+      "format": "gguf",
+      "architecture": "llama",
+      "recommended_backends": [
+        "openvino",
+        "sycl",
+        "vulkan",
+        "cpu"
+      ]
+    },
+    "tinyllama-1.1b-chat-v1.0.Q2_K": {
+      "filename": "tinyllama-1.1b-chat-v1.0.Q2_K.gguf",
+      "format": "gguf",
+      "architecture": "llama",
+      "recommended_backends": [
+        "openvino",
+        "sycl",
+        "vulkan",
+        "cpu"
+      ]
+    },
+    "tinyllama-1.1b-chat-v1.0.Q4_K_M": {
+      "filename": "tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf",
+      "format": "gguf",
+      "architecture": "llama",
+      "recommended_backends": [
+        "openvino",
+        "sycl",
+        "vulkan",
+        "cpu"
+      ]
+    },
+    "tinyllama-1.1b-chat-v1.0.Q5_K_S": {
+      "filename": "tinyllama-1.1b-chat-v1.0.Q5_K_S.gguf",
+      "format": "gguf",
+      "architecture": "llama",
+      "recommended_backends": [
+        "openvino",
+        "sycl",
+        "vulkan",
+        "cpu"
+      ]
+    },
+    "tinyllama-1.1b-chat-v1.0.Q3_K_S": {
+      "filename": "tinyllama-1.1b-chat-v1.0.Q3_K_S.gguf",
+      "format": "gguf",
+      "architecture": "llama",
+      "recommended_backends": [
+        "openvino",
+        "sycl",
+        "vulkan",
+        "cpu"
+      ]
+    }
+  }
+}

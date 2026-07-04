@@ -1,21 +1,46 @@
-#!/bin/bash
-# config_env - Idempotent environment loader
-# Usage: source config_env [unset]
+#!/usr/bin/env bash
+# ==============================================================================
+# Filename:    config_env
+# Purpose:     Idempotent environment loader with force-reload and uv syncing
+# Type:        Sourced
+# Attribution: fekerr & Gemini (20260702_0855 / flash 3.5 extended)
+# Timestamp:   20260702_0855
+# ==============================================================================
 
-# 1. Guard: Prevent execution as a sub-shell
+# 1. Guard: Prevent direct subshell execution
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    echo "[!] ERROR: You must SOURCE this file, not execute it."
-    return 1 # return instead of exit for sourcing safety
+    echo "[!] ERROR: You must SOURCE this file, not execute it." >&2
+    exit 1
 fi
 
-# 2. Handle explicit unset
-if [ "$1" == "unset" ]; then
+# 2. Intercept Force Flag to trigger a clean environment tear-down first
+if [ "${1:-}" == "force" ] || [ "${1:-}" == "--force" ]; then
+    echo "[!] Force reload detected. Cycling environment state..."
+    unset IRISLIME_READY
+fi
+
+# 3. Handle explicit environment unsetting
+if [ "${1:-}" == "unset" ]; then
     echo "[!] Unsetting IrisLime environment..."
     unset IRISLIME_READY
     unset ONEAPI_ROOT
     unset MKLROOT
+    unset ONEAPI_DEVICE_SELECTOR
+    unset OpenVINO_DIR
+    unset INTEL_OPENVINO_DIR
+    unset IRISLIME_TEST_MODEL
+    unset IRISLIME_MODELS_DIR
+    unset ZES_ENABLE_SYSMAN
+    unset DEBUGINFOD_CACHE_PATH
+    unset TCM_ENABLE
     
-    if command -v deactivate &> /dev/null; then
+    # Cleanly revert NVM configurations if registered
+    if command -v nvm >/dev/null 2>&1; then
+        nvm deactivate >/dev/null 2>&1 || true
+        echo "[+] Node version manager tracking deactivated."
+    fi
+    
+    if command -v deactivate >/dev/null 2>&1; then
         deactivate
         echo "[+] Virtual environment deactivated."
     fi
@@ -23,39 +48,99 @@ if [ "$1" == "unset" ]; then
     return 0
 fi
 
-# 3. Idempotency check
-if [ -n "$IRISLIME_READY" ]; then
-    echo "[!] IrisLime environment is already loaded."
+# 4. Idempotency Check
+if [ -n "${IRISLIME_READY:-}" ]; then
+    echo "[!] IrisLime environment is already loaded. Use 'source config_env force' to re-verify."
     return 0
 fi
 
-# 4. Activate venv (Robustly)
-if [ -f "venv/bin/activate" ]; then
-    # Ensure any active venv is killed first
-    if [[ "$VIRTUAL_ENV" != "" ]]; then
-        deactivate 2>/dev/null || unset VIRTUAL_ENV
+# 5. Activate Python Virtual Environment via uv Standard Layout (.venv)
+VENV_PATH=".venv"
+if [ -f "${VENV_PATH}/bin/activate" ]; then
+    if [[ "${VIRTUAL_ENV:-}" != "" ]]; then
+        deactivate >/dev/null 2>&1 || unset VIRTUAL_ENV
     fi
-    source venv/bin/activate
-    echo "[+] Virtual environment activated."
+    source "${VENV_PATH}/bin/activate"
+    echo "[+] Virtual environment activated (${VENV_PATH})."
+    
+    # Check for uv and automatically synchronize dependencies against uv.lock
+    if command -v uv >/dev/null 2>&1; then
+        echo "[*] Auditing and syncing local hardware runtimes with project lockfile..."
+        uv sync
+    fi
 else
-    echo "[!] Virtual environment not found. Run 'make setup' first."
+    echo "[!] Virtual environment folder not found at ${VENV_PATH}." >&2
+    if command -v uv >/dev/null 2>&1; then
+        echo "[*] Bootstrapping a fresh environment automatically via uv..."
+        uv sync
+        source "${VENV_PATH}/bin/activate"
+    else
+        echo "[!] Warning: 'uv' tool absent. Run 'pip install uv && uv sync' to provision toolchains." >&2
+    fi
 fi
 
-# 5. Source Intel oneAPI
+# 6. Source Intel oneAPI Baseline Environment
 INTEL_ROOT="/opt/intel/oneapi"
 if [ -f "$INTEL_ROOT/setvars.sh" ]; then
-    source "$INTEL_ROOT/setvars.sh" --force > /dev/null
+    # Ensure local log folder paths exist
+    mkdir -p logs
+    INTEL_LOG="logs/intel_setvars.log"
+    
+    echo "[*] Sourcing Intel oneAPI platform flags (Tracking log: ${INTEL_LOG})..."
+    
+    # Disable strict variable checks before running Intel's script
+    set +u 2>/dev/null
+    source "$INTEL_ROOT/setvars.sh" --force > "${INTEL_LOG}" 2>&1
     export ONEAPI_ROOT="$INTEL_ROOT"
     export MKLROOT="$INTEL_ROOT/mkl/latest"
-    echo "[+] Intel oneAPI environment sourced (Root: $ONEAPI_ROOT)."
+    # Re-enable strict variable checks to protect remaining script blocks
+    set -u 2>/dev/null
+    
+    echo "[+] Intel oneAPI environment sourced successfully."
 else
     echo "[!] Intel oneAPI setvars.sh not found at $INTEL_ROOT."
 fi
 
-# 6. Set the marker
-export IRISLIME_READY=1
+# 7. Set IrisLime Compilation Matrix & Runtime Variables
+export OpenVINO_DIR="/usr/lib/cmake/openvino2024.6.0"
+export INTEL_OPENVINO_DIR="/usr"
 
-# 7. Other environmental settings:
+# Hypervisor Layer Override: Route to stable OpenCL framework to prevent Level Zero SIGSEGV
+export ONEAPI_DEVICE_SELECTOR="opencl:1"
 
+# Centralized Model Target Interpolation
+export IRISLIME_MODELS_DIR="../models"
+export IRISLIME_TEST_MODEL="${IRISLIME_TEST_MODEL:-$IRISLIME_MODELS_DIR/tinyllama-1.1b-chat-v1.0.Q4_0.gguf}"
+
+# Hardware Acceleration and Debugging Settings
+export ZES_ENABLE_SYSMAN=1
 export DEBUGINFOD_CACHE_PATH="$HOME/.cache/gdb_symbols"
+
+# Suppress oneTBB composability warnings and balance thread core scaling
+export TCM_ENABLE=1
+
+# Node.js Version Manager (NVM) Toolchain Initialization
+export NVM_DIR="${HOME}/.nvm"
+if [[ -s "${NVM_DIR}/nvm.sh" ]]; then
+    set +u 2>/dev/null
+    source "${NVM_DIR}/nvm.sh"
+    # Pin to Node 20 or download it immediately if missing
+    nvm use 20 --silent >/dev/null 2>&1 || nvm install 20 --silent >/dev/null 2>&1
+    set -u 2>/dev/null
+    echo "[+] Node.js Toolchain initialized on version: $(node -v 2>/dev/null || echo '20')"
+else
+    echo "[!] Warning: Node Version Manager missing at ${NVM_DIR}. Native UI generation may hit dependencies."
+fi
+
+# Convenience Automation Shortcuts
+alias build_runner="uv run tools/build_runner.py"
+alias extract_telemetry="uv run tools/extract_telemetry.py"
+alias test_runner="uv run tools/test_runner.py"
+alias quick_litert="./tools/quick_test_litert.py"
+
+export IRISLIME_READY=1
 echo "[+] IrisLime environment is ready."
+
+# ==============================================================================
+# Footer:      config_env
+# ==============================================================================

@@ -1,0 +1,61 @@
+#!/bin/bash
+# config_env - Idempotent environment loader
+# Usage: source config_env [unset]
+
+# 1. Guard: Prevent execution as a sub-shell
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    echo "[!] ERROR: You must SOURCE this file, not execute it."
+    return 1
+fi
+
+# 2. Handle explicit unset
+if [ "$1" == "unset" ]; then
+    echo "[!] Unsetting IrisLime environment..."
+    unset IRISLIME_READY
+    unset ONEAPI_ROOT
+    unset MKLROOT
+    unset IRISLIME_MODELS_DIR
+    unset ONEAPI_DEVICE_SELECTOR
+    unset LLAMA_ARG_LOG_COLORS
+    
+    if command -v deactivate &> /dev/null; then
+        deactivate
+        echo "[+] Virtual environment deactivated."
+    fi
+    return 0
+fi
+
+# 3. Idempotency check
+if [ -n "$IRISLIME_READY" ]; then
+    return 0
+fi
+
+# 4. Activate venv
+if [ -f "venv/bin/activate" ]; then
+    if [[ "$VIRTUAL_ENV" != "" ]]; then
+        deactivate 2>/dev/null || unset VIRTUAL_ENV
+    fi
+    source venv/bin/activate
+else
+    echo "[!] Virtual environment not found. Run 'make setup' first."
+fi
+
+# 5. Source Intel oneAPI
+INTEL_ROOT="/opt/intel/oneapi"
+if [ -f "$INTEL_ROOT/setvars.sh" ]; then
+    source "$INTEL_ROOT/setvars.sh" --force > /dev/null
+    export ONEAPI_ROOT="$INTEL_ROOT"
+    export MKLROOT="$INTEL_ROOT/mkl/latest"
+else
+    echo "[!] Intel oneAPI setvars.sh not found at $INTEL_ROOT."
+fi
+
+# 6. Central Asset Caches, Driver Selectors & Color Overrides
+export IRISLIME_MODELS_DIR="../models"
+export ONEAPI_DEVICE_SELECTOR="opencl:1"
+export LLAMA_ARG_LOG_COLORS="off"
+
+# 7. Set the marker
+export IRISLIME_READY=1
+export DEBUGINFOD_CACHE_PATH="$HOME/.cache/gdb_symbols"
+echo "[+] IrisLime environment is ready."

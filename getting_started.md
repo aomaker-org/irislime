@@ -25,20 +25,20 @@ We follow an architecture that isolates the application code, engine fork, and m
 1. **Clone the project:**
 ```bash
 cd ~/src
-git clone https://github.com/aomaker-org/irislime.git
+git clone --recurse-submodules https://github.com/aomaker-org/irislime.git
 cd irislime
 
 ```
 
 
-2. **Clone and link the inference engine:**
-Clone your fork of `llama.cpp` as a sibling directory, then link it to the project:
+2. **Clone the inference engine (fork):**
+Clone the fork of `llama.cpp` as a sibling directory, then link it to the project:
+This step may be optional if no changes are needed to the engine, but it is recommended for research flexibility.
+The fork of the engine is loaded as a git submodule in irislime.
 ```bash
 cd ~/src
 git clone https://github.com/aomaker-org/llama.cpp.git
 cd ~/src/irislime
-# Link the engine fork
-ln -s ../llama.cpp llama.cpp
 
 ```
 
@@ -46,17 +46,18 @@ ln -s ../llama.cpp llama.cpp
 3. **Configure Model Storage:**
 Store large binary model files in a central location to prevent Git repository bloat:
 ```bash
-mkdir -p ~/src/ai_models
+mkdir -p ~/src/models
 # Link the central storage to your current project
-ln -s ~/src/ai_models models
+ln -s ~/src/models models
 
 ```
 
 
 4. **Acquire a Model:**
 Download a baseline model (e.g., Llama-3-8B-Instruct) into your central store:
+(There is also the "hf" command line tool for downloading models from Hugging Face.)
 ```bash
-wget https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf -O ~/src/ai_models/llama-3-8b.Q4_K_M.gguf
+wget https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf -O ~/src/models/llama-3-8b.Q4_K_M.gguf
 
 ```
 
@@ -73,6 +74,5 @@ source config_env
 
 ## 5. Architectural Rationale
 
-* **Repository Isolation:** By using symlinks for `llama.cpp` and `models`, we prevent Git index pollution and ensure binary files remain outside the version control system.
-* **Modular Evolution:** The `llama.cpp` engine can be branched or updated independently of the application logic.
+* **Repository Isolation:** By using a symlink for `models`, we prevent Git index pollution and ensure binary files remain outside the version control system.
 * **Portability:** You can rebuild the `irislime` environment on any machine, point the symlinks to your existing `ai_models` folder, and resume research immediately.

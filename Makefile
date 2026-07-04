@@ -1,89 +1,57 @@
-# Filename: Makefile
-# Purpose: Research Environment Management for IrisLime
-# Usage:
-#   1. source config_env
-#   2. make build    (Perform OOT build of engine)
-#   3. make verify   (Check forensic baselines)
+# ==============================================================================
+# Filename:    Makefile
+# Purpose:     Top-Level Stateless Router for IrisLime Project Matrices
+# Attribution: fekerr & Gemini (20260702_0915 / flash 3.5 extended)
+# ==============================================================================
 
-.PHONY: build setup scrub verify promote clean help
+# 1. Enforce Core Environment Guard Rails and Hardware Topologies
+include infra/make/base.mk
 
-# --- STRICT ENVIRONMENT GUARD ---
-ifndef IRISLIME_READY
-  $(error [!] IrisLime environment not detected! Run 'source config_env')
-endif
+# 2. Workspace Execution Parameter Defaults
+BUILD_DIR        ?= build/openvino_relwithdebinfo
+NUM_BUILD_JOBS   ?= 1
+CMAKE_BUILD_TYPE ?= RelWithDebInfo
+ENGINE_DIR       := llama.cpp
+LOG_FILE_PATH    ?= $(CURDIR)/$(BUILD_DIR)/logs/build_default.log
 
-BUILD_DIR := ./build
-ENGINE_DIR := ./llama.cpp
-FILES := config_env Makefile
-TIMESTAMP := $(shell date +%Y%m%d_%H%M%S)
-LOG_FILE := build_$(TIMESTAMP).log
+export ENGINE_DIR NUM_BUILD_JOBS CMAKE_BUILD_TYPE LOG_FILE_PATH
 
-# --- TARGETS ---
+.PHONY: all help clean distclean
 
-# Setup: Handle python environment
-setup: venv/.installed
+all: help
 
-venv/.installed: requirements.txt
-	@if [ ! -d "venv" ]; then python3 -m venv venv; fi
-	@./venv/bin/pip install --upgrade pip
-	@./venv/bin/pip install -r requirements.txt
-	@touch venv/.installed
-	@echo "[+] Environment setup complete."
+help: ## Parse and display all available interface targets dynamically from modules
+	@echo "=================================================================="
+	@echo " IrisLime Master Matrix Build & Automation Interface"
+	@echo "=================================================================="
+	@echo ""
+	@echo "Legacy / Direct Makefile Targets:"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2}'
+	@echo ""
+	@echo "------------------------------------------------------------------"
+	@echo " Modern Orchestration Alternatives (Preferred):"
+	@echo "  • build_runner    ->  uv run tools/build_runner.py"
+	@echo "  • test_runner     ->  uv run tools/test_runner.py --dir <path>"
+	@echo "  • quick_litert    ->  ./tools/quick_test_litert.py"
+	@echo "=================================================================="
 
-# Build: Out-of-Tree (OOT) build of llama.cpp using Intel oneAPI
-build: setup
-	@echo "--- Starting Out-of-Tree build ---"
-	@echo "[+] Logging to $(LOG_FILE)"
-	@mkdir -p $(BUILD_DIR)
-	@cd $(BUILD_DIR) && \
-		CC=icx CXX=icpx cmake ../../$(ENGINE_DIR) \
-		-DGGML_SYCL=ON \
-		-DCMAKE_BUILD_TYPE=Release \
-		-DCMAKE_CXX_COMPILER=icpx \
-		-DCMAKE_C_COMPILER=icx 2>&1 | tee ../../$(LOG_FILE)
-	@cd $(BUILD_DIR) && $(MAKE) -j$(shell nproc) 2>&1 | tee -a ../../$(LOG_FILE)
-	@echo "[+] Build complete. Binary located at $(BUILD_DIR)/bin/"
+# 3. Pull in the dynamic backend build recipes natively
+include infra/make/openvino.mk
+include infra/make/sycl.mk
+include infra/make/vulkan.mk
+include infra/make/litert.mk
 
-# Forensic Pipeline (Scrub/Verify/Promote)
-scrub:
-	@./tools/scrub $(FILES)
+# 4. Global Maintenance Redirections
+clean: ## Purge assets within designated active BUILD_DIR target space
+	@echo "[Clean] Clearing target: $(BUILD_DIR)"
+	rm -rf $(BUILD_DIR)
 
-verify: scrub
-	@for f in $(FILES); do \
-		if [ ! -f "$$f.trusted" ]; then \
-			echo "[!] Missing baseline for $$f. Run 'make promote'."; \
-			exit 1; \
-		fi; \
-		diff -q $$f.scrubbed $$f.trusted > /dev/null || \
-		(echo "[!] REGRESSION: $$f differs from $$f.trusted!" && exit 1); \
-	done
-	@echo "[+] Verification passed."
+distclean: ## Run deep sandbox toolchain environment purge sequence via python
+	@if [ -f "tools/distclean.py" ]; then \
+		uv run tools/distclean.py; \
+	else \
+		echo "[!] Fallback: Cleaning workspace build roots manually..."; \
+		rm -rf build/* logs/builds/*; \
+	fi
 
-promote: scrub
-	@for f in $(FILES); do \
-		cp $$f.scrubbed $$f.trusted; \
-		echo "[+] Promoted $$f to trusted status."; \
-	done
-
-# Run: Example usage of the OOT binary
-run-llama:
-	@$(BUILD_DIR)/bin/llama-cli \
-	  -m models/Llama-3.2-1B-Instruct-Q4_K_M.gguf \
-	  -p "The future of AI is" \
-	  -n 50
-
-# Clean: Remove build artifacts and environment
-clean:
-	@rm -rf venv/ *.scrubbed $(BUILD_DIR) build.log
-	@echo "[+] Build artifacts and virtualenv removed."
-
-# Help: Display available targets
-help:
-	@echo "Available Targets:"
-	@echo "  setup   : Install python dependencies"
-	@echo "  build   : Run OOT CMake build using Intel oneAPI"
-	@echo "  scrub   : Run forensic scrubbing on config files"
-	@echo "  verify  : Compare against trusted baselines"
-	@echo "  promote : Update trusted baselines"
-	@echo "  run-llama : Run basic inference test"
-	@echo "  clean   : Remove artifacts and venv"
+# end of Makefile
