@@ -3,7 +3,7 @@
 # Filename:    tools/build_runner.py
 # Purpose:     Format-agnostic build manager reading root matrix_control.json
 # Type:        Executable Script
-# Attribution: fekerr & Gemini (20260630_1625 / flash 3.5 extended)
+# Attribution: fekerr & Gemini (20260702_1005 / flash 3.5 extended)
 # ==============================================================================
 
 import sys
@@ -49,16 +49,30 @@ def invoke_compilation_pass(backend, profile, settings):
     print(f"[+] Persistent Log Target:  {log_file}")
     print(f"==================================================================")
     
-    make_cmd = [
-        "make", 
-        f"build-{backend}", 
-        f"BUILD_DIR={target_dir}",
-        f"NUM_BUILD_JOBS={jobs}"
-    ]
+    # Structural routing bridge for third-party ecosystems versus llama.cpp wrappers
+    if backend == "litert":
+        make_target = "litert-all"
+        make_cmd = [
+            "make",
+            make_target,
+            f"LITERT_DIR={target_dir}",
+            f"NUM_BUILD_JOBS={jobs}"
+        ]
+    else:
+        make_target = f"build-{backend}"
+        make_cmd = [
+            "make", 
+            make_target, 
+            f"BUILD_DIR={target_dir}",
+            f"NUM_BUILD_JOBS={jobs}"
+        ]
     
     # Inject both standard environment maps and user custom overrides natively
     env_override = os.environ.copy()
     env_override["CMAKE_BUILD_TYPE"] = profile
+    
+    # Ensure standard components and Make files track matching log locations
+    env_override["LOG_FILE_PATH"] = os.path.abspath(log_file)
     
     if cxx_flags:
         env_override["CMAKE_CXX_FLAGS"] = cxx_flags
@@ -69,8 +83,34 @@ def invoke_compilation_pass(backend, profile, settings):
     custom_env_vars = settings.get("env_vars", {})
     for var_key, var_val in custom_env_vars.items():
         env_override[var_key] = str(var_val)
-        
-    process = subprocess.run(make_cmd, env=env_override)
+
+    # Check if a global QUIET boundary is requested by the environment matrix
+    is_quiet = env_override.get("QUIET", "0") in ("1", "true", "TRUE")
+
+    # ==========================================================================
+    # Real-Time Output Streaming Multiplexer (with QUIET filtering)
+    # ==========================================================================
+    process = subprocess.Popen(
+        make_cmd,
+        env=env_override,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        bufsize=1
+    )
+    
+    # Concurrently parse and dispatch outputs
+    with open(log_file, "w") as lf:
+        for line in process.stdout:
+            # Always track forensic records on disk
+            lf.write(line)
+            
+            # Suppress terminal prints if executing a CI/CD or Agentic QUIET pass
+            if not is_quiet:
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            
+    process.wait()
     build_success = (process.returncode == 0)
     
     # Document state telemetry manifest maps

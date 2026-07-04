@@ -1,7 +1,7 @@
 # ==============================================================================
 # Filename:    Makefile
 # Purpose:     Top-Level Stateless Router for IrisLime Project Matrices
-# Attribution: fekerr @ gemini (20260701_1038 flash 3.5 + extended)
+# Attribution: fekerr & Gemini (20260702_0915 / flash 3.5 extended)
 # ==============================================================================
 
 # 1. Enforce Core Environment Guard Rails and Hardware Topologies
@@ -20,30 +20,35 @@ export ENGINE_DIR NUM_BUILD_JOBS CMAKE_BUILD_TYPE LOG_FILE_PATH
 
 all: help
 
-help:
-	@echo "IrisLime Master Matrix Automation Interface"
-	@echo "Usage:"
-	@echo "  make build-<backend> [BUILD_DIR=path] [NUM_BUILD_JOBS=N] [CMAKE_BUILD_TYPE=type]"
-	@echo "Targets:"
-	@echo "  build-openvino  - Compile OpenVINO acceleration target"
-	@echo "  build-sycl      - Compile Intel oneAPI SYCL target"
-	@echo "  build-vulkan    - Compile Mesa Vulkan compute target"
-	@echo "  clean           - Purge assets within designated BUILD_DIR target"
-	@echo "  distclean       - Run deep toolchain purge sequence via tools script"
+help: ## Parse and display all available interface targets dynamically from modules
+	@echo "=================================================================="
+	@echo " IrisLime Master Matrix Build & Automation Interface"
+	@echo "=================================================================="
+	@echo ""
+	@echo "Legacy / Direct Makefile Targets:"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2}'
+	@echo ""
+	@echo "------------------------------------------------------------------"
+	@echo " Modern Orchestration Alternatives (Preferred):"
+	@echo "  • build_runner    ->  uv run tools/build_runner.py"
+	@echo "  • test_runner     ->  uv run tools/test_runner.py --dir <path>"
+	@echo "  • quick_litert    ->  ./tools/quick_test_litert.py"
+	@echo "=================================================================="
 
 # 3. Pull in the dynamic backend build recipes natively
 include infra/make/openvino.mk
 include infra/make/sycl.mk
 include infra/make/vulkan.mk
+include infra/make/litert.mk
 
 # 4. Global Maintenance Redirections
-clean:
+clean: ## Purge assets within designated active BUILD_DIR target space
 	@echo "[Clean] Clearing target: $(BUILD_DIR)"
 	rm -rf $(BUILD_DIR)
 
-distclean:
+distclean: ## Run deep sandbox toolchain environment purge sequence via python
 	@if [ -f "tools/distclean.py" ]; then \
-		python3 tools/distclean.py; \
+		uv run tools/distclean.py; \
 	else \
 		echo "[!] Fallback: Cleaning workspace build roots manually..."; \
 		rm -rf build/* logs/builds/*; \

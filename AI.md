@@ -1,46 +1,39 @@
---- BEGIN FILE: AI.md | Size: 4120 bytes | SHA256: TODO ---
-# IrisLime LLM Context Architecture & Session State Laws
-# Filename:    AI.md
-# Location:    Repository Root (/)
-# Timestamp:   20260630_1110
-# Attribution: fekerr & Gemini (20260630_1110 / flash 3.5 extended)
-# Purpose:     Immutable Context-Transfer Interface and Core Execution Laws
+# Workspace Specification & Operational Guardrails (`AI.md`)
 
-## 1. Project Taxonomy, Engineering Mission, & Interface Conventions
-IrisLime is a highly optimized, modular, out-of-tree multi-target build pipeline wrapping the `llama.cpp` / `ggml` ecosystem. The project is specifically engineered to maximize local edge inference performance and build-time safety across asymmetric, heterogeneous hybrid CPU architectures and virtualized consumer iGPUs under WSL2 (Ubuntu 24.04 LTS Noble).
-
-### Key Architectural Constraints
-- **Zero In-Tree Symlinks:** All model cache objects reside strictly outside the project workspace via environment paths.
-- **Budget-Gated Offloading:** Public repository visibility leverages free-tier GitHub Actions hosted runners. Premium-rate cloud resources are restricted.
-- **Asymmetric Affinity:** Threads are aggressively managed to prevent memory cache starvation and spin-lock execution latencies.
-
-### 1.1 Script Metadata Encodings (Mandatory)
-Every shell, utility, or orchestration script introduced to this repository must implement an explicit Header and Footer block:
-1. **Header Block:** Must declare `Filename`, `Purpose`, `Type` (Sourced vs Executable), `Attribution`, and a point-in-time `Timestamp`.
-2. **Execution Safety:** Executable scripts must use `set -euo pipefail`. Sourced scripts must include a guard trap blocking direct subshell execution.
-3. **Footer Block:** Must output a standard explicit text string upon successful completion to guarantee deterministic parsing of execution logs.
-
-### 1.2 Universal Stream Marking (The Human-AI Interface Rule)
-To minimize cognitive load and stabilize working memory during extended collaborative sessions, all high-density text outputs—including interactive chat responses, script files, and sandbox execution logs—must be explicitly bounded by structural frames:
-1. **Chat Streams:** Must open with an identifier header declaring the timestamped label, operational tags, and primary purpose, and close with a matching tracking footer.
-2. **Telemetry Logs:** Standardize text-stream markers so that human developers or regex-based script parsers can instantly slice log contents without scanning unfiltered terminal noise.
-3. **Universal Trailer Policy:** Every file (including markdown reference notes) must terminate with a matching comment block repeating the file's relative home location to facilitate tail-scrolled visual confirmation and regex log slicing.
+**Last Synced State:** July 4, 2026  
+**Host Architecture:** Windows 11 (Intel Core 12th Gen)  
+**Primary Repository Workspace:** `irislime`  
 
 ---
 
-## 2. Active System Topology & Telemetry Maps
+## 1. System Topology & Validated Environments
 
-### Host Hardware Blueprint (Validation Station)
-- **Processor:** Intel Core i7-1255U (Heterogeneous: 2 Physical P-Cores with SMT / 8 E-Cores without SMT).
-- **Available Guest RAM:** 7 GB (Constrained Virtualized Page Allocation via WSL2).
-- **Target Accelerator:** Intel Iris Xe Integrated Graphics (96 EUs, Architecture ID `0x46a8`).
-- **Hypervisor Boundary:** Windows 11 Host to Ubuntu 24.04 LTS Guest passing through `/dev/dxg`.
+Any LLM/SLM context processing this workspace must adhere strictly to the physical file system paths and toolchains validated below. Do not assume abstract defaults.
 
-### Automated Build Parameters
-- **`NUM_BUILD_JOBS := 1`**: Fixed sequential compilation constraint mandated by guest hypervisor RAM limits (7 GB total / 4 GB required per heavy compiler thread) to prevent out-of-memory swap thrashing.
-- **`NUM_INF_THREADS := 2`**: Automatically mapped to lock execution matrices strictly to physical Performance Core boundaries, leaving E-cores free for OS tasks.
-- **Runtime Hypervisor Override:** The system requires `ONEAPI_DEVICE_SELECTOR="opencl:1"` to bypass the Level Zero `0x1` hypervisor pointer pass-through segmentation crash (`SIGSEGV`).
+### 1.1 The Host Compiler Layer
+* **Compiler Backend:** Microsoft Visual C++ (MSVC) Native 64-bit Optimizing Compiler.
+* **Validated Binary Node:** `C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\cl.exe`
+* **Target Build Framework:** MSVC v144 / Windows 11 Unified SDK.
+
+### 1.2 Terminal Shell Interfaces
+* **Native Host Prompt:** Developer Git Bash (VS 2022) configured via dynamic variable inheritance.
+  * *Launch Directive:* Loads `VsDevCmd.bat -arch=amd64` to securely stage compiler variables (`INCLUDE`, `LIB`, `PATH`) into volatile memory before dropping execution cleanly into the native MinGW64 Bash interpreter (`bash-5.3$`).
+* **Linux Subsystem Workspace:** Isolated single instance of `Ubuntu-24.04` LTS via WSL2.
+* **Persistent Shell Silencers:** All visual and audible input boundary errors have been muted via terminal `bellStyle: none` options and GNU Readline `set bell-style none` configurations inside `~/.inputrc`.
+
+### 1.3 Local Storage Runtime Matrix
+* **Active SSD Storage Runway:** 78.84 GB free space allocated for active build fragments, C++ linking spaces, and local SLM token parameters.
+* **Active Cloud Endpoints (`rclone`):**
+  * `gaom:` — 4 TiB Primary Allocation Array
+  * `gdrive:` — 5 TiB Architecture Drive
+* *Storage Policy:* All large legacy hypervisor fragments and historical development tarballs have been permanently moved out of local storage sectors and archived securely in cold cloud nodes.
 
 ---
-# EPILOG: End of File Descriptor for AI.md
+
+## 2. Core Operational Guardrails
+
+* **The Immutable Logging Paradigm:** Practice a strict "never delete, always append" forensic logging philosophy for file records and transaction tracking.
+* **Cross-Platform Path Alignment:** Never utilize virtualized drive-letter mappings (`G:`, `H:`). All data references between host Windows and guest Linux boundaries must evaluate via native cross-platform loopbacks (`\\wsl.localhost\Ubuntu-24.04\`) or localized home nodes (`--cd ~`).
+* **Environment Isolation Guardrails:** All Python execution steps must route exclusively through the native `uv` toolchain manager. Avoid contaminating global system environments by running self-contained, ephemeral sandboxes (`uv run`).
+
 ---

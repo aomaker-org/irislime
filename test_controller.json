@@ -1,0 +1,40 @@
+{
+  "global_test_settings": {
+    "stop_on_first_failure": true,
+    "default_iterations": 1
+  },
+  "execution_matrix": {
+    "smoke_tests": {
+      "enabled": true,
+      "description": "Baseline pipeline and compilation linkage sweeps",
+      "targets": [
+        {
+          "name": "litert_native_smoke",
+          "type": "internal_script",
+          "path": "tools/quick_test_litert.py",
+          "compatible_formats": ["litert"]
+        },
+        {
+          "name": "backend_ops_syntax",
+          "type": "compiled_binary",
+          "relative_path": "bin/test-backend-ops",
+          "args": ["--list-ops"],
+          "compatible_formats": ["gguf"]
+        }
+      ]
+    },
+    "performance_benchmarks": {
+      "enabled": true,
+      "description": "Granular execution latency tracing runs",
+      "targets": [
+        {
+          "name": "llama_bench_sweep",
+          "type": "compiled_binary",
+          "relative_path": "bin/llama-bench",
+          "args": ["-p", "128", "-n", "16"],
+          "compatible_formats": ["gguf"]
+        }
+      ]
+    }
+  }
+}

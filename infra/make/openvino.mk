@@ -2,21 +2,19 @@
 # Filename:    infra/make/openvino.mk
 # Purpose:     Intel OpenVINO Inference Acceleration Compilation Blueprint
 # Type:        Makefile Component (Dynamic Build-Isolation Compliant)
-# Attribution: fekerr & Gemini (20260701_1220 / flash 3.5 extended)
+# Attribution: fekerr & Gemini (20260702_0932 / flash 3.5 extended)
 # ==============================================================================
 
 BUILD_DIR     ?= build/openvino_relwithdebinfo
 LOG_FILE_PATH ?= $(CURDIR)/$(BUILD_DIR)/logs/build_default.log
 
 # --- CLEAN COMPILER PATCH MATRIX ---
-# Missing Khronos OpenCL enums caused by Intel oneAPI header injection collisions
 OPENCL_PATCH_DEFS := \
     CL_EXTERNAL_MEMORY_HANDLE_D3D11_TEXTURE_KHR=0x406E \
     CL_EXTERNAL_MEMORY_HANDLE_D3D11_TEXTURE_KMT_KHR=0x406F \
     CL_EXTERNAL_MEMORY_HANDLE_D3D12_HEAP_KHR=0x4070 \
     CL_EXTERNAL_MEMORY_HANDLE_D3D12_RESOURCE_KHR=0x4071
 
-# Use Make's addprefix to automatically prepend "-D" to every token in the array
 OPENVINO_CXX_FLAGS := $(addprefix -D,$(OPENCL_PATCH_DEFS))
 
 # --- ENFORCED ENVIRONMENT POINTER INTERPOLATION ---
@@ -32,7 +30,7 @@ endif
 
 .PHONY: build-openvino clean-openvino
 
-build-openvino:
+build-openvino: ## Configure and compile the target OpenVINO acceleration workspace
 	@echo "[Make] Initializing OpenVINO compilation inside: $(BUILD_DIR)"
 	@mkdir -p $(BUILD_DIR) $(dir $(LOG_FILE_PATH))
 	@if [ -f "$(LOG_FILE_PATH)" ]; then \
@@ -50,6 +48,7 @@ build-openvino:
 		-DGGML_OPENVINO=ON \
 		-DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) \
 		-DOpenVINO_DIR=$(TARGET_OV_DIR) \
+		$(CMAKE_FLAGS) \
 		-DCMAKE_CXX_FLAGS="$(OPENVINO_CXX_FLAGS)" >> $(LOG_FILE_PATH) 2>&1 && \
 	$(MAKE) -j$(NUM_BUILD_JOBS) >> $(LOG_FILE_PATH) 2>&1; \
 	STATUS=$$?; \
@@ -58,8 +57,9 @@ build-openvino:
 	if [ $$STATUS -ne 0 ]; then \
 		echo "[!] OpenVINO Compilation Macro Failed. Inspect $(LOG_FILE_PATH)"; \
 		exit $$STATUS; \
-	fi
+	fi; \
+	echo "$(TIMESTAMP),openvino,$(CMAKE_BUILD_TYPE),$${DURATION}" >> $(METRICS_FILE)
 
-clean-openvino:
+clean-openvino: ## Purge isolated target configurations and logs for OpenVINO
 	@echo "[!] Purging isolated target directory: $(BUILD_DIR)"
 	rm -rf $(BUILD_DIR)

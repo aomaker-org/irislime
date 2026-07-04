@@ -1,0 +1,25 @@
+[Make Session] Launching Validation Matrix at Fri Jul 03 00:14:33  2026
+
+[+] Mode Activation: Targeted Triage Pass (--failed)
+[Triage] Isolated 1 failing case intersections to re-run.
+[+] Active Logging Session Direct File Sink: logs/tests/matrix_run_20260703_001433.log
+==================================================================
+
+[1] Environment: sycl_relwithdebinfo | Test: llama_bench_sweep | Model: tinyllama-1.1b-chat-v1.0.Q8_0
+  [RUN] Target Script/Binary: llama_bench_sweep
+        Command: /home/fekerr/src/irislime/build/sycl_relwithdebinfo/bin/llama-bench -p 128 -n 16 --model /home/fekerr/src/models/tinyllama-1.1b-chat-v1.0.Q8_0.gguf --backend sycl
+
+[!] Fail-Fast Triggered: Aborting matrix run early.
+
+================================================================================================
+                                    FINAL MATRIX SWEEP LEDGER
+================================================================================================
+ BUILD ENVIRONMENT         | TEST TARGET            | MODEL KEY                 | DURATION   | STATUS
+------------------------------------------------------------------------------------------------
+ sycl_relwithdebinfo       | llama_bench_sweep      | tinyllama-1.1b-chat-v1.0.Q8_0 |      1.2s | FAILED
+================================================================================================
+  TOTAL EVALUATED PERMUTATIONS : 1
+  SUCCESSFUL PASSES            : 0
+  EXECUTION CRASHES/FAILURES   : 1
+====================================================================================
+

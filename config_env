@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # Filename:    config_env
-# Purpose:     Idempotent environment loader with force-reload capabilities
+# Purpose:     Idempotent environment loader with force-reload and uv syncing
 # Type:        Sourced
-# Attribution: fekerr & Gemini (20260630_1710 / flash 3.5 extended)
-# Timestamp:   20260630_1710
+# Attribution: fekerr & Gemini (20260702_0855 / flash 3.5 extended)
+# Timestamp:   20260702_0855
 # ==============================================================================
 
 # 1. Guard: Prevent direct subshell execution
@@ -54,15 +54,29 @@ if [ -n "${IRISLIME_READY:-}" ]; then
     return 0
 fi
 
-# 5. Activate Python Virtual Environment Robustly
-if [ -f "venv/bin/activate" ]; then
+# 5. Activate Python Virtual Environment via uv Standard Layout (.venv)
+VENV_PATH=".venv"
+if [ -f "${VENV_PATH}/bin/activate" ]; then
     if [[ "${VIRTUAL_ENV:-}" != "" ]]; then
         deactivate >/dev/null 2>&1 || unset VIRTUAL_ENV
     fi
-    source venv/bin/activate
-    echo "[+] Virtual environment activated."
+    source "${VENV_PATH}/bin/activate"
+    echo "[+] Virtual environment activated (${VENV_PATH})."
+    
+    # Check for uv and automatically synchronize dependencies against uv.lock
+    if command -v uv >/dev/null 2>&1; then
+        echo "[*] Auditing and syncing local hardware runtimes with project lockfile..."
+        uv sync
+    fi
 else
-    echo "[!] Virtual environment not found. Run 'make setup' first." >&2
+    echo "[!] Virtual environment folder not found at ${VENV_PATH}." >&2
+    if command -v uv >/dev/null 2>&1; then
+        echo "[*] Bootstrapping a fresh environment automatically via uv..."
+        uv sync
+        source "${VENV_PATH}/bin/activate"
+    else
+        echo "[!] Warning: 'uv' tool absent. Run 'pip install uv && uv sync' to provision toolchains." >&2
+    fi
 fi
 
 # 6. Source Intel oneAPI Baseline Environment
@@ -117,6 +131,12 @@ if [[ -s "${NVM_DIR}/nvm.sh" ]]; then
 else
     echo "[!] Warning: Node Version Manager missing at ${NVM_DIR}. Native UI generation may hit dependencies."
 fi
+
+# Convenience Automation Shortcuts
+alias build_runner="uv run tools/build_runner.py"
+alias extract_telemetry="uv run tools/extract_telemetry.py"
+alias test_runner="uv run tools/test_runner.py"
+alias quick_litert="./tools/quick_test_litert.py"
 
 export IRISLIME_READY=1
 echo "[+] IrisLime environment is ready."

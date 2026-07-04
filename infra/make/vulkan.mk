@@ -2,7 +2,7 @@
 # Filename:    infra/make/vulkan.mk
 # Purpose:     Portable Vulkan Cross-Platform Graphics Engine Blueprint
 # Type:        Makefile Component (Dynamic Build-Isolation Compliant)
-# Attribution: fekerr & Gemini (20260701_1028 / flash 3.5 extended)
+# Attribution: fekerr & Gemini (20260702_0930 / flash 3.5 extended)
 # ==============================================================================
 
 BUILD_DIR     ?= build/vulkan_release
@@ -10,7 +10,7 @@ LOG_FILE_PATH ?= $(BUILD_DIR)/logs/build_manual.log
 
 .PHONY: build-vulkan clean-vulkan
 
-build-vulkan:
+build-vulkan: ## Configure and compile the portable Mesa Vulkan compute target workspace
 	@echo "[Make] Initializing Vulkan SPIR-V compilation inside: $(BUILD_DIR)"
 	@mkdir -p $(BUILD_DIR) $(dir $(LOG_FILE_PATH))
 	@echo "==================================================================" >> $(LOG_FILE_PATH)
@@ -30,9 +30,10 @@ build-vulkan:
 	if [ $$STATUS -ne 0 ]; then \
 		echo "[!] Vulkan Compilation Macro Failed. Inspect $(LOG_FILE_PATH)"; \
 		exit $$STATUS; \
-	fi
+	fi; \
+	echo "$(TIMESTAMP),vulkan,$(CMAKE_BUILD_TYPE),$${DURATION}" >> $(METRICS_FILE)
 
-clean-vulkan:
+clean-vulkan: ## Purge isolated targets and generated cache objects for Vulkan
 	rm -rf $(BUILD_DIR)
 
 # end of infra/make/vulkan.mk

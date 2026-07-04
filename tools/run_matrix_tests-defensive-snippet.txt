@@ -1,0 +1,64 @@
+import shutil  # Ensure shutil is imported at the top of your script
+
+def finalize_and_summary(total, passed, failed, records, repo_root, is_triage_mode):
+    """Prints out the final validation results ledger and updates persistent records using atomic staging."""
+    print("\n================================================================================================")
+    print("                                    FINAL MATRIX SWEEP LEDGER")
+    print("================================================================================================")
+    print(f" {'BUILD ENVIRONMENT':25} | {'TEST TARGET':22} | {'MODEL KEY':25} | {'DURATION':10} | {'STATUS'}")
+    print("------------------------------------------------------------------------------------------------")
+    for r in records:
+        print(f" {r['env']:25} | {r['test']:22} | {r['model']:25} | {r['duration_seconds']:8}s | {r['status']}")
+    print("================================================================================================")
+    print(f"  TOTAL EVALUATED PERMUTATIONS : {total}")
+    print(f"  SUCCESSFUL PASSES            : {passed}")
+    print(f"  EXECUTION CRASHES/FAILURES   : {failed}")
+    print("====================================================================================\n")
+
+    timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    run_mode = "TRIAGE" if is_triage_mode else "FULL_SWEEP"
+
+    # DEFENSIVE MOVE 1: Update the Central Append-Only Transactional Ledger (Always Safe)
+    history_ledger_path = os.path.join(repo_root, "logs", "tests", "sweep_history.csv")
+    try:
+        write_header = not os.path.exists(history_ledger_path)
+        with open(history_ledger_path, "a", encoding="utf-8") as hf:
+            if write_header:
+                hf.write("timestamp,mode,total_runs,passed,failed,status_flag\n")
+            status_flag = "FAILING" if failed > 0 else "HEALTHY"
+            hf.write(f"{timestamp_str},{run_mode},{total},{passed},{failed},{status_flag}\n")
+    except Exception as e:
+        print(f"[!] Warning: Failed to append execution trace metrics to transactional ledger: {e}")
+
+    # DEFENSIVE MOVE 2: Hardened Atomic JSON File Allocation
+    if not is_triage_mode:
+        status_path = os.path.join(repo_root, "build", "test_status.json")
+        bak_path = status_path + ".bak"
+        tmp_path = status_path + ".tmp"
+        
+        # Stash current valid manifest out-of-band right before targeting modifications
+        if os.path.exists(status_path) and os.path.getsize(status_path) > 0:
+            try:
+                shutil.copy2(status_path, bak_path)
+            except Exception as e:
+                print(f"[!] Warning: Could not preserve historical baseline to backup path: {e}")
+
+        status_payload = {
+            "last_sweep_timestamp": timestamp_str,
+            "metrics": {"total": total, "passed": passed, "failed": failed},
+            "runs": records
+        }
+
+        try:
+            # Write out exclusively to a transient staging pointer
+            with open(tmp_path, "w", encoding="utf-8") as sf:
+                json.dump(status_payload, sf, indent=2)
+                sf.flush()
+                os.fsync(sf.fileno()) # Force the Linux storage buffer to sync cache directly to disk
+            
+            # Atomic swap: Instantaneous file-system namespace update. Eliminates 0-byte hazards.
+            os.replace(tmp_path, status_path)
+        except Exception as e:
+            print(f"[!] Critical: Atomic configuration state storage transaction failed: {e}")
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
