@@ -1,0 +1,17 @@
+=== TEST RUN TELEMETRY METRIC MANIFEST ===
+Timestamp ID:       20260705_050056_001
+Command line:       build/openvino_release/bin/llama-bench.exe --model ../models/tinyllama-1.1b-chat-v1.0.Q4_0.gguf -p 128 -n 16
+Execution Duration: 22.3166 seconds
+Exit Status:        0
+==========================================
+
+--- [RAW STDOUT STREAMS] ---
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | --------------: | -------------------: |
+| llama 1B Q4_0                  | 606.53 MiB |     1.10 B | OPENVINO   |  -1 |           pp128 |       173.62 Â± 17.06 |
+| llama 1B Q4_0                  | 606.53 MiB |     1.10 B | OPENVINO   |  -1 |            tg16 |         13.07 Â± 0.45 |
+
+
+--- [RAW STDERR STREAMS] ---
+OpenVINO: using device CPU
+

@@ -1,8 +1,8 @@
 # ==============================================================================
-# Filename:    infra/make/litert.mk
-# Purpose:     Resource-Gated Bazel Orchestration Wrapper for LiteRT Submodule
-# Target:      Intel Iris Xe Framework Compliant Target Infrastructure
-# Attribution: fekerr & Gemini (20260703_0042 / flash 3.5 extended)
+# Filename:     infra/make/litert.mk
+# Purpose:      Resource-Gated Bazel Orchestration Wrapper for LiteRT Submodule
+# Target:       Intel Iris Xe Framework Compliant Target Infrastructure
+# Attribution:  fekerr & Gemini (20260704_1720 / Cross-Platform Pass)
 # ==============================================================================
 
 LITERT_SRC      ?= deps/litert-lm
@@ -32,5 +32,5 @@ litert-clean: ## Clear staging directories and invoke contextual out-of-tree Baz
 	rm -rf build/litert_release build/litert_debug
 	@if command -v bazel &> /dev/null && [ -d "$(LITERT_SRC)" ] && { [ -f "$(LITERT_SRC)/WORKSPACE" ] || [ -f "$(LITERT_SRC)/MODULE.bazel" ]; }; then \
 		echo "[-] Context shift: Entering workspace at $(LITERT_SRC) for cache expunge..."; \
-		cd $(LITERT_SRC) && bazel --output_base="/home/fekerr/.cache/bazel_irislime" clean --expunge; \
+		cd $(LITERT_SRC) && bazel --output_base="$(HOME)/.cache/bazel_irislime" clean --expunge; \
 	fi
