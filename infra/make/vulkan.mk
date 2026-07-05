@@ -1,8 +1,8 @@
 # ==============================================================================
-# Filename:    infra/make/vulkan.mk
-# Purpose:     Portable Vulkan Cross-Platform Graphics Engine Blueprint
-# Type:        Makefile Component (Dynamic Build-Isolation Compliant)
-# Attribution: fekerr & Gemini (20260702_0930 / flash 3.5 extended)
+# Filename:     infra/make/vulkan.mk
+# Purpose:      Portable Vulkan Cross-Platform Graphics Engine Blueprint
+# Type:         Makefile Component (Dynamic Build-Isolation Compliant)
+# Attribution:  fekerr & Gemini (20260704_1710 / Optimization Pass)
 # ==============================================================================
 
 BUILD_DIR     ?= build/vulkan_release
@@ -23,7 +23,7 @@ build-vulkan: ## Configure and compile the portable Mesa Vulkan compute target w
 		-DGGML_VULKAN=ON \
 		-DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) \
 		$(CMAKE_FLAGS) >> $(LOG_FILE_PATH) 2>&1 && \
-	$(MAKE) -j$(NUM_BUILD_JOBS) >> $(LOG_FILE_PATH) 2>&1; \
+	cmake --build . -j$(NUM_BUILD_JOBS) --config $(CMAKE_BUILD_TYPE) >> $(LOG_FILE_PATH) 2>&1; \
 	STATUS=$$?; \
 	END_TIME=$$(date +%s); \
 	DURATION=$$((END_TIME - START_TIME)); \
@@ -35,5 +35,3 @@ build-vulkan: ## Configure and compile the portable Mesa Vulkan compute target w
 
 clean-vulkan: ## Purge isolated targets and generated cache objects for Vulkan
 	rm -rf $(BUILD_DIR)
-
-# end of infra/make/vulkan.mk
