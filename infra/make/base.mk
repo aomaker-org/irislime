@@ -1,29 +1,31 @@
 # ==============================================================================
-# Filename:    infra/make/base.mk
-# Purpose:     RAM-Aware Topology Parsing & Safe Toolchain Pre-flight Sanity Check
-# Type:        Makefile Component Include
-# Attribution: fekerr & Gemini (20260702_0915 / flash 3.5 extended)
+# Filename:     infra/make/base.mk
+# Purpose:      RAM-Aware Topology Parsing & Safe Toolchain Pre-flight Sanity Check
+# Type:         Makefile Component Include
+# Attribution:  fekerr & Gemini (20260704_1710 / Cross-Platform Pass)
 # ==============================================================================
 
 # Strict Environment Guard Interlock
 ifndef IRISLIME_READY
-  $(error [!] IrisLime environment context not detected! Run 'source config_env')
+  $(error [!] IrisLime environment context not detected! Run 'source config_win11' or 'source config_env')
 endif
 
 # --- GLOBAL SHELL CONFIGURATION ---
-SHELL        := /usr/bin/env bash
+SHELL        := bash
 .SHELLFLAGS  := -euo pipefail -c
 
 QUIET ?= 0
 
 # --- HARDWARE TOPOLOGY & MEMORY PARSER ---
-TOTAL_THREADS := $(shell nproc)
+TOTAL_THREADS := $(shell nproc 2>/dev/null || echo 4)
 NUM_P_THREADS := $(shell grep -l ',' /sys/devices/system/cpu/cpu*/topology/thread_siblings_list 2>/dev/null | wc -l)
 NUM_E_THREADS := $(shell grep -L ',' /sys/devices/system/cpu/cpu*/topology/thread_siblings_list 2>/dev/null | wc -l)
 
-# Forensic Memory Check (Throttles parallelism to prevent OOM swap-thrashing)
-TOTAL_RAM_KB  := $(shell grep MemTotal /proc/meminfo | awk '{print $$2}')
-TOTAL_RAM_GB  := $(shell echo $$(( $(TOTAL_RAM_KB) / 1024 / 1024 )))
+# Forensic Memory Check (Graceful fallback if /proc/meminfo is absent natively)
+TOTAL_RAM_GB  := $(shell grep MemTotal /proc/meminfo 2>/dev/null | awk '{print int($$2/1024/1024)}')
+ifeq ($(TOTAL_RAM_GB),)
+  TOTAL_RAM_GB := 16
+endif
 RAM_SAFE_JOBS := $(shell echo $$(( $(TOTAL_RAM_GB) / 4 )))
 
 # Calculate CPU Build Capacity and Physical Inference Cores

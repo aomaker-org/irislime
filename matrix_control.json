@@ -1,44 +1,149 @@
 {
   "global_settings": {
     "min_required_disk_space_gb": 5.0,
-    "default_parallel_jobs": 1
+    "test_model": "../models/tinyllama-1.1b-chat-v1.0.Q4_0.gguf",
+    "hardware_db_path": "infra/cache/hardware_profile.json"
   },
   "backend_overrides": {
     "openvino": {
       "enabled": true,
-      "profiles": ["RelWithDebInfo", "Debug"],
       "parallel_jobs": 1,
-      "cmake_cxx_flags": "-DCL_EXTERNAL_MEMORY_HANDLE_D3D11_TEXTURE_KHR=0x406E -DCL_EXTERNAL_MEMORY_HANDLE_D3D11_TEXTURE_KMT_KHR=0x406F -DCL_EXTERNAL_MEMORY_HANDLE_D3D12_HEAP_KHR=0x4070 -DCL_EXTERNAL_MEMORY_HANDLE_D3D12_RESOURCE_KHR=0x4071",
+      "inactivity_timeout_seconds": 1800,
+      "fail_fast": false,
+      "ordered_profiles": [
+        {
+          "name": "Debug",
+          "suffix": "debug",
+          "track_telemetry": true
+        },
+        {
+          "name": "RelWithDebInfo",
+          "suffix": "relwithdebinfo",
+          "track_telemetry": true
+        },
+        {
+          "name": "Release",
+          "suffix": "release",
+          "track_telemetry": true
+        }
+      ],
+      "test_matrix_parameters": {
+        "context_sizes": [128, 512, 2048],
+        "batch_sizes": [16, 64, 128],
+        "gpu_layers_offload": [-1, 0]
+      },
       "env_vars": {
-        "GGML_OPEN_VINO_DEVICE": "GPU",
+        "GGML_OPENVINO_DEVICE": "CPU",
+        "ONEAPI_DEVICE_SELECTOR": "opencl:1",
+        "ZES_ENABLE_SYSMAN": "1",
         "TCM_ENABLE": "1"
       }
     },
     "sycl": {
       "enabled": true,
-      "profiles": ["RelWithDebInfo"],
-      "parallel_jobs": 4,
+      "parallel_jobs": 1,
+      "inactivity_timeout_seconds": 1800,
+      "fail_fast": false,
+      "ordered_profiles": [
+        {
+          "name": "Debug",
+          "suffix": "debug",
+          "track_telemetry": true
+        },
+        {
+          "name": "RelWithDebInfo",
+          "suffix": "relwithdebinfo",
+          "track_telemetry": true
+        },
+        {
+          "name": "Release",
+          "suffix": "release",
+          "track_telemetry": true
+        }
+      ],
+      "test_matrix_parameters": {
+        "context_sizes": [128, 512, 2048],
+        "batch_sizes": [16, 64, 128],
+        "gpu_layers_offload": [-1, 0]
+      },
       "env_vars": {
-        "CXX": "icpx",
-        "CC": "icx",
-        "ONEAPI_DEVICE_SELECTOR": "level_zero:gpu"
+        "CC": "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/bin/icx.exe",
+        "CXX": "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/bin/icx.exe",
+        "ONEAPI_DEVICE_SELECTOR": "level0:gpu",
+        "ZES_ENABLE_SYSMAN": "1",
+        "SYCL_CACHE_PERSISTENT": "1"
       }
     },
     "vulkan": {
-      "enabled": true,
-      "profiles": ["Release"],
+      "enabled": false,
       "parallel_jobs": 4,
-      "cmake_flags": "-DGGML_VULKAN=ON"
+      "inactivity_timeout_seconds": 300,
+      "fail_fast": false,
+      "ordered_profiles": [
+        {
+          "name": "Debug",
+          "suffix": "debug",
+          "track_telemetry": true
+        },
+        {
+          "name": "Release",
+          "suffix": "release",
+          "track_telemetry": true
+        }
+      ],
+      "test_matrix_parameters": {
+        "context_sizes": [128, 512],
+        "batch_sizes": [16, 64],
+        "gpu_layers_offload": [-1, 0]
+      },
+      "env_vars": {
+        "GGML_VULKAN_DEVICE": "0"
+      }
     },
     "litert": {
-      "enabled": true,
-      "profiles": ["Release"],
+      "enabled": false,
       "parallel_jobs": 4,
-      "cmake_flags": "-DGGML_LITERT=ON -Dlitert_link_capi_so=true",
+      "inactivity_timeout_seconds": 120,
+      "fail_fast": true,
+      "ordered_profiles": [
+        {
+          "name": "Debug",
+          "suffix": "debug",
+          "track_telemetry": true
+        },
+        {
+          "name": "Release",
+          "suffix": "release",
+          "track_telemetry": false
+        }
+      ],
+      "test_matrix_parameters": {
+        "context_sizes": [128, 512],
+        "batch_sizes": [16, 32],
+        "gpu_layers_offload": [0]
+      },
       "env_vars": {
-        "LITERT_USE_GPU": "1",
-        "LITERT_USE_OPENCL": "1"
+        "IRISLIME_ACTIVE_BACKEND": "litert"
       }
+    },
+    "base": {
+      "enabled": false,
+      "parallel_jobs": 4,
+      "inactivity_timeout_seconds": 120,
+      "fail_fast": false,
+      "ordered_profiles": [
+        {
+          "name": "Release",
+          "suffix": "release",
+          "track_telemetry": true
+        }
+      ],
+      "test_matrix_parameters": {
+        "context_sizes": [128, 512],
+        "batch_sizes": [16, 32],
+        "gpu_layers_offload": [0]
+      },
+      "env_vars": {}
     }
   }
 }

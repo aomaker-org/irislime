@@ -41,6 +41,7 @@ cmake_install.cmake
 *.exe
 
 # --- Local Environment & Logs ---
+config_local.sh
 .status.json
 .DS_Store
 # Tracking logs for audit trails!

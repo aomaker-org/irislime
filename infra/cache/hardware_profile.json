@@ -1,0 +1,12 @@
+{
+  "timestamp": "20260704_190500",
+  "processor": "Intel64 Family 6 Model 154 Stepping 4",
+  "capabilities": {
+    "HAS_AVX": true,
+    "HAS_AVX2": true,
+    "HAS_FMA": true,
+    "HAS_AVX512": false,
+    "OPENCL_VERSION": "3.0"
+  },
+  "injected_cmake_args": "-DGGML_AVX2=ON -DGGML_FMA=ON -DGGML_AVX512=OFF"
+}

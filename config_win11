@@ -1,0 +1,153 @@
+# ==============================================================================
+# Filename:     config_win11
+# Purpose:      Idempotent Windows 11 environment loader (Option A Terminal Stack)
+# Type:         Sourced
+# Attribution:  fekerr & Gemini (20260705_0415 / Path Verification Pass)
+# ==============================================================================
+
+# 1. Guard: Prevent direct subshell execution
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    echo "[!] ERROR: You must SOURCE this file, not execute it." >&2
+    exit 1
+fi
+
+# 2. Intercept Force Flag to trigger a clean environment tear-down first
+if [ "${1:-}" == "force" ] || [ "${1:-}" == "--force" ]; then
+    echo "[!] Force reload detected. Cycling host environment state..."
+    unset IRISLIME_READY
+fi
+
+# 3. Handle explicit environment unsetting
+if [ "${1:-}" == "unset" ]; then
+    echo "[!] Unsetting IrisLime host environment..."
+    unset IRISLIME_READY
+    unset IRISLIME_MODELS_DIR
+    unset IRISLIME_TEST_MODEL
+    unset OpenVINO_DIR
+    unset INTEL_OPENVINO_DIR
+    unset ONEAPI_DEVICE_SELECTOR
+    unset ZES_ENABLE_SYSMAN
+    unset TCM_ENABLE
+    unset ONEAPI_ROOT
+    unset MKLROOT
+    unset OPENSSL_ROOT_DIR
+    
+    if command -v deactivate >/dev/null 2>&1; then
+        deactivate
+        echo "[+] Host virtual environment deactivated."
+    fi
+    echo "[+] IrisLime host environment unset."
+    return 0
+fi
+
+# 4. Idempotency Check
+if [ -n "${IRISLIME_READY:-}" ]; then
+    echo "[!] IrisLime environment is already loaded. Use 'source config_win11 force' to re-verify."
+    return 0
+fi
+
+# 5. Activate Python Virtual Environment via Windows Layout (.venv/Scripts)
+VENV_PATH=".venv"
+if [ -f "${VENV_PATH}/Scripts/activate" ]; then
+    if [[ "${VIRTUAL_ENV:-}" != "" ]]; then
+        deactivate >/dev/null 2>&1 || unset VIRTUAL_ENV
+    fi
+    source "${VENV_PATH}/Scripts/activate"
+    echo "[+] Native host virtual environment activated (${VENV_PATH})."
+    
+    # Run the laser-light show! Audits and syncs host dependencies via uv
+    if command -v uv >/dev/null 2>&1; then
+        echo "[*] Auditing and syncing host runtimes with project lockfile..."
+        uv sync
+    fi
+else
+    echo "[!] Host virtual environment folder not found at ${VENV_PATH}." >&2
+    if command -v uv >/dev/null 2>&1; then
+        echo "[*] Bootstrap fresh host environment automatically via uv..."
+        uv sync
+        source "${VENV_PATH}/Scripts/activate"
+    else
+        echo "[!] Critical: 'uv' tool absent. Run 'pip install uv && uv sync' to provision toolchains." >&2
+    fi
+fi
+
+# 6. Assert/Verify Inherited Hardware Toolchains from Terminal Profile
+echo "[*] Verifying inherited hardware environment variables..."
+
+if command -v cl.exe &> /dev/null; then
+    echo "[+] Validated Microsoft C/C++ Compiler infrastructure is active."
+else
+    echo "[-] Warning: cl.exe not detected. Ensure this profile tab runs VS2022 Dev tools." >&2
+fi
+
+if [ -n "${ONEAPI_ROOT:-}" ] || [ -n "${MKLROOT:-}" ]; then
+    echo "[+] Validated Intel oneAPI hardware variables are active in session memory."
+else
+    echo "[-] Warning: Intel oneAPI vectors absent. Check your terminal profile chaining." >&2
+fi
+
+# ==============================================================================
+# Section 7: Set Windows-Specific Fallback Compilations & Runtime Variables
+# ==============================================================================
+export INTEL_OPENVINO_DIR="C:/Program Files/WindowsApps/IntelCorporation.OpenVINOToolkit.2026.2.0_2026.2.0.0_x64__aqcv7fbxf4wm4"
+export OpenVINO_DIR="${INTEL_OPENVINO_DIR}/runtime/cmake"
+export IRISLIME_PLATFORM="win11_native"
+export OPENSSL_ROOT_DIR="C:/Program Files/OpenSSL-Win64"
+
+# Hardware Acceleration, Selectors, and Core Scaling
+export ONEAPI_DEVICE_SELECTOR="opencl:1"
+export ZES_ENABLE_SYSMAN=1
+export TCM_ENABLE=1
+
+# Centralized Model Target Interpolation
+export IRISLIME_MODELS_DIR="../models"
+export IRISLIME_TEST_MODEL="${IRISLIME_TEST_MODEL:-$IRISLIME_MODELS_DIR/tinyllama-1.1b-chat-v1.0.Q4_0.gguf}"
+
+if [ -f "config_local.sh" ]; then
+    . config_local.sh
+fi
+
+# (the following block has been updated and the comment will be fixed)
+# --- RUNTIME DLL PATH EXTENSIONS:
+# 	(Fixes 0xC0000135 / 3221225781) ---
+# We map paths using the POSIX '/c/' layout to bypass drive-letter colon splitting.
+# Both Release and base bin topologies are appended to accommodate package variants.
+#
+# --- RUNTIME DLL & COMPILER PATH EXTENSIONS
+# 	(Fixes SYCL 0xC0000135 & Missing Compiler) ---
+# Map compiler and runtime tracks using the pure POSIX '/c/' layout to prevent colon path splitting
+OPENVINO_BIN_POS="/c/Program Files/WindowsApps/IntelCorporation.OpenVINOToolkit.2026.2.0_2026.2.0.0_x64__aqcv7fbxf4wm4/runtime/bin/intel64/Release"
+OPENVINO_ALT_POS="/c/Program Files/WindowsApps/IntelCorporation.OpenVINOToolkit.2026.2.0_2026.2.0.0_x64__aqcv7fbxf4wm4/runtime/bin"
+OPENSSL_BIN_POS="/c/Program Files/OpenSSL-Win64/bin"
+
+# Prepend Intel oneAPI icx/icpx toolchain tracks natively
+# 	(adjust folder names to match the installation layout)
+INTEL_COMPILER_BIN="/c/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/bin"
+
+export PATH="${INTEL_COMPILER_BIN}:${OPENVINO_BIN_POS}:${OPENVINO_ALT_POS}:${OPENSSL_BIN_POS}:${PATH}"
+
+# 8. Node.js Version Management via Host Executable
+if command -v nvm &> /dev/null; then
+    nvm use 20 --silent >/dev/null 2>&1 || true
+    echo "[+] Node.js Toolchain synchronized via native system engine (version: $(node -v 2>/dev/null))."
+else
+    echo "[!] Warning: Native nvm.exe missing. Native UI loops may fail dependencies."
+fi
+
+# 9. Convenience Automation Shortcuts
+alias extract_telemetry="uv run tools/extract_telemetry.py"
+alias quick_litert="./tools/quick_test_litert.py"
+alias test_history="uv run tools/test_rerun_menu.py" # New interactive menu engine link
+alias probe_hardware="uv run tools/probe_hardware.py"
+
+export IRISLIME_DEBUG_WATCHDOG=1 # to be implemented later; for now, just update the alias
+alias test_runner="uv run tools/test_runner.py --debug_watchdog"
+alias build_runner="uv run tools/build_runner.py --debug_watchdog"
+
+# Native Host Context Packing Tools
+alias files2clip="uv run python tools/files2clip"
+alias clip2files="uv run python tools/clip2files"
+
+# Final readiness marker.
+export IRISLIME_READY=1
+echo "[+] IrisLime host environment is ready."
