@@ -6,7 +6,7 @@
   },
   "backend_overrides": {
     "openvino": {
-      "enabled": true,
+      "enabled": false,
       "parallel_jobs": 1,
       "inactivity_timeout_seconds": 1800,
       "fail_fast": false,

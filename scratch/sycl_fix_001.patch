@@ -1,0 +1,24 @@
+diff --git a/infra/make/sycl.mk b/infra/make/sycl.mk
+index a3f4f28..3759b12 100644
+--- a/infra/make/sycl.mk
++++ b/infra/make/sycl.mk
+@@ -31,12 +31,14 @@ build-sycl: bootstrap-headers ## Configure and compile the Intel oneAPI SYCL cor
+ 	@echo "[Make] Log Target Destination: $(LOG_FILE_PATH)"
+ 	@START_TIME=$$(date +%s); \
+ 	cd $(BUILD_DIR) && \
+-	CC=icx CXX=icpx \
+-	MKLROOT=$${MKLROOT:-/opt/intel/oneapi/mkl/latest} \
++	P_PATH="$(LITERT_LINK_DIR)" && \
++	M_DIR="$${MKLROOT:-/opt/intel/oneapi/mkl/latest}/lib/cmake/mkl" && \
++	CC=icx CXX=icpx MKLROOT=$${MKLROOT:-/opt/intel/oneapi/mkl/latest} \
+ 	cmake ../../$(ENGINE_DIR) \
+ 		-DGGML_SYCL=ON \
+ 		-DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) \
+-		-DCMAKE_PREFIX_PATH=" \
+-			$(LITERT_LINK_DIR); \
+-			$${MKLROOT:-/opt/intel/oneapi/mkl/latest}" \
+-		-DIRISLIME_LITERT_DIR="$(LITERT_LINK_DIR)" \
++		-DCMAKE_PREFIX_PATH="$$P_PATH" \
++		-DMKL_DIR="$$M_DIR" \
++		-DIRISLIME_LITERT_DIR="$$P_PATH" \
+ 		$(CMAKE_FLAGS) >> $(LOG_FILE_PATH) 2>&1 && \

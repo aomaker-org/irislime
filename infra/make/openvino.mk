@@ -1,8 +1,9 @@
 # ==============================================================================
-# Filename:     infra/make/openvino.mk
-# Purpose:      Intel OpenVINO Inference Acceleration Compilation Blueprint
-# Type:         Makefile Component (Self-Healing Header & Granular Clean Compliant)
-# Attribution:  fekerr & Gemini (20260704_1915 / Self-Healing Header Pass)
+# Filename:    infra/make/openvino.mk
+# Purpose:     Intel OpenVINO Inference Acceleration Compilation Blueprint
+# Type:        Makefile Component (Self-Healing Header & Granular Clean Compliant)
+# Attribution: fekerr & Gemini (20260706_0612 / Recipe Consolidation Pass)
+# Timestamp:   20260706_0612
 # ==============================================================================
 
 BUILD_DIR     ?= build/openvino_relwithdebinfo
@@ -31,11 +32,11 @@ endif
 ifeq ($(OS),Windows_NT)
     CMAKE_GEN_FLAGS    := -G "Ninja"
     OPENVINO_CXX_FLAGS := $(addprefix -D,$(OPENCL_PATCH_DEFS)) /EHsc -I$(LOCAL_INC_DIR)
-    CMAKE_EXTRA_FLAGS  := -DGGML_EXCEPTIONS=ON
+    CMAKE_EXTRA_FLAGS  := -DGGML_EXCEPTIONS=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 else
     CMAKE_GEN_FLAGS    := 
     OPENVINO_CXX_FLAGS := $(addprefix -D,$(OPENCL_PATCH_DEFS)) -fexceptions -I$(LOCAL_INC_DIR)
-    CMAKE_EXTRA_FLAGS  := -DGGML_EXCEPTIONS=ON
+    CMAKE_EXTRA_FLAGS  := -DGGML_EXCEPTIONS=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 endif
 
 .PHONY: build-openvino clean-openvino bootstrap-headers clean-cache-openvino
@@ -49,25 +50,24 @@ bootstrap-headers: ## Fetches missing Khronos OpenCL C++ bindings autonomously i
 		echo "[+] Khronos OpenCL C++ headers securely mapped to workspace tracking assets."; \
 	fi
 
-build-openvino: bootstrap-headers ## Configure and compile the target OpenVINO acceleration workspace
-	@if [ -z "$(TARGET_OV_DIR)" ]; then \
-		echo "[!] Error: OpenVINO_DIR is not set. Source config_win11 or config_env first."; \
-		exit 1; \
+build-openvino: bootstrap-headers
+	@mkdir -p logs/builds/openvino_profile
+	@if [ ! -d "$(BUILD_DIR)" ] || [ ! -f "$(BUILD_DIR)/CMakeCache.txt" ]; then \
+		echo "[!] ALERT: CMake cache missing in $(BUILD_DIR). Launching self-healing generation pass..." ; \
+		mkdir -p $(BUILD_DIR) ; \
+		BUILD_TYPE=$$(echo "$(BUILD_DIR)" | sed 's/.*_//') ; \
+		if [ "$$BUILD_TYPE" = "debug" ]; then CONF_TYPE="Debug" ; \
+		elif [ "$$BUILD_TYPE" = "release" ]; then CONF_TYPE="Release" ; \
+		else CONF_TYPE="RelWithDebInfo" ; fi ; \
+		cmake -B $(BUILD_DIR) -S llama.cpp -DCMAKE_BUILD_TYPE=$$CONF_TYPE $(CMAKE_GEN_FLAGS) $(CMAKE_EXTRA_FLAGS) ; \
 	fi
-	@echo "[Make] Initializing OpenVINO compilation inside: $(BUILD_DIR)"
-	@mkdir -p $(BUILD_DIR)
-	@echo "[Make] Log streaming handled via Python multiplexer parent engine."
-	@echo "=================================================================="
-	unset Platform && cd $(BUILD_DIR) && \
-	cmake ../../$(ENGINE_DIR) \
-		$(CMAKE_GEN_FLAGS) \
-		-DGGML_OPENVINO=ON \
-		$(CMAKE_EXTRA_FLAGS) \
-		-DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) \
-		-DOpenVINO_DIR="$(TARGET_OV_DIR)" \
-		$(CMAKE_FLAGS) \
-		-DCMAKE_CXX_FLAGS="$(OPENVINO_CXX_FLAGS)" && \
-	cmake --build . -j$(NUM_BUILD_JOBS) --config $(CMAKE_BUILD_TYPE)
+	@echo "[*] Initializing memory-constrained OpenVINO core build matrix..."
+	@echo "[*] Throttling parallel allocation track to a single execution thread (-j1)..."
+	cd $(BUILD_DIR) && cmake --build . -j1 & \
+	BUILD_PID=$$! ; \
+	echo "[+] Background build process spawned with tracking coordinate PID: $$BUILD_PID" ; \
+	uv run tools/track_profile.py --pid $$BUILD_PID --out logs/builds/openvino_profile/resource_telemetry.csv --interval 1.0 ; \
+	wait $$BUILD_PID
 
 clean-openvino: ## Purge isolated target configurations and logs for OpenVINO
 	@echo "[!] Purging isolated target directory: $(BUILD_DIR)"
