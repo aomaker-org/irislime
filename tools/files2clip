@@ -1,12 +1,10 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-''''test -f "$(dirname "$0")/../.venv/bin/python3" && exec "$(dirname "$0")/../.venv/bin/python3" "$0" "$@" || exec python3 "$0" "$@" # '''
 # ==============================================================================
-# Filename:    tools/files2clip
-# Purpose:     Pack multi-target workspace assets and wildcards for LLM context
-# Type:        Executable
-# Attribution: fekerr & Gemini (20260708_1645 / Optimization Pass)
-# Timestamp:   20260708_1645
+# Filename:     tools/files2clip
+# Purpose:      Pack multi-target workspace assets and wildcards for LLM context
+# Type:         Executable
+# Attribution:  fekerr & Gemini (20260711 Optimization Pass)
 # ==============================================================================
 import os
 import sys
@@ -77,11 +75,11 @@ def resolve_targets(targets, include_untracked=False):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Pack specific workspace targets and wildcards cleanly into the clipboard container."
+        description="Pack specific workspace targets into the clipboard container."
     )
     parser.add_argument(
         "targets", nargs="*", default=["."],
-        help="Target files, directories, or wildcard patterns (e.g., infra/make/*.mk)"
+        help="Target files, directories, or wildcard patterns"
     )
     parser.add_argument(
         "--everything", action="store_true",
@@ -108,10 +106,8 @@ def main():
         f"# Tracking Footer: {timestamp}_Workspace_Context_Payload_Complete\n"
     )
     
-    # Symmetrical Clipboard Interop Engine (Bypasses external python requirements)
     copied = False
     try:
-        # Primary Pipeline: Native Windows execution path via host path link
         proc = subprocess.Popen(['clip.exe'], stdin=subprocess.PIPE, text=True, errors='ignore')
         proc.communicate(input=wrapped_stream)
         if proc.returncode == 0:
@@ -120,7 +116,6 @@ def main():
         pass
 
     if not copied:
-        # Fallback Pipeline: Native Linux execution environments (X11 / Wayland environments)
         for cmd in [['xclip', '-selection', 'clipboard'], ['wl-copy']]:
             try:
                 proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, text=True)
@@ -139,7 +134,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# ==============================================================================
-# EPILOG: End of File Descriptor for tools/files2clip
-# ==============================================================================
