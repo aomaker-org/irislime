@@ -1,6 +1,11 @@
+```
 # irislime
 
 An experimental hardware-software co-design sandbox optimized for edge AI inference, low-level tensor acceleration, and repository-aware agent automation. This repository serves as a live engineering playground for optimizing small language models on heterogeneous consumer hardware.
+
+git clone --recurse-submodules https://github.com/aomaker-org/irislime.git
+
+See docs/quick_uv_install.md and tools/provision.sh to install necessary tools.
 
 ## 🎯 Project Intent: Portfolio to Sandbox
 This repository has evolved from a static project portfolio into a live, high-velocity development sandbox. The architecture focuses on:
@@ -41,3 +46,5 @@ Before executing local builds or validation testing sequences, orient yourself w
 
 ---
 *Verily, thou shalt hoard data.*
+
+```

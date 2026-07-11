@@ -1,0 +1,131 @@
+[*] Initializing memory-constrained OpenVINO core build matrix...
+[*] Throttling parallel allocation track to a single execution thread (-j1)...
+cd build/openvino_debug && cmake --build . -j1 & \
+BUILD_PID=$! ; \
+echo "[+] Background build process spawned with tracking coordinate PID: $BUILD_PID" ; \
+uv run tools/track_profile.py --pid $BUILD_PID --out logs/builds/openvino_profile/resource_telemetry.csv --interval 1.0 ; \
+wait $BUILD_PID
+[+] Background build process spawned with tracking coordinate PID: 88533
+gmake[1]: Entering directory '/home/fekerr/src/irislime/build/openvino_debug'
+[  2%] Built target ggml-base
+[  5%] Built target ggml-cpu
+[  6%] Built target ggml
+[ 37%] Built target llama
+[ 38%] Built target llama-common-base
+[ 38%] Built target cpp-httplib
+[ 44%] Built target llama-common
+[ 45%] Built target test-tokenizer-0
+[ 45%] Built target test-sampling
+[ 45%] Built target test-reasoning-budget
+[ 45%] Built target test-grammar-parser
+[ 46%] Built target test-grammar-integration
+[ 46%] Built target test-llama-grammar
+[ 53%] Built target mtmd
+[ 55%] Built target server-context
+[ 55%] Built target test-chat
+[ 55%] Built target test-json-schema-to-grammar
+[ 56%] Built target test-quantize-stats
+[ 56%] Built target test-gbnf-validator
+[ 56%] Built target test-tokenizer-1-bpe
+[ 56%] Built target test-tokenizer-1-spm
+[ 57%] Built target test-llama-archs
+[ 58%] Built target test-chat-peg-parser
+[ 59%] Built target test-jinja
+[ 60%] Built target test-chat-auto-parser
+[ 60%] Built target test-chat-template
+[ 61%] Built target test-log
+[ 63%] Built target test-peg-parser
+[ 63%] Built target test-regex-partial
+[ 63%] Built target test-thread-safety
+[ 63%] Built target test-arg-parser
+[ 64%] Built target test-opt
+[ 65%] Built target test-gguf
+[ 65%] Built target test-backend-ops
+[ 66%] Built target test-model-load-cancel
+[ 67%] Built target test-autorelease
+[ 68%] Built target test-backend-sampler
+[ 69%] Built target test-state-restore-fragmented
+[ 70%] Built target test-recurrent-state-rollback
+[ 71%] Built target test-save-load-state
+[ 71%] Built target test-barrier
+[ 72%] Built target test-quantize-fns
+[ 72%] Built target test-quantize-perf
+[ 73%] Built target test-rope
+[ 74%] Built target test-col2im-1d
+[ 74%] Built target test-mtmd-c-api
+[ 74%] Built target gguf-model-data
+[ 74%] Built target test-gguf-model-data
+[ 74%] Built target test-quant-type-selection
+[ 75%] Built target test-c
+[ 76%] Built target test-alloc
+[ 76%] Built target export-graph-ops
+[ 77%] Built target llama-batched
+[ 78%] Built target llama-debug
+[ 78%] Built target llama-embedding
+[ 78%] Built target llama-eval-callback
+[ 78%] Built target sha256
+[ 79%] Built target xxhash
+[ 79%] Built target sha1
+[ 79%] Built target llama-gguf-hash
+[ 79%] Built target llama-gguf
+[ 79%] Built target llama-idle
+[ 79%] Built target llama-lookahead
+[ 80%] Built target llama-lookup
+[ 80%] Built target llama-lookup-create
+[ 80%] Built target llama-lookup-merge
+[ 81%] Built target llama-lookup-stats
+[ 81%] Built target llama-parallel
+[ 82%] Built target llama-passkey
+[ 83%] Built target llama-retrieval
+[ 83%] Built target llama-simple
+[ 84%] Built target llama-simple-chat
+[ 84%] Built target llama-speculative
+[ 84%] Built target llama-speculative-simple
+[ 85%] Built target llama-gen-docs
+[ 85%] Built target llama-finetune
+[ 85%] Built target llama-diffusion
+[ 86%] Built target llama-diffusion-cli
+[ 87%] Built target llama-convert-llama2c-to-ggml
+[ 88%] Built target llama-vdot
+[ 89%] Built target llama-q8dot
+[ 90%] Built target llama-batched-bench-impl
+[ 90%] Built target llama-batched-bench
+[ 91%] Built target llama-gguf-split
+[ 92%] Built target llama-imatrix
+[ 92%] Built target llama-bench-impl
+[ 92%] Built target llama-bench
+[ 92%] Built target llama-completion-impl
+[ 92%] Built target llama-completion
+[ 92%] Built target llama-perplexity-impl
+[ 92%] Built target llama-perplexity
+[ 93%] Built target llama-quantize-impl
+[ 93%] Built target llama-quantize
+[ 93%] Built target llama-ui-embed
+[ 93%] Provisioning UI assets
+-- UI: npm output up-to-date, skipping build
+-- UI: gzip compression applied (/home/fekerr/src/irislime/build/openvino_debug/tools/ui/dist/_gzip)
+[ 93%] Built target llama-ui-assets
+[ 94%] Built target llama-ui
+[ 94%] Built target llama-cli-impl
+[ 95%] Built target llama-cli
+[ 96%] Built target llama-server-impl
+[ 96%] Built target llama-server
+[ 96%] Built target llama-tokenize
+[ 96%] Built target llama-debug-template-parser
+[ 97%] Built target llama-template-analysis
+[ 97%] Built target llama-tts
+[ 97%] Built target llama-llava-cli
+[ 97%] Built target llama-gemma3-cli
+[ 97%] Built target llama-minicpmv-cli
+[ 97%] Built target llama-qwen2vl-cli
+[ 98%] Built target llama-mtmd-cli
+[ 98%] Built target llama-mtmd-debug
+[ 98%] Built target llama-cvector-generator
+[ 99%] Built target llama-export-lora
+[ 99%] Built target llama-fit-params-impl
+[100%] Built target llama-fit-params
+[100%] Built target llama-results
+[100%] Built target llama-app
+gmake[1]: Leaving directory '/home/fekerr/src/irislime/build/openvino_debug'
+==> [TELEMETRY] Tracking tree metrics rooted at PID 88533...
+==> [TELEMETRY] Complete process tree for root 88533 terminated.

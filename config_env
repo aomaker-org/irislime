@@ -1,26 +1,27 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# Filename:    config_env
-# Purpose:     Idempotent environment loader with force-reload and uv syncing
-# Type:        Sourced
-# Attribution: fekerr & Gemini (20260702_0855 / flash 3.5 extended)
-# Timestamp:   20260702_0855
+# Path:        config_env
+# Purpose:     Idempotent WSL2 environment loader with volatile flag state
+#              protection, dynamic parameter tagging, and prompt configuration.
+# Target OS:   Ubuntu 26.04 LTS / WSL2 Subsystem ONLY
+# Type:        Sourced Script (Execute via 'source config_env' or '. config_env')
+# Lineage:     Unified Asset Specification
+# Updated:     20260710_0135 (fekerr & Gemini / Forensic Logic Re-Alignment)
 # ==============================================================================
 
-# 1. Guard: Prevent direct subshell execution
+# 1. Guard: Prevent direct subshell execution without killing the active terminal
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     echo "[!] ERROR: You must SOURCE this file, not execute it." >&2
-    exit 1
+    return 1 2>/dev/null || exit 1
 fi
 
-# 2. Intercept Force Flag to trigger a clean environment tear-down first
+# 2. Intercept and Parse Input Parameters
+LOCAL_TAG=""
 if [ "${1:-}" == "force" ] || [ "${1:-}" == "--force" ]; then
     echo "[!] Force reload detected. Cycling environment state..."
     unset IRISLIME_READY
-fi
-
-# 3. Handle explicit environment unsetting
-if [ "${1:-}" == "unset" ]; then
+    LOCAL_TAG="${2:-}"
+elif [ "${1:-}" == "unset" ]; then
     echo "[!] Unsetting IrisLime environment..."
     unset IRISLIME_READY
     unset ONEAPI_ROOT
@@ -28,13 +29,14 @@ if [ "${1:-}" == "unset" ]; then
     unset ONEAPI_DEVICE_SELECTOR
     unset OpenVINO_DIR
     unset INTEL_OPENVINO_DIR
+    unset ISLM_USER
+    unset ISLM_RUN_TYPE
     unset IRISLIME_TEST_MODEL
     unset IRISLIME_MODELS_DIR
     unset ZES_ENABLE_SYSMAN
     unset DEBUGINFOD_CACHE_PATH
     unset TCM_ENABLE
     
-    # Cleanly revert NVM configurations if registered
     if command -v nvm >/dev/null 2>&1; then
         nvm deactivate >/dev/null 2>&1 || true
         echo "[+] Node version manager tracking deactivated."
@@ -46,9 +48,24 @@ if [ "${1:-}" == "unset" ]; then
     fi
     echo "[+] IrisLime environment unset."
     return 0
+elif [ -n "${1:-}" ]; then
+    # First argument is treated directly as the prompt runtime tag
+    LOCAL_TAG="$1"
 fi
 
-# 4. Idempotency Check
+# 3. Process Runtime Tag Assertions & Parameter Suggestions
+if [ -n "${LOCAL_TAG}" ]; then
+    export ISLM_RUN_TYPE="${LOCAL_TAG}"
+    echo "[+] Prompt run-type tag locked to: [${ISLM_RUN_TYPE}]"
+elif [ -z "${ISLM_RUN_TYPE:-}" ]; then
+    echo "[i] Tip: To tag your prompt context, try: export ISLM_RUN_TYPE=\"prompt sugar\""
+    echo "    (Alternatively, pass it directly: '. config_env your_tag')"
+else
+    # Exception Gate: Retain the active prompt tag during a force cycle if a new one wasn't passed
+    echo "[+] Retaining active prompt tag exception: [${ISLM_RUN_TYPE}]"
+fi
+
+# 4. Idempotency Check (Short-circuits safely if environment is already resident)
 if [ -n "${IRISLIME_READY:-}" ]; then
     echo "[!] IrisLime environment is already loaded. Use 'source config_env force' to re-verify."
     return 0
@@ -63,7 +80,6 @@ if [ -f "${VENV_PATH}/bin/activate" ]; then
     source "${VENV_PATH}/bin/activate"
     echo "[+] Virtual environment activated (${VENV_PATH})."
     
-    # Check for uv and automatically synchronize dependencies against uv.lock
     if command -v uv >/dev/null 2>&1; then
         echo "[*] Auditing and syncing local hardware runtimes with project lockfile..."
         uv sync
@@ -79,34 +95,52 @@ else
     fi
 fi
 
+# STATE GUARD: CAPTURE INITIAL INTERACTIVE TERMINAL SHELL FLAGS
+#
+# We record if nounset (-u) is currently active in the user's running shell 
+# session memory block so we can restore it exactly as it was post-execution.
+
+if [[ $- == *u* ]]; then _IR_ORIG_SET_U=1; else _IR_ORIG_SET_U=0; fi
+
+# ------------------------------------------------------------------------------
 # 6. Source Intel oneAPI Baseline Environment
+# ------------------------------------------------------------------------------
 INTEL_ROOT="/opt/intel/oneapi"
 if [ -f "$INTEL_ROOT/setvars.sh" ]; then
-    # Ensure local log folder paths exist
+    # Provision authoritative forensics log directory path
     mkdir -p logs
     INTEL_LOG="logs/intel_setvars.log"
-    
     echo "[*] Sourcing Intel oneAPI platform flags (Tracking log: ${INTEL_LOG})..."
     
-    # Disable strict variable checks before running Intel's script
+    # Temporarily drop strict flags to ride through loose vendor code variables
     set +u 2>/dev/null
     source "$INTEL_ROOT/setvars.sh" --force > "${INTEL_LOG}" 2>&1
+    
     export ONEAPI_ROOT="$INTEL_ROOT"
     export MKLROOT="$INTEL_ROOT/mkl/latest"
-    # Re-enable strict variable checks to protect remaining script blocks
-    set -u 2>/dev/null
-    
     echo "[+] Intel oneAPI environment sourced successfully."
 else
     echo "[!] Intel oneAPI setvars.sh not found at $INTEL_ROOT."
 fi
 
+# ------------------------------------------------------------------------------
 # 7. Set IrisLime Compilation Matrix & Runtime Variables
-export OpenVINO_DIR="/usr/lib/cmake/openvino2024.6.0"
+# ------------------------------------------------------------------------------
+#
+# Dynamic path configuration matching the upstream Ubuntu 26 package paths
+
+if [ -d "/usr/lib/x86_64-linux-gnu/cmake/openvino" ]; then
+    export OpenVINO_DIR="/usr/lib/x86_64-linux-gnu/cmake/openvino"
+else
+    export OpenVINO_DIR="/usr/lib/cmake/openvino"
+fi
 export INTEL_OPENVINO_DIR="/usr"
 
 # Hypervisor Layer Override: Route to stable OpenCL framework to prevent Level Zero SIGSEGV
 export ONEAPI_DEVICE_SELECTOR="opencl:1"
+
+# Global Node Identity Configurations
+export ISLM_USER="${ISLM_USER:-default_node}"
 
 # Centralized Model Target Interpolation
 export IRISLIME_MODELS_DIR="../models"
@@ -115,8 +149,6 @@ export IRISLIME_TEST_MODEL="${IRISLIME_TEST_MODEL:-$IRISLIME_MODELS_DIR/tinyllam
 # Hardware Acceleration and Debugging Settings
 export ZES_ENABLE_SYSMAN=1
 export DEBUGINFOD_CACHE_PATH="$HOME/.cache/gdb_symbols"
-
-# Suppress oneTBB composability warnings and balance thread core scaling
 export TCM_ENABLE=1
 
 # Node.js Version Manager (NVM) Toolchain Initialization
@@ -124,23 +156,46 @@ export NVM_DIR="${HOME}/.nvm"
 if [[ -s "${NVM_DIR}/nvm.sh" ]]; then
     set +u 2>/dev/null
     source "${NVM_DIR}/nvm.sh"
-    # Pin to Node 20 or download it immediately if missing
     nvm use 20 --silent >/dev/null 2>&1 || nvm install 20 --silent >/dev/null 2>&1
-    set -u 2>/dev/null
     echo "[+] Node.js Toolchain initialized on version: $(node -v 2>/dev/null || echo '20')"
 else
     echo "[!] Warning: Node Version Manager missing at ${NVM_DIR}. Native UI generation may hit dependencies."
 fi
 
-# Convenience Automation Shortcuts
+# RESTORE ORIGINAL VOLATILE SHELL FLAG CONFIGURATIONS
+if [ "${_IR_ORIG_SET_U}" -eq 1 ]; then set -u; else set +u; fi
+unset _IR_ORIG_SET_U
+
+# ------------------------------------------------------------------------------
+# 8. Optimized Interactive Prompt Geometry (Zero-Overhead Hybrid Model)
+# ------------------------------------------------------------------------------
+#
+# Bash magic notes:
+# Single quotes freeze the literal text structure at assignment time.
+# Bash natively parses the variable expansion and time variables inside its 
+# C-core loop on carriage returns with zero subshell forking penalties.
+
+if [[ $- == *i* ]]; then
+    export PS1='\[\e]0;\u@\h: \w\a\]\n\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;35m\]${ISLM_RUN_TYPE:+[$ISLM_RUN_TYPE]: }\[\033[00m\]\[\033[01;37m\]\w\[\033[00m\] \[\033[01;33m\]\D{%y%m_%H%M}_\!\[\033[00m\]\n; '
+fi
+
+# ------------------------------------------------------------------------------
+# 9. Syntactic Sugar / Predictable Shortcut Symmetry
+# ------------------------------------------------------------------------------
 alias build_runner="uv run tools/build_runner.py"
 alias extract_telemetry="uv run tools/extract_telemetry.py"
 alias test_runner="uv run tools/test_runner.py"
 alias quick_litert="./tools/quick_test_litert.py"
+alias files2clip="tools/files2clip"
+alias clip2files="tools/clip2files"
+
+alias bbptests_runner="uv run tools/bbptests_runner.py --profile vulkan_debug"
+alias bbpsmoke_runner="IRISLIME_FLAG_VARS='SMOKE_HELP' uv run tools/bbptests_runner.py"
 
 export IRISLIME_READY=1
+echo "[+] IrisLime shared configuration preferences cleanly evaluated."
 echo "[+] IrisLime environment is ready."
 
 # ==============================================================================
-# Footer:      config_env
+# Context Boundary: config_env_Complete
 # ==============================================================================

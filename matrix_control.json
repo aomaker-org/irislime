@@ -6,7 +6,7 @@
   },
   "backend_overrides": {
     "openvino": {
-      "enabled": false,
+      "enabled": true,
       "parallel_jobs": 1,
       "inactivity_timeout_seconds": 1800,
       "fail_fast": false,
@@ -75,7 +75,7 @@
       }
     },
     "vulkan": {
-      "enabled": false,
+      "enabled": true,
       "parallel_jobs": 4,
       "inactivity_timeout_seconds": 300,
       "fail_fast": false,
@@ -101,7 +101,7 @@
       }
     },
     "litert": {
-      "enabled": false,
+      "enabled": true,
       "parallel_jobs": 4,
       "inactivity_timeout_seconds": 120,
       "fail_fast": true,
