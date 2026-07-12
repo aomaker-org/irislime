@@ -1,22 +1,18 @@
 #!/usr/bin/env python3
 # ==============================================================================
 # Path:        scratch/brain_dump_20260711.py
-# Purpose:     Idempotent File Factory & Context Ledger (Short Line Protected)
+# Purpose:     Idempotent File Factory & Context Ledger (Vanilla ASCII Edition)
 # Target OS:   Ubuntu 26.04 LTS / WSL2 Subsystem (Core12 Workstation Platform)
 # Lineage:     Unified Asset Specification / Temporary Sandbox Artifacts
 # Author:      IrisLime Core Engine Integration
-# Updated:     20260711_0925 (Implicitly concatenated sub-80 character rows)
+# Updated:     20260711_1621 (Safe execution boundary wrap)
 # ==============================================================================
 
 import sys
 from pathlib import Path
 
-# Authoritative path mapping pointing natively relative to your repository root
 WORKSPACE_ROOT = Path(__file__).resolve().parent.parent
 
-# ==============================================================================
-# Short-Row String Array Registry (Immune to Clipboard Drops & Terminal Wraps)
-# ==============================================================================
 ASSET_REGISTRY = {
     "README.md": [
         "# IrisLime Core Engine Integration Platform",
@@ -33,33 +29,33 @@ ASSET_REGISTRY = {
         "",
         "---",
         "",
-        "## 🏗️ Core Architectural Topology",
+        "## Core Architectural Topology",
         "",
         ("The workspace is organized into explicit structural domains to "
          "separate engine sources, automated pipelines, orchestration "
          "telemetry logs, and instructional sandboxes:"),
         "",
-        ("* **`infra/`** – Authoritative system makefile macro engines "
+        ("* **`infra/`** - Authoritative system makefile macro engines "
          "([BT]vulkan.mk[BT], [BT]sycl.mk[BT]) managing localized "
          "compilation parameters, profile layouts, and environment checks."),
-        ("* **`llama.cpp/`** – Local framework fork version-locked to the "
+        ("* **`llama.cpp/`** - Local framework fork version-locked to the "
          "active Intel performance patch vectors "
          "([BT]remotes/origin/feature/sycl-openvino-intel-patches[BT])."),
-        ("* **`deps/`** – Immutable system and optimization dependencies, "
+        ("* **`deps/`** - Immutable system and optimization dependencies, "
          "including the core [BT]litert-lm[BT] engine tracks."),
-        ("* **`deps/learning/`** – Localized repository forks owned by "
+        ("* **`deps/learning/`** - Localized repository forks owned by "
          "[BT]aomaker-org[BT] containing foundational educational platforms "
          "for machine learning verification."),
-        ("* **`tools/`** – Intelligent python script utilities and "
+        ("* **`tools/`** - Intelligent python script utilities and "
          "execution wrappers managing cross-backend builds, hardware "
          "diagnostics, and inference loops."),
-        ("* **`logs/`** – Telemetry datastores split cleanly into "
+        ("* **`logs/`** - Telemetry datastores split cleanly into "
          "persistent build journals ([BT]logs/builds/[BT]) and structured "
          "test metrics ([BT]logs/tests/[BT])."),
         "",
         "---",
         "",
-        "## 🛠️ Integrated Automation Features",
+        "## Integrated Automation Features",
         "",
         "### 1. Unified Profile Build Orchestrator ([BT]tools/build_runner.py[BT])",
         ("A hardened compilation wrapper that enforces safe process isolation "
@@ -119,7 +115,7 @@ ASSET_REGISTRY = {
         "",
         "---",
         "",
-        "## 🚀 Step 1: Initialize the Terminal Environment Vector",
+        "## Step 1: Initialize the Terminal Environment Vector",
         "",
         ("The system variables, path configurations, and semantic shortcuts "
          "are driven by the project's central shell coordinator script. Every "
@@ -140,7 +136,7 @@ ASSET_REGISTRY = {
         "",
         "---",
         "",
-        "## 📦 Step 2: Provisioning Workspace Submodules",
+        "## Step 2: Provisioning Workspace Submodules",
         "",
         ("The system tracks downstream dependency frameworks through explicitly "
          "pinned git submodules. To synchronize your local workspace with the "
@@ -167,7 +163,7 @@ ASSET_REGISTRY = {
         "",
         "---",
         "",
-        "## 🔍 Step 3: Running Workspace Pre-Flight Diagnostics",
+        "## Step 3: Running Workspace Pre-Flight Diagnostics",
         "",
         ("Before executing heavy hardware compilation chains or token "
          "processing tasks, verify that your local filesystem footprints, "
@@ -184,15 +180,12 @@ ASSET_REGISTRY = {
          "configurations while safely ignoring heavy compiled objects, "
          "system models, and build logs."),
         "",
-        "---" on the fly."),
-        "",
         "---",
-        "",
-        "## 🐶 Running Local SLM Health Checks (`puppy_chow`)",
+        "## Running Local SLM Health Checks (puppy_chow)",
         "",
         ("To verify that your compiled graphics hardware acceleration libraries "
          "are interacting flawlessly with model weights arrays, you can fire "
-         "a localized inference loop using the project’s lightweight "
+         "a localized inference loop using the project's lightweight "
          "[BT]puppy_chow[BT] validation series."),
         "",
         "### 1. Fetch the Quantized Testing Weights Baseline",
@@ -220,9 +213,6 @@ ASSET_REGISTRY = {
     ]
 }
 
-# ==============================================================================
-# Factory Processing Unpacker Engine
-# ==============================================================================
 def unpack_sandbox_assets():
     print("==================================================================")
     print("[+] IRISLIME SANDBOX IDEMPOTENT FILE FACTORY INITIALIZED")
@@ -237,7 +227,6 @@ def unpack_sandbox_assets():
         destination_path = WORKSPACE_ROOT / relative_path
         destination_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Compile the short row arrays into a cohesive textual snapshot
         raw_payload = "\n".join(lines_list) + "\n"
         
         sanatized_content = (
@@ -255,5 +244,3 @@ def unpack_sandbox_assets():
 
 if __name__ == "__main__":
     unpack_sandbox_assets()
-
-# end of file: scratch/brain_dump_20260711.py

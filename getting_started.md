@@ -1,78 +1,72 @@
 # Getting Started with IrisLime
 
-**IrisLime** is a research-focused environment designed to facilitate local, small-scale Large Language Model (LLM) inference on Intel Iris Xe integrated graphics, leveraging WSL2 and the Intel oneAPI toolkit.
+This manual outlines the step-by-step procedures required to initialize your interactive shell environment, configure dependency path boundaries, and verify local multi-backend tracking states.
 
-## 1. Prerequisites
+---
 
-* **Windows 11** with WSL2 enabled.
-* [Intel oneAPI Base Toolkit](https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit.html) installed (v2026 recommended).
-* Ensure Windows host GPU drivers are current.
+## Step 1: Initialize the Terminal Environment Vector
 
-## 2. System Configuration (Manual)
-
-To bridge your Windows GPU to the WSL2 environment:
-
-1. **Enable the vgem bridge:** Run `sudo modprobe vgem` to enable the virtual graphics module.
-2. **Verification:** Check for the render node: `ls -l /dev/dri/renderD128`.
-*(If not present, ensure you have initialized your WSL2 instance after driver updates).*
-
-## 3. Workspace Setup (The Dependency Injection Model)
-
-We follow an architecture that isolates the application code, engine fork, and model weights to maintain a lean, forensic-ready repository.
-
-### Step-by-Step Initialization
-
-1. **Clone the project:**
-```bash
-cd ~/src
-git clone --recurse-submodules https://github.com/aomaker-org/irislime.git
-cd irislime
-
-```
-
-
-2. **Clone the inference engine (fork):**
-Clone the fork of `llama.cpp` as a sibling directory, then link it to the project:
-This step may be optional if no changes are needed to the engine, but it is recommended for research flexibility.
-The fork of the engine is loaded as a git submodule in irislime.
-```bash
-cd ~/src
-git clone https://github.com/aomaker-org/llama.cpp.git
-cd ~/src/irislime
-
-```
-
-
-3. **Configure Model Storage:**
-Store large binary model files in a central location to prevent Git repository bloat:
-```bash
-mkdir -p ~/src/models
-# Link the central storage to your current project
-ln -s ~/src/models models
-
-```
-
-
-4. **Acquire a Model:**
-Download a baseline model (e.g., Llama-3-8B-Instruct) into your central store:
-(There is also the "hf" command line tool for downloading models from Hugging Face.)
-```bash
-wget https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf -O ~/src/models/llama-3-8b.Q4_K_M.gguf
-
-```
-
-
-
-## 4. Initialization
-
-Always initialize the local environment variables before building or running:
+The system variables, path configurations, and semantic shortcuts are driven by the project's central shell coordinator script. Every time you spawn a new terminal window or container session, execute the authoritative environment load command from the workspace root:
 
 ```bash
-source config_env
-
+. config_env
 ```
 
-## 5. Architectural Rationale
+### The Hot-Reload Gateway
+The script is explicitly engineered with a decoupled runtime guard. Sourcing `config_env` on a session where the variables are already active will automatically bypass heavy path exports while cleanly re-running the inner alias allocation arrays. This allows you to apply instant string adjustments or typo fixes to your aliases without tearing down your active variables.
 
-* **Repository Isolation:** By using a symlink for `models`, we prevent Git index pollution and ensure binary files remain outside the version control system.
-* **Portability:** You can rebuild the `irislime` environment on any machine, point the symlinks to your existing `ai_models` folder, and resume research immediately.
+---
+
+## Step 2: Provisioning Workspace Submodules
+
+The system tracks downstream dependency frameworks through explicitly pinned git submodules. To synchronize your local workspace with the organization's current baseline targets, execute the sequence:
+
+### 1. Synchronize Acceleration Framework Repositories
+Pull down the performance-patched version of the inference engines:
+```bash
+git submodule update --init --recursive
+```
+
+### 2. Ingest Academic Learning Laboratories
+Execute the automated organizational provisioning script to fork and integrate our target learning environments straight into your local `deps/learning/` layout:
+```bash
+./tools/setup_learning_submodules.sh
+```
+
+This tool automatically leverages your authenticated GitHub CLI tool (`gh`) to clone your organization's forks of Harvard's TinyTorch (`cs249r_book`), Cornell's MiniTorch, and Karpathy's algorithmic compression engines.
+
+---
+
+## Step 3: Running Workspace Pre-Flight Diagnostics
+
+Before executing heavy hardware compilation chains or token processing tasks, verify that your local filesystem footprints, modified git matrices, and active submodule hashes are clean.
+
+Run the customized snapshot utility from your terminal prompt:
+```bash
+tools/view_repo_info.sh
+```
+
+This tool acts as a scrolling index trace, displaying your current git status tracking rows, listing active submodules, confirming remote repository parameters, and mapping your directory configurations while safely ignoring heavy compiled objects, system models, and build logs.
+
+---
+## Running Local SLM Health Checks (puppy_chow)
+
+To verify that your compiled graphics hardware acceleration libraries are interacting flawlessly with model weights arrays, you can fire a localized inference loop using the project's lightweight `puppy_chow` validation series.
+
+### 1. Fetch the Quantized Testing Weights Baseline
+Run the standard library provisioner script to download a 398 MB 0.5B Qwen asset straight into your adjacent models directory:
+```bash
+uv run tools/model_manager.py
+```
+
+### 2. Invoke Stable, Greedy Inference Verification
+Execute the hardened shell wrapper to prompt the model using strict ChatML boundary containers and a zero-temperature parameter constraint to force deterministic responses:
+```bash
+tools/puppy_chow_004.sh
+```
+
+This routes the token generation pass directly across your local Vulkan or SYCL processing pipelines, confirming your hardware interfaces are functioning perfectly.
+
+---
+
+
