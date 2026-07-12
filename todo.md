@@ -66,3 +66,24 @@ echo "hmm"
 
 ## TODO: 20260630_1116 Updates
 * [ ] Fix `tools/files2clip`: Enhance script logic to accept and cleanly process multiple explicit filenames via command-line arguments simultaneously rather than processing just a single file target.
+
+# TODO: 20260708 updates:
+
+## [BACKLOG] Infrastructure & Toolchain Optimization
+
+### 🟩 Task: Variable-Driven OpenVINO Channel Switching
+* **Context:** `tools/provision.sh` currently locks the OpenVINO deployment pipeline to a static repository distribution vector (`ubuntu24 main`). While highly stable, this pattern prevents testing on bleeding-edge preview streams or custom development distributions without manual file modification.
+* **Objective:** Implement a clean, variable-driven environment knob (`$IRISLIME_OPENVINO_STREAM`) matching the architecture established for the `uv` toolchain installer (`$IRISLIME_PROV_CK`).
+* **Architectural Guardrails (Best Practices):**
+    * Avoid file forks (e.g., do not split into `provision_stable.sh` and `provision_preview.sh`). Keep a single, unified provisioning script.
+    * Utilize POSIX-compliant fallback notation to default to maximum predictability if the variable is omitted from the host configuration layer:
+        `IRISLIME_OPENVINO_STREAM="${IRISLIME_OPENVINO_STREAM:-STABLE}"`
+* **Implementation Engineering Plan:**
+    1.  Map out the verified repository targets:
+        * `STABLE`: `deb https://apt.repos.intel.com/openvino/2024 ubuntu24 main`
+        * `PREVIEW`: Target the corresponding Intel pre-release package channels if testing beta architectures.
+    2.  Inject a clean conditional block inside `Step 3` of `tools/provision.sh` to construct the string dynamically before writing out to `/etc/apt/sources.list.d/intel-openvino.list`.
+* **Observability Impact:** The variable's active state must resolve down to your execution logs (`logs/`). This guarantees that your Git flight recorder tracks whether a hardware validation pass or a model speed benchmark was executed against production-hardened algorithms or experimental preview runtimes.
+
+# end of todo.md
+

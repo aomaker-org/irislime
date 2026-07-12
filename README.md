@@ -1,43 +1,44 @@
-# irislime
+# IrisLime Core Engine Integration Platform
 
-An experimental hardware-software co-design sandbox optimized for edge AI inference, low-level tensor acceleration, and repository-aware agent automation. This repository serves as a live engineering playground for optimizing small language models on heterogeneous consumer hardware.
+Welcome to the IrisLime core local validation and edge AI workspace. This platform acts as an automated, unified integration layer optimized specifically for the Ubuntu 26.04 LTS / WSL2 subsystem running on Core12 multi-backend workstation architectures.
 
-## 🎯 Project Intent: Portfolio to Sandbox
-This repository has evolved from a static project portfolio into a live, high-velocity development sandbox. The architecture focuses on:
-* **Hardware Abstraction Loops:** Bypassing driver and toolkit collisions (such as Intel oneAPI/Khronos header conflicts) to run stable execution matrices across OpenVINO, SYCL, and Vulkan backends.
-* **Agent Integration:** Building and testing autonomous repository-aware scripts and hooks—leveraging environments like Jules (`jules.google.com`)—to orchestrate continuous integration and structural codebase audits.
-* **Headless Automation:** Shifting away from fragile interactive console loops to robust, programmatic verification matrices (`test_runner.py`) that evaluate low-level mathematical kernel stability (`test-backend-ops`) and track high-precision telemetry.
-
-## 🏗️ Hardware Architecture & Configuration Matrix
-All build targets, parallelization thread pool allocations, compiler flags, and runtime environment overrides are declared centrally within a single engineering blueprint: `matrix_control.json`.
-
-### Core Workflow Execution
-1. **Source Runtimes:** Ensure hardware-specific environment mappings are bound to the active shell:
-   ```bash
-   source /opt/intel/oneapi/setvars.sh
-
-# Drift: previous README content
-
-# IrisLime: Edge AI Exploration Sandbox
-
-**IrisLime** (Iris + SLM) is a research environment optimized for executing local, small-scale Large Language Model (LLM) inference on Intel Iris Xe integrated graphics. It establishes a secure compute bridge between a Windows 11 host GPU driver layer and a virtualized Linux workspace using WSL2 and the Intel oneAPI developer toolkit.
-
-## Repository Vision
-To preserve a lean, forensic-ready project footprint, this environment rigorously decouples tracking infrastructure from upstream inference engine source repositories and high-density binary model weights using isolated file allocation bounds and directory symlinks.
-
-## Document Stratum Map
-Before executing local builds or validation testing sequences, orient yourself with the authoritative documentation layers:
-
-1. ?? **[Quick Start Deployment Recipe](quick_start.md)**: The streamlined copy-paste terminal checklist for first-time instance initialization on target developer hardware.
-2. ?? **[Deep Dive Getting Started Guide](getting_started.md)**: Comprehensive guide outlining host kernel graphics modprobe parameters, environmental gate criteria, and isolated debugging harnesses.
-3. ?? **[Training and Onboarding Repository](training/README.md)**: Architectural reference center documenting team Git workflow models, squash-merge rationales, and cross-OS encoding troubleshooting.
-
-## Core Workspace Taxonomy
-* `config_env`: Idempotent session environment gate loader. Initializes localized Python virtual environments and maps Intel system variables.
-* `scratch/`: Engineering sandbox workspace. Holds point-in-time snapshot utilities, local backlog indices, and validation scripts (`run_test000.sh`, `run_test002.sh`).
-* `tools/`: Maintained background orchestration utilities and automated headless text extraction engines.
-* `models/`: Filesystem symlink pointing to your centralized local storage directory for GGUF model binaries.
-* `llama.cpp/`: Filesystem symlink pointing to your active, custom-patched C++ inference engine fork repository.
+The repository manages advanced local hardware acceleration implementations (Intel SYCL, OpenVINO, and Vulkan) for language model inference while serving as a local computing sandbox for model training and lossy text data compression research.
 
 ---
-*Verily, thou shalt hoard data.*
+
+## Core Architectural Topology
+
+The workspace is organized into explicit structural domains to separate engine sources, automated pipelines, orchestration telemetry logs, and instructional sandboxes:
+
+* **`infra/`** - Authoritative system makefile macro engines (`vulkan.mk`, `sycl.mk`) managing localized compilation parameters, profile layouts, and environment checks.
+* **`llama.cpp/`** - Local framework fork version-locked to the active Intel performance patch vectors (`remotes/origin/feature/sycl-openvino-intel-patches`).
+* **`deps/`** - Immutable system and optimization dependencies, including the core `litert-lm` engine tracks.
+* **`deps/learning/`** - Localized repository forks owned by `aomaker-org` containing foundational educational platforms for machine learning verification.
+* **`tools/`** - Intelligent python script utilities and execution wrappers managing cross-backend builds, hardware diagnostics, and inference loops.
+* **`logs/`** - Telemetry datastores split cleanly into persistent build journals (`logs/builds/`) and structured test metrics (`logs/tests/`).
+
+---
+
+## Integrated Automation Features
+
+### 1. Unified Profile Build Orchestrator (`tools/build_runner.py`)
+A hardened compilation wrapper that enforces safe process isolation for macro builds. It satisfaction-checks Python 3.14 text-mode pipe specifications and features a three-tiered watchdog system:
+* **Standard Output Stream Scanning:** Non-blocking queue reads prevent terminal buffer deadlocks.
+* **Filesystem Inode Ingestion:** Tracks real-time log allocation (`st_size`) to confirm background compilation activity even if stdout is dark.
+* **Parameterized Heartbeat Traps:** Actively reads text pulses committed to `.irislime_heartbeat` to expand or shrink the silence counter budget on the fly.
+
+### 2. Profiled Verification Engine (`tools/bbptests_runner.py`)
+A adaptive, zero-maintenance test harness that completely discards brittle, hardcoded execution lists. By dynamically probing target binary folders, it extracts and isolates compiled executables matching the `test-` prefix. It runs them inside their native directories to protect relative resource mapping paths, uses string replacement gates (`errors="replace"`) to cleanly ingest raw token outputs without throwing Unicode decoder crashes, and populates interactive horizontal tickers.
+
+### 3. Capabilities Help-Smoke Tester (`bbpsmoke_runner`)
+Leverages the dynamic engine to run high-velocity linkage validation across every compiled binary in the multi-backend directory tree. By passing the `-h` flag to all discovered assets, it verifies that library dependencies resolve successfully, isolates shared object faults (`LINK_ERR`), and stores help catalogs.
+
+### 4. Scrolling Hardware Watchdog (`tools/compiler_watch`)
+A non-destructive, non-blocking process tree visualizer. It eliminates screen-clearing operations to protect your terminal app's historical scrollback memory, formats parent-child lines natively, extracts thread allocations, traces core affinity matrix variables (`PSR`), and supports quiet escapes via `q`.
+
+### 5. Automated Data Ingestion (`tools/model_manager.py`)
+A standard-library-driven network provisioner that handles asset transfers directly from Hugging Face repositories using chunked urllib pipelines. It features an inline progress metronome, validates file sizing targets, and automatically senses local `HF_TOKEN` variables to inject secure bearer authorization.
+
+---
+
+

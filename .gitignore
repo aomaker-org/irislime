@@ -11,7 +11,7 @@ env/
 htmlcov/
 dist/
 build/
-logs/builds/
+# logs/builds/
 *.egg-info/
 
 # --- Rust ---
@@ -64,3 +64,4 @@ config_local.sh
 Thumbs.db
 *~
 models/
+.irislime_heartbeat

@@ -1,0 +1,30 @@
+diff --git a/infra/make/sycl.mk b/infra/make/sycl.mk
+index 9840ea3..585fb88 100644
+--- a/infra/make/sycl.mk
++++ b/infra/make/sycl.mk
+@@ -21,7 +21,7 @@ LOG_FILE_PATH ?= $(BUILD_DIR)/logs/build_manual.log
+ 
+ .PHONY: build-sycl clean-sycl
+ 
+-build-sycl: ## Configure and compile the Intel oneAPI SYCL core acceleration target
++build-sycl: bootstrap-headers ## Configure and compile the Intel oneAPI SYCL core acceleration target
+ 	@echo "[Make] Profile Target Locked: LITERT_PROFILE=$(LITERT_PROFILE)"
+ 	@echo "[Make] Initializing Intel oneAPI SYCL compilation inside: $(BUILD_DIR)"
+ 	@mkdir -p $(BUILD_DIR) $(dir $(LOG_FILE_PATH))
+@@ -34,10 +34,14 @@ build-sycl: ## Configure and compile the Intel oneAPI SYCL core acceleration tar
+ 	CC=icx CXX=icpx cmake ../../$(ENGINE_DIR) \
+ 		-DGGML_SYCL=ON \
+ 		-DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) \
+-		-DCMAKE_PREFIX_PATH="$(LITERT_LINK_DIR)" \
++		-DCMAKE_PREFIX_PATH="$(LITERT_LINK_DIR);$$MKLROOT/lib/cmake/mkl" \
+ 		-DIRISLIME_LITERT_DIR="$(LITERT_LINK_DIR)" \
+ 		$(CMAKE_FLAGS) >> $(LOG_FILE_PATH) 2>&1 && \
+-	cmake --build . -j$(NUM_BUILD_JOBS) --config $(CMAKE_BUILD_TYPE) >> $(LOG_FILE_PATH) 2>&1; \
++	cmake --build . -j$(NUM_BUILD_JOBS) --config $(CMAKE_BUILD_TYPE) >> $(LOG_FILE_PATH) 2>&1 & \
++	BUILD_PID=$$! ; \
++	echo "[+] Background SYCL build process spawned with tracking coordinate PID: $$BUILD_PID" ; \
++	uv run tools/track_profile.py --pid $$BUILD_PID --out logs/builds/sycl_profile/resource_telemetry.csv --interval 1.0 ; \
++	wait $$BUILD_PID ; \
+ 	STATUS=$$?; \
+ 	END_TIME=$$(date +%s); \
+ 	DURATION=$$((END_TIME - START_TIME)); \
