@@ -2,6 +2,8 @@
 # ==========================================================================
 # INGESTION HEADER: scratch/gather_snapshot.sh
 # Purpose: Compiles a dynamic point-in-time snapshot ledger before trunk merges.
+# 20260712 copilot | fix heredoc variable escaping: removed backslashes so
+#                    bash expands $(...) and ${...} correctly inside the block
 # ==========================================================================
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

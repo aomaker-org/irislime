@@ -10,7 +10,7 @@ if [ -z "$ONEAPI_ROOT" ]; then
 fi
 if ! command -v icpx &> /dev/null; then
     echo "SYCL compiler (icpx) not found! Please ensure Intel oneAPI base toolkit is installed."
-    echo "Falling back to standard CPU build as a mock for the script if SYCL isn't available..."
+    echo "Falling back to standard CPU build since SYCL is not available..."
     SYCL_FLAG="-DGGML_SYCL=OFF"
 else
     SYCL_FLAG="-DGGML_SYCL=ON"

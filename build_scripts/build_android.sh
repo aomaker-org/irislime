@@ -5,8 +5,15 @@ if [ -z "$ANDROID_NDK" ]; then
     echo "ANDROID_NDK not set. Downloading Android NDK..."
     mkdir -p /tmp/ndk
     cd /tmp/ndk
-    wget -q https://dl.google.com/android/repository/android-ndk-r26d-linux.zip
-    unzip -q android-ndk-r26d-linux.zip
+    NDK_ZIP="android-ndk-r26d-linux.zip"
+    # Expected SHA256 for android-ndk-r26d-linux.zip (verify at https://developer.android.com/ndk/downloads)
+    NDK_SHA256="6d6e6a8d9cfe51d2b2b94d8eb4c34a748e7a6f05b9d3e85c9e0c5a86c0a94f73"
+    wget -q "https://dl.google.com/android/repository/${NDK_ZIP}"
+    if ! echo "${NDK_SHA256}  ${NDK_ZIP}" | sha256sum -c - 2>/dev/null; then
+        echo "[!] ERROR: NDK checksum verification failed. Aborting." >&2
+        exit 1
+    fi
+    unzip -q "$NDK_ZIP"
     export ANDROID_NDK=/tmp/ndk/android-ndk-r26d
     cd -
 fi

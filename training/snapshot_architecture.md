@@ -40,17 +40,13 @@ This tag preserves an unalterable record of a known-good configuration state, ca
 
 If an automated testing execution script or an unverified experimental pass corrupts your shell variables, fractures the commit graph, or breaks the compilation paths tomorrow, you can restore your workspace byte-for-byte using this recovery protocol.
 
-Execute this single-stroke alignment sequence to clear out local entropy and force-reset the tree back to today's verified state:
-
-> **Warning**: The force-push step below will rewrite the remote `main` history. Only execute this in a genuine emergency scenario and only after temporarily disabling branch protection rules in the repository settings. Coordinate with all active contributors before proceeding.
+Reset your local tree to the immutable tag baseline:
 
 ```bash
-# 1. Force-reset your active local history to the immutable tag baseline
+# Force-reset your active local history to the immutable tag baseline
 git checkout main
 git reset --hard tags/v1.0.0-onboarding-stable
 
-# 2. Force-align the remote server trunk back to the pristine anchor point
-#    (Requires branch protection to be temporarily disabled)
-git push origin main --force
-
 ```
+
+To realign the remote `main` branch, follow the standard PR workflow — create a recovery branch, push it, and open a PR. Direct force-pushes to `main` are prohibited by the branch protection policy documented in [git_workflow.md](git_workflow.md). If an extraordinary emergency requires bypassing this policy, coordinate with the repository administrator to temporarily disable branch protection via the repository settings, document the rationale in the commit message, and re-enable protection immediately after the merge.
