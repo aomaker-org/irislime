@@ -5,9 +5,9 @@ Welcome to the IrisLime engineering training center. This repository serves as t
 
 ## Training Modules
 
-* 🌿 **[Git Workflows & Trunk Protection Manual](https://www.google.com/search?q=git_workflow.md)**: Comprehensive training guide on the project's single-operator commit model, branch preservation mandates, and the technical rationale behind squash-merge linear histories.
-* 👾 **[Cross-OS Encoding Interoperability Guide](https://www.google.com/search?q=encoding_interop.md)**: Deep dive documentation analyzing the CP437 ANSI vs UTF-8 character encoding collision encountered during Windows-to-WSL clipboard redirection pipelines.
-* 🧱 **[Forensic Snapshot Architecture Manual](https://www.google.com/search?q=snapshot_architecture.md)**: Technical overview of the point-in-time environment snapshot engine, file verification layers, and immutable annotated tag recovery protocols.
+* 🌿 **[Git Workflows & Trunk Protection Manual](git_workflow.md)**: Comprehensive training guide on the project's single-operator commit model, branch preservation mandates, and the technical rationale behind squash-merge linear histories.
+* 👾 **[Cross-OS Encoding Interoperability Guide](encoding_interop.md)**: Deep dive documentation analyzing the CP437 ANSI vs UTF-8 character encoding collision encountered during Windows-to-WSL clipboard redirection pipelines.
+* 🧱 **[Forensic Snapshot Architecture Manual](snapshot_architecture.md)**: Technical overview of the point-in-time environment snapshot engine, file verification layers, and immutable annotated tag recovery protocols.
 
 ## Core Onboarding Rule
 

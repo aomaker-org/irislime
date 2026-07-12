@@ -26,7 +26,7 @@ A squash merge takes the entire aggregated delta of the feature branch and conde
 
 1. **Strictly Linear History**: It eliminates multi-parent merge web topologies. The production history remains a straight, easily read line.
 2. **Guaranteed Atomic Commit Boundaries**: Every single commit on `main` is guaranteed to represent a completely stable, fully compiling software state. The production branch transitions instantly from working pre-feature code to working post-feature code.
-3. **Optimized Troubleshooting via `git bisect**`: When looking for an engine regression, `git bisect` utilizes a binary search through the timeline. If the branch history contains broken, non-compiling micro-commits, `git bisect` frequently halts on intermediate broken states where test suites cannot execute. Squashing ensures every search hop lands on a clean, valid compilation milestone.
+3. **Optimized Troubleshooting via `git bisect`**: When looking for an engine regression, `git bisect` utilizes a binary search through the timeline. If the branch history contains broken, non-compiling micro-commits, `git bisect` frequently halts on intermediate broken states where test suites cannot execute. Squashing ensures every search hop lands on a clean, valid compilation milestone.
 4. **Separation of Concerns**: High-level intent is documented on `main`, while low-level step-by-step developer implementation metrics remain safely archived on the un-deleted feature branches.
 
 ## 3. Automated Validation Gates (Trunk Protection)

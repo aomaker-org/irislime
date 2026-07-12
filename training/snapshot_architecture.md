@@ -42,12 +42,15 @@ If an automated testing execution script or an unverified experimental pass corr
 
 Execute this single-stroke alignment sequence to clear out local entropy and force-reset the tree back to today's verified state:
 
+> **Warning**: The force-push step below will rewrite the remote `main` history. Only execute this in a genuine emergency scenario and only after temporarily disabling branch protection rules in the repository settings. Coordinate with all active contributors before proceeding.
+
 ```bash
 # 1. Force-reset your active local history to the immutable tag baseline
 git checkout main
 git reset --hard tags/v1.0.0-onboarding-stable
 
 # 2. Force-align the remote server trunk back to the pristine anchor point
+#    (Requires branch protection to be temporarily disabled)
 git push origin main --force
 
 ```
