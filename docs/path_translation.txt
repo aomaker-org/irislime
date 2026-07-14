@@ -1,0 +1,24 @@
+# ==============================================================================
+# IDENTIFIER:  docs/path_translation.txt
+# AUTHOR:      fekerr & Gemini
+# TIMESTAMP:   20260714_1015
+# DESCRIPTION: Cross-Platform Path Translation Reference Guide
+# ==============================================================================
+
+[WSL PATH TRANSLATION RULE]
+Inside WSL (Ubuntu), Windows drives are mounted under '/mnt/'. To translate:
+1. Flip all backslashes '\' to forward slashes '/'
+2. Convert drive letters (e.g., 'C:\') to lowercase mount points (e.g., '/mnt/c/')
+
+Windows Path: C:\Users\feker\AppData\Roaming\rclone\rclone.conf
+WSL Path:     /mnt/c/Users/feker/AppData/Roaming/rclone/rclone.conf
+
+[AUTOMATION UTILITIES]
+1. In WSL2 (Ubuntu): 'wslpath' translates Windows paths on the fly.
+   Example: cp "$(wslpath "C:\Users\feker\AppData\Roaming\rclone\rclone.conf")" ~/.config/rclone/
+
+2. In Git Bash (Windows): 'cygpath' translates Unix paths.
+   Example: cygpath -u "C:\Users\feker\AppData\Roaming\rclone\rclone.conf"
+
+3. In Python: 'pathlib.Path' manages conversions natively using the '/' operator.
+# ==============================================================================

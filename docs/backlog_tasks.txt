@@ -1,0 +1,11 @@
+# ==============================================================================
+# IDENTIFIER:  docs/backlog_tasks.txt
+# DESCRIPTION: IrisLime Infrastructure Backlog Ledger
+# ==============================================================================
+
+[ ] GIT BOUNDARIES: Confirm root .gitignore successfully ignores the 'scratch/' and 'logs/' trees.
+[x] PIPELINE SYNC: Verify rclone successfully syncs state and blobs to gdrive after sandbox baseline commit.
+[ ] BOOTSTRAP: Refactor config_env to delegate to config_wsl.sh / config_win11.sh and map aliases.
+[ ] SHEBANGS: Sweep remaining python scripts in tools/ to optimize execution paths.
+[ ] DOCUMENTATION: Compile comprehensive '*.txt' files detailing system tests and environment bootstrapping.
+# ==============================================================================
