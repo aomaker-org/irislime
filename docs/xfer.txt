@@ -1,0 +1,21 @@
+# ==============================================================================
+# IDENTIFIER:  docs/xfer.txt
+# VERSION:     1.1.0
+# DESCRIPTION: Specification of the IrisLime Non-Interactive CAS Sync Engine
+# ==============================================================================
+
+[SYSTEM CONFIGURATION OVERVIEW]
+The xfer.py script handles workspace telemetry synchronization in a completely 
+non-interactive format. It detects and captures handshakes, commits them to a 
+local Git sandbox, and fires off background sync tasks to Google Drive.
+
+[KEY WORKSPACE BEHAVIORS]
+1. Zero Prompts: Script avoids standard input checks, automating raw transfers.
+2. Backgrounding: For Unix/WSL setups, subprocesses run in detached process groups.
+3. Git Sandbox: A nested git database tracks changes inside scratch/aio/.
+
+[ALIAS INTEGRATION METHODOLOGY]
+To use the shortcut 'xfer' directly on your command line, the following alias 
+is injected inside your session initialization files:
+alias xfer="python3 tools/xfer.py"
+# ==============================================================================
