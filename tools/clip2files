@@ -1,4 +1,6 @@
-#!/usr/bin/env python3
+#!/bin/sh
+# -*- coding: utf-8 -*-
+''''[ -f "$(dirname "$0")/../.venv/Scripts/python" ] && exec "$(dirname "$0")/../.venv/Scripts/python" "$0" "$@" || [ -f "$(dirname "$0")/../.venv/bin/python" ] && exec "$(dirname "$0")/../.venv/bin/python" "$0" "$@" || exec python "$0" "$@" # '''
 # ==============================================================================
 # Filename:    tools/clip2files
 # Purpose:     Headless multi-file manifest extraction with tail-validation

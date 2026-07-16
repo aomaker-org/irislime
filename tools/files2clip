@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+#!/bin/sh
 # -*- coding: utf-8 -*-
-''''which python3 >/dev/null 2>&1 && exec "$(dirname "$0")/../.venv/bin/python3" "$0" "$@" # '''
+''''[ -f "$(dirname "$0")/../.venv/Scripts/python" ] && exec "$(dirname "$0")/../.venv/Scripts/python" "$0" "$@" || [ -f "$(dirname "$0")/../.venv/bin/python" ] && exec "$(dirname "$0")/../.venv/bin/python" "$0" "$@" || exec python "$0" "$@" # '''
 # ==============================================================================
 # Filename:    tools/files2clip
 # Purpose:     Pack multi-target workspace assets and wildcards for LLM context
