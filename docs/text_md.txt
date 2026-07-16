@@ -1,0 +1,48 @@
+================================================================================
+IRISLIME SIMPLE TEXT MARKDOWN (STMD) SPECIFICATION
+================================================================================
+
+1. METADATA BLOCK
+   Must be at the top of the file. Key-Value pairs separated by colon.
+   Example:
+   ---
+   Title: Script_Name
+   Date: YYYYMMDD_HHMMSS
+   Author: fekerr
+   ---
+
+2. SECTION HEADERS
+   Use square bracket markers for sectioning to avoid nesting complexity.
+   [SECTION: NAME]
+   ... content ...
+   [END: NAME]
+
+3. CODE BLOCKS
+   Standard triple backticks are allowed, but MUST be at the start of the line 
+   and contain no leading whitespace to ensure the Web UI doesn't misinterpret 
+   them as nested content.
+
+4. FOOTER
+   Must end with a cryptographic integrity-hash tag:
+   # Integrity-Hash: [SHA256_HASH]
+
+================================================================================
+
+
+TODO: this was a modification suggested 2607_706am?
+
+================================================================================
+IRISLIME SIMPLE TEXT MARKDOWN (STMD) SPECIFICATION
+================================================================================
+
+[SECTION: METADATA]
+Title: <The title of the patch/document>
+Timestamp: YYYYMMDD_HHMMSS
+[END: METADATA]
+
+[SECTION: DIFF]
+<Standard Git Diff Output>
+[END: DIFF]
+
+# Integrity-Hash: <SHA256_HASH>
+================================================================================
