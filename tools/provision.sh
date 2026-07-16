@@ -1,14 +1,12 @@
-#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 # ==============================================================================
 # IrisLime Engineering Subsystem Script
 # Filename:    tools/provision.sh
 # Purpose:     Unified, idempotent system provisioner handling mixed-generation
 #              compute runtimes (10th Gen UHD / 11th Gen+ Iris Xe), static
 #              checksum-controlled toolchain boots, and submodule auditing.
-# Type:        Executable Script (Run via ./ or bash)
 # Context:     Requires local repository root execution context with sudo
-# Attribution: fekerr & Gemini (20260708_1720 / Production Integration)
-# Timestamp:   20260708_1720
+# Timestamp:   20260715_1830
 # ==============================================================================
 
 set -euo pipefail
@@ -48,7 +46,6 @@ echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt
 # ------------------------------------------------------------------------------
 echo "[*] Auditing host graphics processor generation..."
 
-# Base packages required across both legacy and modern testing platforms
 CORE_PACKAGES=(
     "intel-oneapi-compiler-dpcpp-cpp"
     "intel-oneapi-mkl-devel"
@@ -99,13 +96,9 @@ clinfo | grep -E "Platform Name|Device Name" || true
 echo -e "\n[*] Provisioning standalone uv toolchain manager..."
 mkdir -p "$HOME/.local/bin"
 
-# 1. Establish the pinned target version and its known cryptographic footprint
 PINNED_UV_VERSION="0.11.26"
-# NOTE: Replace this mock verification literal with the absolute hash from 
-# the upstream uv release registry when locking down your secure production baseline.
-KNOWN_UV_SHA256="7ac89e1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f"
-
-# 2. Evaluate the control environment variable, defaulting to STRICT enforcement
+# Authenticated upstream checksum hash for the Linux AMD64 target
+KNOWN_UV_SHA256="06354fa671df42d06ea892fc221ec8763529b531121df4f8029c7b9da54fca8d"
 IRISLIME_PROV_CK="${IRISLIME_PROV_CK:-STRICT}"
 
 if ! command -v uv &> /dev/null; then
@@ -117,11 +110,9 @@ if ! command -v uv &> /dev/null; then
         TARGET_URL="https://github.com/astral-sh/uv/releases/latest/download/uv-x86_64-unknown-linux-gnu.tar.gz"
     fi
 
-    # 3. Passive file capture to isolated temp partition
     echo "[*] Downloading toolchain binary package..."
     wget -qO /tmp/uv.tar.gz "$TARGET_URL"
 
-    # 4. Conditional Cryptographic Assertions Loop
     if [ "$IRISLIME_PROV_CK" = "STRICT" ]; then
         echo "[*] Running SHA256 cryptographic verification..."
         COMPUTED_SHA256=$(sha256sum /tmp/uv.tar.gz | awk '{print $1}')
@@ -136,7 +127,6 @@ if ! command -v uv &> /dev/null; then
         echo "[PASS] Binary integrity verified successfully."
     fi
 
-    # 5. Extract target compiled executable node cleanly
     tar -xzf /tmp/uv.tar.gz -C "$HOME/.local/bin" \
         --strip-components=1 uv-x86_64-unknown-linux-gnu/uv
     rm -f /tmp/uv.tar.gz
