@@ -67,3 +67,6 @@ models/
 .local_host_telemetry.csv
 pure_powershell_telemetry/
 scratch/
+win11build/
+build/
+logs/

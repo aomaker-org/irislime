@@ -46,16 +46,15 @@ export ONEAPI_DEVICE_SELECTOR="opencl:1"
 
 set_prompt() {
     local exit_code=$?
-    # Use only the first part of the hostname (e.g., LAPTOP-AJPE53SG)
     local short_host=${HOSTNAME%%.*}
     local tag="${IRISLIME_PROMPT_TAG:-default}"
     local ts=$(date +"%y%m_%H%M_%S")
-    local status_symbol=$( [ $exit_code -eq 0 ] && echo "✓" || echo "!" )
+    
+    # Use a standard ASCII safe checkmark
+    local status_symbol=$( [ $exit_code -eq 0 ] && echo "OK" || echo "!" )
 
-    # Only show git branch if we are in a git repo to save horizontal space
     local git_info=$(type __git_ps1 >/dev/null 2>&1 && __git_ps1 ' (%s)')
 
-    # Format: user@host(1003):[tag]: path branch ts_status
     PS1="${USER}@${short_host}(1003):[${tag}]: \w${git_info} ${ts}_${status_symbol}\n; "
 }
 
