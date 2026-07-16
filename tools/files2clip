@@ -3,8 +3,8 @@
 # ==============================================================================
 # Filename:     tools/files2clip
 # Purpose:      Pack multi-target workspace assets and wildcards for LLM context
-# Type:         Executable
-# Attribution:  fekerr & Gemini (20260711 Optimization Pass)
+# Type:         Executable / Sourced via Python interpreter
+# Attribution:  fekerr & Gemini (20260715 WSL Path Integrity Pass)
 # ==============================================================================
 import os
 import sys
@@ -51,7 +51,7 @@ def resolve_targets(targets, include_untracked=False):
         globbed = glob.glob(target, recursive=True)
         if not globbed:
             if not os.path.exists(target):
-                print(f"[!] Warning: Target '{target}' matched no files or paths.")
+                print(f"[!] Warning: Target '{target}' matched no files or paths.", file=sys.stderr)
             continue
 
         for path in globbed:
@@ -90,7 +90,7 @@ def main():
     files_to_pack = resolve_targets(args.targets, include_untracked=args.everything)
     
     if not files_to_pack:
-        print("[X] Abort: No valid files identified or allowed under index tracking guidelines.")
+        print("[X] Abort: No valid files identified or allowed under index tracking guidelines.", file=sys.stderr)
         sys.exit(1)
         
     output_nodes = [generate_file_stream(f) for f in files_to_pack]
@@ -107,14 +107,29 @@ def main():
     )
     
     copied = False
-    try:
-        proc = subprocess.Popen(['clip.exe'], stdin=subprocess.PIPE, text=True, errors='ignore')
-        proc.communicate(input=wrapped_stream)
-        if proc.returncode == 0:
-            copied = True
-    except Exception:
-        pass
+    
+    # Try the absolute WSL-to-Windows clipboard pipe first
+    wsl_clip = "/mnt/c/Windows/System32/clip.exe"
+    if os.path.exists(wsl_clip):
+        try:
+            proc = subprocess.Popen([wsl_clip], stdin=subprocess.PIPE, text=True, errors='ignore')
+            proc.communicate(input=wrapped_stream)
+            if proc.returncode == 0:
+                copied = True
+        except Exception as e:
+            print(f"[-] Diagnostic: WSL absolute clip.exe path failed: {e}", file=sys.stderr)
 
+    # Fall back to raw command check (for Windows environments where clip.exe is native in PATH)
+    if not copied:
+        try:
+            proc = subprocess.Popen(['clip.exe'], stdin=subprocess.PIPE, text=True, errors='ignore')
+            proc.communicate(input=wrapped_stream)
+            if proc.returncode == 0:
+                copied = True
+        except Exception:
+            pass
+
+    # Fall back to Linux system clipboards ONLY if not running on WSL/Windows paths
     if not copied:
         for cmd in [['xclip', '-selection', 'clipboard'], ['wl-copy']]:
             try:
@@ -127,9 +142,9 @@ def main():
                 continue
 
     if copied:
-        print(f"[+] Bundle generated successfully ({len(files_to_pack)} assets | {len(wrapped_stream)} characters). Pushed to clipboard.")
+        print(f"[+] Bundle generated successfully ({len(files_to_pack)} assets). Pushed to clipboard.")
     else:
-        print("[X] System Routing Fault: Clipboard sub-system could not be accessed natively.")
+        print("[X] System Routing Fault: Clipboard sub-system could not be accessed natively.", file=sys.stderr)
         sys.exit(1)
 
 if __name__ == "__main__":
