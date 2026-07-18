@@ -16,7 +16,7 @@ LOG_FILE_PATH    ?= $(CURDIR)/$(BUILD_DIR)/logs/build_default.log
 
 export ENGINE_DIR NUM_BUILD_JOBS CMAKE_BUILD_TYPE LOG_FILE_PATH
 
-.PHONY: all help clean distclean build test
+.PHONY: all help clean distclean build test docs
 
 all: help
 
@@ -25,6 +25,11 @@ build: ## Run Python-driven isolated hardware compilation matrices automatically
 
 test: ## Execute localized Small Language Model verification loops across active hardware
 	uv run tools/test_runner.py
+
+docs: ## Generate Markdown (.md) from Simple ASCII Text Format (.txt) files
+	uv run python tools/ascii2md.py docs/ARCHITECTURAL_REVIEW_AND_BEST_PRACTICES.txt docs/ARCHITECTURAL_REVIEW_AND_BEST_PRACTICES.md
+	uv run python tools/ascii2md.py docs/AI_AGENT_REQUIREMENTS.txt docs/AI_AGENT_REQUIREMENTS.md
+	uv run python tools/ascii2md.py TODO_CONSOLIDATED.txt TODO_CONSOLIDATED.md
 
 help: ## Parse and display all available interface targets dynamically from modules
 	@echo "=================================================================="
