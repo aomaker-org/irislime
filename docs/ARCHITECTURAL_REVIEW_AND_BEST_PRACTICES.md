@@ -1,0 +1,53 @@
+---
+**PATH**: `docs/ARCHITECTURAL_REVIEW_AND_BEST_PRACTICES.txt`  
+**PURPOSE**: `Architectural Review and Industry Best Practices Audit for IrisLime.`  
+**TARGET**: `Systems Engineers, Developers, and Autonomous AI Agents.`  
+**LINEAGE**: `fekerr-dev / irislime Documentation`  
+**UPDATED**: `20260718_120000`  
+**Integrity-Hash**: `1234a56b789c012d345e678f901a234b567c890d123e456f789a012b345c678d`  
+---
+
+1. EXECUTIVE SUMMARY
+This document summarizes an architectural review of the irislime codebase
+and fekerr-dev host integration against industry software engineering best
+practices. It provides actionable design recommendations for branch hygiene,
+module versioning, path portability, single-source documentation, and python runtime pinning.
+
+2. BRANCH HYGIENE AND TAGGED ARCHIVAL
+* Challenge: Retaining long-lived stale feature branches clutters developer
+  navigation and slows 'git fetch' operations.
+* Best Practice Solution: Instead of deleting historical branches or leaving
+  unmerged pointers active, lock branch commit heads using annotated Git Tags
+  (e.g., 'git tag archive/<name> <commit>'). This guarantees 100% data and commit
+  preservation while keeping active branch structures organized.
+
+3. MONOLITHIC COPYING VS MODULE VERSIONING
+* Challenge: Copying fekerr-dev files directly into irislime/fekerr-dev risks
+  script drift when host tools are updated in the primary toolkit repository.
+* Best Practice Solution: Use Git Submodules ('git submodule add') or package host
+  PowerShell tools into a versioned module manifest (FekerrDev.psd1) installed in
+  $env:PSModulePath.
+
+4. PATH PORTABILITY AND ENVIRONMENT RESOLUTION
+* Challenge: Hardcoded absolute paths (e.g. 'C:\Users\feker\src\...') break script
+  portability across different host user accounts, CI runners, or WSL subsystems.
+* Best Practice Solution: Derive paths dynamically using environment relative
+  variables ($PSScriptRoot in PowerShell, $USERPROFILE, or pathlib in Python).
+
+5. SINGLE SOURCE OF TRUTH FOR DOCUMENTATION (ASCII TO MARKDOWN)
+* Challenge: Maintaining parallel .txt and .md documentation files manually causes
+  documentation drift.
+* Best Practice Solution: Treat Simple ASCII Text Format (.txt) files as the Single
+  Source of Truth (SSOT). Automatically generate .md files at build time via
+  'make docs' utilizing 'tools/ascii2md.py'.
+
+6. PYTHON RUNTIME PINNING (UV ENVIRONMENT LOCK)
+* Challenge: Running unpinned Python environments can cause non-deterministic
+  behavior across host and container execution nodes.
+* Best Practice Solution: Pin the target runtime explicitly in '.python-version'
+  using 'uv python pin 3.12'.
+
+---
+**Integrity-Hash**: `1234a56b789c012d345e678f901a234b567c890d123e456f789a012b345c678d`  
+**EOF**: `docs/ARCHITECTURAL_REVIEW_AND_BEST_PRACTICES.txt`  
+---
