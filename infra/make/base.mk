@@ -96,3 +96,26 @@ track-workspace: ## List active binary assets and log configurations inside acti
 	else \
 		find $(BUILD_DIR) -type f -name "*.log" -o -name "llama-cli"; \
 	fi
+
+.PHONY: build-base clean-base
+
+build-base: verify-infra setup-venv
+	@PROFILE_VAL="$${PROFILE:-$${CMAKE_BUILD_TYPE:-Release}}"; \
+	PROFILE_LOWER=$$(echo "$$PROFILE_VAL" | tr '[:upper:]' '[:lower:]'); \
+	TARGET_DIR="build/base_$$PROFILE_LOWER"; \
+	echo "[Make] Initializing Base CPU compilation inside: $$TARGET_DIR"; \
+	mkdir -p "$$TARGET_DIR"; \
+	if [ ! -f "$$TARGET_DIR/CMakeCache.txt" ]; then \
+		cmake -B "$$TARGET_DIR" -S $(ENGINE_DIR) \
+			-DCMAKE_BUILD_TYPE="$$PROFILE_VAL" \
+			-DGGML_EXCEPTIONS=ON \
+			-DLLAMA_BUILD_TESTS=ON \
+			-DCMAKE_C_COMPILER_LAUNCHER=ccache \
+			-DCMAKE_CXX_COMPILER_LAUNCHER=ccache; \
+	fi; \
+	cmake --build "$$TARGET_DIR" -j$(NUM_BUILD_JOBS)
+
+clean-base:
+	@echo "[Clean] Removing build/base_* directories"
+	rm -rf build/base_*
+

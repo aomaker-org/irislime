@@ -1,7 +1,7 @@
 {
   "global_settings": {
     "min_required_disk_space_gb": 5.0,
-    "test_model": "../models/tinyllama-1.1b-chat-v1.0.Q4_0.gguf",
+    "test_model": "../models/qwen2.5-0.5b-instruct-q4_k_m.gguf",
     "hardware_db_path": "infra/cache/hardware_profile.json"
   },
   "backend_overrides": {
@@ -127,7 +127,7 @@
       }
     },
     "base": {
-      "enabled": false,
+      "enabled": true,
       "parallel_jobs": 4,
       "inactivity_timeout_seconds": 120,
       "fail_fast": false,
