@@ -65,3 +65,9 @@ Thumbs.db
 *~
 models/
 .irislime_heartbeat
+
+# --- Log Archiver & Cloud Streaming Artifacts ---
+*_logs_*.zip
+*.chunk.*
+tools/bin/
+
