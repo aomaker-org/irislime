@@ -44,6 +44,8 @@ SECTION 3: TESTING, PERFORMANCE BENCHMARKING & MODEL INTEGRATION
       direct system process counter checks.
 
 SECTION 4: AI WORKFLOW, SECURITY & REPOSITORY GUARDRAILS
+* [ ] AGY Credit & Token Preservation Guard: Deploy tools/token_throttle_guard.py to enforce
+      50%/5h quota throttling gates (pausing 10 minutes per 5-minute cycle when exceeded).
 * [ ] AGY Single-Core Window Restriction: Enforce agy operating on a single primary core basis
       rather than spawning scattered terminal windows (except for isolated experiments).
 * [ ] WSL Ubuntu [dash] Integration: Enable Ubuntu bash CLI to invoke host Get-TerminalDashboard.ps1

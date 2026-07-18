@@ -45,6 +45,17 @@ Integrity-Hash: 7891a23b456c789d012e345f678a901b234c567d890e123f456a789b012c345d
 * Session logging must capture execution metadata (git commit hash, timestamp,
   hardware profile).
 
+6. AGY CREDIT & TOKEN PRESERVATION PROTOCOL
+* Rate Monitoring: AGY consumption rates must be evaluated over a 5-hour window.
+* 50% Threshold Gate: If credit/token consumption rate exceeds 50% of the 5-hour quota
+  budget limit, the agent MUST immediately engage rate preservation mode.
+* Cooldown & Throttling Protocol:
+  - Pause execution 10 minutes out of every 5-minute work cycle (or execute backoff
+    cooldown timers).
+  - Prune context window payloads by omitting redundant raw log dumps.
+  - Rely on localized script execution receipts rather than repeatedly reading massive
+    source manifests.
+
 ================================================================================
 Integrity-Hash: 7891a23b456c789d012e345f678a901b234c567d890e123f456a789b012c345d
 EOF:         docs/AI_AGENT_REQUIREMENTS.txt
