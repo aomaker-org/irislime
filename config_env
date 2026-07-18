@@ -24,6 +24,7 @@ if [ "${1:-}" == "force" ] || [ "${1:-}" == "--force" ]; then
 elif [ "${1:-}" == "unset" ]; then
     echo "[!] Unsetting IrisLime environment..."
     unset IRISLIME_READY
+    unset IRISLIME_ROOT
     unset ONEAPI_ROOT
     unset MKLROOT
     unset ONEAPI_DEVICE_SELECTOR
@@ -37,6 +38,11 @@ elif [ "${1:-}" == "unset" ]; then
     unset DEBUGINFOD_CACHE_PATH
     unset TCM_ENABLE
     
+    # Remove custom functions and aliases
+    unset -f pto pti
+    unalias files2clip clip2files pack2clip patch_incoming 2>/dev/null
+    
+    # Cleanly revert NVM configurations if registered
     if command -v nvm >/dev/null 2>&1; then
         nvm deactivate >/dev/null 2>&1 || true
         echo "[+] Node version manager tracking deactivated."
@@ -72,7 +78,8 @@ if [ -n "${IRISLIME_READY:-}" ]; then
 fi
 
 # 5. Activate Python Virtual Environment via uv Standard Layout (.venv)
-VENV_PATH=".venv"
+export IRISLIME_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VENV_PATH="${IRISLIME_ROOT}/.venv"
 if [ -f "${VENV_PATH}/bin/activate" ]; then
     if [[ "${VIRTUAL_ENV:-}" != "" ]]; then
         deactivate >/dev/null 2>&1 || unset VIRTUAL_ENV
@@ -191,6 +198,18 @@ alias clip2files="tools/clip2files"
 
 alias bbptests_runner="uv run tools/bbptests_runner.py --profile vulkan_debug"
 alias bbpsmoke_runner="IRISLIME_FLAG_VARS='SMOKE_HELP' uv run tools/bbptests_runner.py"
+
+# Structured Text I/O Helpers & Aliases
+pto() {
+    python "${IRISLIME_ROOT}/tools/patch_io.py" out "$@"
+}
+pti() {
+    python "${IRISLIME_ROOT}/tools/patch_io.py" in "$@"
+}
+alias files2clip="uv run python ${IRISLIME_ROOT}/tools/files2clip"
+alias clip2files="uv run python ${IRISLIME_ROOT}/tools/clip2files"
+alias pack2clip=pto
+alias patch_incoming=pti
 
 export IRISLIME_READY=1
 echo "[+] IrisLime shared configuration preferences cleanly evaluated."

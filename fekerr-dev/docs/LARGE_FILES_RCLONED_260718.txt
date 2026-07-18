@@ -1,0 +1,15 @@
+================================================================================
+PATH:        C:\Users\feker\src\fekerr-dev\docs\LARGE_FILES_RCLONED_260718.txt
+PURPOSE:     Local Receipt Note for Large AI Models / Files Swept via Rclone.
+TARGET:      Host Developer Reference & Laptop Directory Inventory.
+UPDATED:     20260718_115344
+================================================================================
+
+1. DISCOVERED AND RCLONED ASSETS IN THIS DIRECTORY:
+* minecraft_archive_20260718_140956.zip | Size: 2598.71 MB
+  - Cloud Target: gdrive:transfer/models/260718_models/minecraft_archive_20260718_140956.zip
+
+2. ARCHIVAL POLICY
+* These assets have been replicated to Google Drive cloud storage.
+* Original local paths remain intact under additive-only operational rules.
+================================================================================

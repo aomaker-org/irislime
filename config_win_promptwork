@@ -1,0 +1,50 @@
+# ==============================================================================
+# Filename:     config_win_promptwork
+# Purpose:      Custom prompt configuration with high-visibility colors
+# Attribution:  fekerr & Antigravity (20260716)
+# ==============================================================================
+
+# 1. Dynamic, colorful multi-line prompt with blank line padding
+set_prompt() {
+    local exit_code=$?
+    local short_host=${HOSTNAME%%.*}
+    local tag="${IRISLIME_PROMPT_TAG:-default}"
+    local ts=$(date +"%y%m_%H%M_%S")
+    
+    # ANSI Escape sequence wrappers for non-printing characters
+    local c_reset="\[\e[0m\]"
+    local c_user="\[\e[36m\]"       # Cyan
+    local c_host="\[\e[94m\]"       # Light/Bright Blue (changed from 34m dark blue for high visibility on black background)
+    local c_tag="\[\e[35m\]"        # Purple
+    local c_time="\[\e[90m\]"       # Gray
+    local c_path="\[\e[33m\]"       # Yellow
+    local c_green="\[\e[32m\]"      # Green (Success / Git)
+    local c_red="\[\e[31m\]"        # Red (Failure)
+    
+    local status_symbol=""
+    if [ $exit_code -eq 0 ]; then
+        status_symbol="${c_green}✓${c_reset}"
+    else
+        status_symbol="${c_red}! (exit: ${exit_code})${c_reset}"
+    fi
+    
+    local git_info=$(type __git_ps1 >/dev/null 2>&1 && __git_ps1 ' (%s)')
+    if [ -n "${git_info}" ]; then
+        git_info="${c_green}${git_info}${c_reset}"
+    fi
+
+    # Colored components
+    local host_part="${c_user}${USER}${c_reset}@${c_host}${short_host}${c_reset}(1003)"
+    local tag_part="[${c_tag}${tag}${c_reset}]"
+    local path_part="${c_path}\w${c_reset}"
+    local time_part="${c_time}${ts}${c_reset}"
+
+    # Prompt layout:
+    # 1. Blank line before
+    # 2. Metadata line: user@host [tag] - timestamp [status]
+    # 3. Path and git status (broken in the middle)
+    # 4. Blank line after metadata/path
+    # 5. Cursor input line
+    PS1="\n${host_part} ${tag_part} - ${time_part} [${status_symbol}]\n${path_part}${git_info}\n\n; "
+}
+PROMPT_COMMAND=set_prompt

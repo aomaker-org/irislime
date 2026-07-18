@@ -80,4 +80,18 @@ source config_env unset
 
 This routine unsets all exported variables, disables the active Python virtual environment, and untracks Node Version Manager (`nvm`) bindings.
 
-```
+---
+
+## 📋 Structured Text I/O & Clipboard Utilities
+
+Sourcing the environment loads the following structured input/output tools to facilitate file sharing and LLM context management:
+
+### Functions
+* `pto [file]`: Packs the specified file(s) into the Windows host clipboard using the `files2clip` utility.
+* `pti`: Extracts files from a structured clipboard payload back into the workspace directory structure using the `clip2files` utility.
+
+### Aliases
+* `files2clip`: Raw CLI utility to package multi-target workspace files/directories into structured XML/markdown frames.
+* `clip2files`: Raw CLI utility to parse incoming structured frames from clipboard or stdin and reconstruct the files on disk.
+* `pack2clip`: Direct alias proxy for `pto` (structured text I/O pack operation).
+* `patch_incoming`: Direct alias proxy for `pti` (structured text I/O unpack/patch operation).

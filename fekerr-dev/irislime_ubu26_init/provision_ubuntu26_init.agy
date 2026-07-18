@@ -1,0 +1,48 @@
+# ==============================================================================
+# PATH:        irislime_ubu26_init/provision_ubuntu26_init.agy
+# PURPOSE:     Phase 2 automation playbook for agy. Installs uv tool chains,
+#              configures profiles, and initializes the local workspaces.
+# TARGET:      Ubuntu 26.04 LTS User Space (UID 1004)
+# LINEAGE:     fekerr-dev / Automation Playbooks
+# UPDATED:     20260715_143500
+# Integrity-Hash: 26d5c36a5353504c255818837f43a004cb5b6f03fee5074e76979c6b647fe719
+# ==============================================================================
+
+- task: "System Verification"
+  actions:
+    - check_env: "USER"
+    - check_env: "HOME"
+
+- task: "Install Python UV Package Manager"
+  actions:
+    - shell: "curl -LsSf https://astral.sh/uv/install.sh | sh"
+    - shell: "source $HOME/.local/bin/env"
+
+- task: "Clone Workspace Tooling Repository"
+  actions:
+    - shell: "mkdir -p $HOME/src"
+    - shell: "git clone https://github.com/your-remote/fekerr-dev.git $HOME/src/fekerr-dev"
+    - shell: "git clone https://github.com/your-remote/irislime.git $HOME/src/irislime"
+
+- task: "Set Up Interactive Shell Environment Handshake"
+  actions:
+    - shell: "cp $HOME/src/fekerr-dev/configs/bashrc_template $HOME/.bashrc"
+    - shell: "cp $HOME/src/fekerr-dev/bootstrap_env $HOME/"
+
+- task: "Initialize Python Virtual Environments"
+  actions:
+    - shell: "cd $HOME/src/fekerr-dev && uv venv .venv"
+    - shell: "cd $HOME/src/irislime && uv venv .venv"
+
+- task: "Verify Asset Integrity Signatures"
+  actions:
+    - shell: "uv run python $HOME/src/fekerr-dev/tools/hash_signer.py verify $HOME/bootstrap_env"
+
+# Integrity-Hash: 26d5c36a5353504c255818837f43a004cb5b6f03fee5074e76979c6b647fe719
+# EOF:         irislime_ubu26_init/provision_ubuntu26_init.agy
+# ==============================================================================
+
+- task: "Execute High-Performance Intel Computing Provisioner"
+  actions:
+    - shell: "chmod +x $HOME/src/irislime/tools/provision.sh"
+    - shell: "$HOME/src/irislime/tools/provision.sh"

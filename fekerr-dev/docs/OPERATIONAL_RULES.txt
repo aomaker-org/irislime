@@ -1,0 +1,48 @@
+================================================================================
+PATH:        docs/OPERATIONAL_RULES.txt
+PURPOSE:     Core Software and Systems Engineering Rules for fekerr-dev.
+TARGET:      All developers, scripts, and AI code generation models.
+LINEAGE:     fekerr-dev / Workspace Infrastructure
+UPDATED:     20260715_143500
+Integrity-Hash: 5694a98b8316500c2971a98d26ede9c1f9c8db123bf7948d8a28b0b292845bfb
+================================================================================
+
+RULE 1: MAXIMUM OBSERVABILITY AND VERBOSE METHODS
+* All automated steps, file transfers, or state transitions must print clear,
+  timestamped status reports to standard streams.
+* Command runs within automation scripts must save execution metrics.
+* When executing terminal diagnostics, use 'pipe2clip' to preserve standard output,
+  standard error, and timing profiles cleanly.
+
+RULE 2: NO SILENT STREAM DISCARDING
+* NEVER pipe standard output or standard error to /dev/null unless strictly
+  unavoidable (e.g., highly private cryptographic material or noisy OS loops).
+* If a null pipe is used, it MUST contain a detailed comment explaining the
+  exact engineering constraint.
+* Alternative: Pipe output to a temporary tracking file in '/tmp' and filter
+  the content into shell variables via helper functions (e.g., grep/awk/sed).
+
+RULE 3: ADDITIVE STATE MODIFICATION
+* Prefer appending to configurations over destructive overwrites.
+* Generate temporary backup files (e.g., cp file file.bak_$(date +%Y%m%d_%H%M%S))
+  prior to executing automated modifications.
+* Save tracking records, pipeline execution traces, and generated logs to
+  timestamp-labeled files rather than recycling static file paths.
+
+RULE 4: META-DATA HEADERS AND TRACING SIGNATURES
+* Every custom script, configuration, or log archive must begin and end with
+  structured ASCII header and footer blocks detailing path, lineage, and purpose.
+* Implement self-referential integrity hashes ('Integrity-Hash: 5694a98b8316500c2971a98d26ede9c1f9c8db123bf7948d8a28b0b292845bfb
+  critical control assets. 
+
+RULE 5: SIMPLE ASCII INTERCHANGE FOR MARKDOWN
+* To prevent rich-text truncation, escape issues, and clipping in web UI viewports,
+  do not use native markdown (.md) documents as primary working files.
+* Use pure, standard-conforming plain text ASCII files (.txt) utilizing clean,
+  human-scannable block structures. These can easily be parsed back into markdown
+  at a later stage if needed.
+
+================================================================================
+Integrity-Hash: 5694a98b8316500c2971a98d26ede9c1f9c8db123bf7948d8a28b0b292845bfb
+EOF:         docs/OPERATIONAL_RULES.txt
+================================================================================

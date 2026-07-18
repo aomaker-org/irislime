@@ -1,0 +1,27 @@
+﻿================================================================================
+PROVISIONING RECORD: ub26_0715_555
+================================================================================
+Timestamp:     2026-07-15 18:18:00 UTC
+Host Engine:   PowerShell 7 (PS7.6.3 Windows Host)
+Target:        Ubuntu / Container Alignment (ub26)
+Runner:        C:\Users\feker\src\fekerr-dev\ps7\provision_container.ps1
+--------------------------------------------------------------------------------
+
+[ ] STEP 1: PRE-FLIGHT VERIFICATION
+    - [ ] Run complete workspace integrity verification sweep
+    - [ ] Confirm rclone_cache indices are active
+    - [ ] Confirm settings.json CLI options are locked
+
+[ ] STEP 2: PREPARE SANDBOX / DISTRIBUTION LAYOUT
+    - [ ] Initialize target mount directories
+    - [ ] Resolve WSL2/Host terminal integration points
+
+[ ] STEP 3: RUN PROVISIONING PIPELINE
+    - [ ] Execute provision_container.ps1
+    - [ ] Route console trace and capture execution metrics via Out-TraceClip / p2c
+
+[ ] STEP 4: POST-RUN SIGN-OFF
+    - [ ] Lock down state logs
+    - [ ] Run log-session to update SESSION_RECONSTRUCTION.txt
+================================================================================
+# Integrity-Hash: 20360a2fa1ea0f90b011dbc6a9b627db9fe9e1157e4ac9f9e2dcb421592a7971

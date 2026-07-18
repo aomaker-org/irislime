@@ -1,0 +1,21 @@
+# ==============================================================================
+# Configuration:  tools/files2clip.toml
+# Purpose:        Configure defaults, limits, and behavior for files2clip
+# Type:           Generic Workspace Tool Config
+# ==============================================================================
+
+[limits]
+# Safety ceiling in bytes per file to prevent flooding the LLM context (1MB default)
+max_truncate_size = 1048576
+
+[rules]
+# If true, only packages files tracked by Git index. 
+# If false, allows copying untracked files and out-of-repo targets.
+require_git_tracking = false
+
+# Default targets to pack when files2clip is invoked with no arguments
+default_targets = ["."]
+
+[paths]
+# Explicit path to Windows Host clip.exe when executed under WSL
+wsl_clip_path = "/mnt/c/Windows/System32/clip.exe"
