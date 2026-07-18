@@ -45,6 +45,18 @@ def main():
         json.dump(manifest_data, f, indent=2)
     print(f"[+] Written Windows Rclone Manifest: {json_path.relative_to(root)}")
     
+    # Sync zip package to Windows host filesystem if present in WSL
+    local_zip = root / zip_name
+    win_host_path = Path("/mnt/c/Users/feker/src/irislime")
+    if local_zip.exists() and win_host_path.exists() and win_host_path != root:
+        dest_win_zip = win_host_path / zip_name
+        try:
+            import shutil
+            shutil.copy2(local_zip, dest_win_zip)
+            print(f"[+] Synced zip package to Windows host: {dest_win_zip}")
+        except Exception as e:
+            print(f"[!] Note: Could not sync zip to Windows host ({e})")
+
     # Generate Windows Batch Script (.bat)
     bat_content = f"""@echo off
 REM ==============================================================================
@@ -65,6 +77,20 @@ echo Target Package: %ZIP_FILE%
 echo Remote Target : %REMOTE_DEST%
 echo.
 
+REM Ensure target zip exists, or copy from WSL share if missing
+if not exist "%ZIP_FILE%" (
+    if exist "\\\\wsl.localhost\\ubu26_0715\\home\\fekerr\\src\\irislime\\%ZIP_FILE%" (
+        echo [*] Copying %ZIP_FILE% from WSL environment...
+        copy "\\\\wsl.localhost\\ubu26_0715\\home\\fekerr\\src\\irislime\\%ZIP_FILE%" "%ZIP_FILE%" >nul
+    ) else if exist "\\\\wsl$\\ubu26_0715\\home\\fekerr\\src\\irislime\\%ZIP_FILE%" (
+        echo [*] Copying %ZIP_FILE% from WSL environment...
+        copy "\\\\wsl$\\ubu26_0715\\home\\fekerr\\src\\irislime\\%ZIP_FILE%" "%ZIP_FILE%" >nul
+    ) else (
+        echo [ERROR] Target zip package '%ZIP_FILE%' not found in current directory or WSL share.
+        exit /b 1
+    )
+)
+
 REM Locate rclone.exe on Windows host
 set "RCLONE_EXE="
 if exist "%LOCALAPPDATA%\\Microsoft\\WinGet\\Links\\rclone.exe" set "RCLONE_EXE=%LOCALAPPDATA%\\Microsoft\\WinGet\\Links\\rclone.exe"
@@ -81,7 +107,7 @@ if "%RCLONE_EXE%"=="" (
 echo [*] Using rclone binary: %RCLONE_EXE%
 echo [*] Streaming archive package to cloud remote...
 
-"%RCLONE_EXE%" copy "%ZIP_FILE%" "%REMOTE_DEST%" --progress --drive-chunk-size 64M --transfers 4
+"%RCLONE_EXE%" copyto "%ZIP_FILE%" "%REMOTE_DEST%/%ZIP_FILE%" --progress --drive-chunk-size 64M --transfers 4
 
 if !errorlevel! neq 0 (
     echo [ERROR] Rclone upload failed with code !errorlevel!.
@@ -120,6 +146,25 @@ Write-Host "Target Package : $ZipFile" -ForegroundColor Yellow
 Write-Host "Remote Target  : $RemoteDest" -ForegroundColor Yellow
 Write-Host ""
 
+# Ensure target zip file exists, or fetch from WSL network share if missing
+if (-not (Test-Path $ZipFile)) {{
+    $Distro = $env:WSL_DISTRO_NAME
+    if (-not $Distro) {{ $Distro = "ubu26_0715" }}
+    $WslZipPath = "\\\\wsl.localhost\\$Distro\\home\\fekerr\\src\\irislime\\$ZipFile"
+    $WslZipAlt = "\\\\wsl$\\$Distro\\home\\fekerr\\src\\irislime\\$ZipFile"
+    
+    if (Test-Path $WslZipPath) {{
+        Write-Host "[*] Copying $ZipFile from WSL environment ($WslZipPath)..." -ForegroundColor Yellow
+        Copy-Item $WslZipPath -Destination $ZipFile
+    }} elseif (Test-Path $WslZipAlt) {{
+        Write-Host "[*] Copying $ZipFile from WSL environment ($WslZipAlt)..." -ForegroundColor Yellow
+        Copy-Item $WslZipAlt -Destination $ZipFile
+    }} else {{
+        Write-Error "[ERROR] Target zip package '$ZipFile' not found in local directory or WSL environment."
+        exit 1
+    }}
+}}
+
 # Find rclone.exe
 $RcloneExe = Get-Command "rclone" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Path
 if (-not $RcloneExe) {{
@@ -135,9 +180,9 @@ if (-not $RcloneExe) {{
 }}
 
 Write-Host "[*] Using rclone executable: $RcloneExe" -ForegroundColor Green
-Write-Host "[*] Executing rclone copy to $RemoteDest..." -ForegroundColor Green
+Write-Host "[*] Executing rclone copyto to $RemoteDest/$ZipFile..." -ForegroundColor Green
 
-& $RcloneExe copy "$ZipFile" "$RemoteDest" --progress --drive-chunk-size 64M --transfers 4
+& $RcloneExe copyto "$ZipFile" "$RemoteDest/$ZipFile" --progress --drive-chunk-size 64M --transfers 4
 
 if ($LASTEXITCODE -eq 0) {{
     Write-Host "`n[*] Verifying remote payload delivery..." -ForegroundColor Green

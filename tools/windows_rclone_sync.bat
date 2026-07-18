@@ -17,6 +17,20 @@ echo Target Package: %ZIP_FILE%
 echo Remote Target : %REMOTE_DEST%
 echo.
 
+REM Ensure target zip exists, or copy from WSL share if missing
+if not exist "%ZIP_FILE%" (
+    if exist "\\wsl.localhost\ubu26_0715\home\fekerr\src\irislime\%ZIP_FILE%" (
+        echo [*] Copying %ZIP_FILE% from WSL environment...
+        copy "\\wsl.localhost\ubu26_0715\home\fekerr\src\irislime\%ZIP_FILE%" "%ZIP_FILE%" >nul
+    ) else if exist "\\wsl$\ubu26_0715\home\fekerr\src\irislime\%ZIP_FILE%" (
+        echo [*] Copying %ZIP_FILE% from WSL environment...
+        copy "\\wsl$\ubu26_0715\home\fekerr\src\irislime\%ZIP_FILE%" "%ZIP_FILE%" >nul
+    ) else (
+        echo [ERROR] Target zip package '%ZIP_FILE%' not found in current directory or WSL share.
+        exit /b 1
+    )
+)
+
 REM Locate rclone.exe on Windows host
 set "RCLONE_EXE="
 if exist "%LOCALAPPDATA%\Microsoft\WinGet\Links\rclone.exe" set "RCLONE_EXE=%LOCALAPPDATA%\Microsoft\WinGet\Links\rclone.exe"
@@ -33,7 +47,7 @@ if "%RCLONE_EXE%"=="" (
 echo [*] Using rclone binary: %RCLONE_EXE%
 echo [*] Streaming archive package to cloud remote...
 
-"%RCLONE_EXE%" copy "%ZIP_FILE%" "%REMOTE_DEST%" --progress --drive-chunk-size 64M --transfers 4
+"%RCLONE_EXE%" copyto "%ZIP_FILE%" "%REMOTE_DEST%/%ZIP_FILE%" --progress --drive-chunk-size 64M --transfers 4
 
 if !errorlevel! neq 0 (
     echo [ERROR] Rclone upload failed with code !errorlevel!.

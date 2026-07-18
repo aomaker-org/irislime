@@ -121,6 +121,16 @@ Total Size: {metadata['total_size_human']}
             zf.write(f, arcname=str(rel))
             
     print(f"[+] Zip archive created successfully. Size: {output_zip.stat().st_size / (1024 * 1024):.2f} MB")
+    
+    # Sync to Windows host workspace if accessible
+    win_host_path = Path("/mnt/c/Users/feker/src/irislime")
+    if win_host_path.exists() and win_host_path != root:
+        dest_win_zip = win_host_path / output_zip.name
+        try:
+            shutil.copy2(output_zip, dest_win_zip)
+            print(f"[+] Synced zip archive to Windows host: {dest_win_zip}")
+        except Exception as e:
+            print(f"[!] Note: Could not sync zip to Windows host ({e})")
 
 def find_rclone_binary() -> str:
     # Check workspace local tools bin first
@@ -137,11 +147,12 @@ def find_rclone_binary() -> str:
 
 def perform_rclone_upload(rclone_bin: str, local_archive: Path, remote_folder: str, dry_run: bool = False) -> bool:
     print(f"[*] Initiating chunked rclone stream to: {remote_folder}")
+    remote_target_file = f"{remote_folder}/{local_archive.name}"
     cmd = [
         rclone_bin,
-        "copy",
+        "copyto",
         str(local_archive),
-        remote_folder,
+        remote_target_file,
         "--progress",
         "--drive-chunk-size", "64M",
         "--transfers", "4",

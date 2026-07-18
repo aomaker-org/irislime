@@ -16,6 +16,25 @@ Write-Host "Target Package : $ZipFile" -ForegroundColor Yellow
 Write-Host "Remote Target  : $RemoteDest" -ForegroundColor Yellow
 Write-Host ""
 
+# Ensure target zip file exists, or fetch from WSL network share if missing
+if (-not (Test-Path $ZipFile)) {
+    $Distro = $env:WSL_DISTRO_NAME
+    if (-not $Distro) { $Distro = "ubu26_0715" }
+    $WslZipPath = "\\wsl.localhost\$Distro\home\fekerr\src\irislime\$ZipFile"
+    $WslZipAlt = "\\wsl$\$Distro\home\fekerr\src\irislime\$ZipFile"
+    
+    if (Test-Path $WslZipPath) {
+        Write-Host "[*] Copying $ZipFile from WSL environment ($WslZipPath)..." -ForegroundColor Yellow
+        Copy-Item $WslZipPath -Destination $ZipFile
+    } elseif (Test-Path $WslZipAlt) {
+        Write-Host "[*] Copying $ZipFile from WSL environment ($WslZipAlt)..." -ForegroundColor Yellow
+        Copy-Item $WslZipAlt -Destination $ZipFile
+    } else {
+        Write-Error "[ERROR] Target zip package '$ZipFile' not found in local directory or WSL environment."
+        exit 1
+    }
+}
+
 # Find rclone.exe
 $RcloneExe = Get-Command "rclone" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Path
 if (-not $RcloneExe) {
@@ -31,9 +50,9 @@ if (-not $RcloneExe) {
 }
 
 Write-Host "[*] Using rclone executable: $RcloneExe" -ForegroundColor Green
-Write-Host "[*] Executing rclone copy to $RemoteDest..." -ForegroundColor Green
+Write-Host "[*] Executing rclone copyto to $RemoteDest/$ZipFile..." -ForegroundColor Green
 
-& $RcloneExe copy "$ZipFile" "$RemoteDest" --progress --drive-chunk-size 64M --transfers 4
+& $RcloneExe copyto "$ZipFile" "$RemoteDest/$ZipFile" --progress --drive-chunk-size 64M --transfers 4
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "`n[*] Verifying remote payload delivery..." -ForegroundColor Green
