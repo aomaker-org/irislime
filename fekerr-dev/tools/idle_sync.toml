@@ -1,0 +1,12 @@
+[idle_settings]
+idle_cooldown_seconds = 300
+check_interval_seconds = 30
+
+[rclone_targets]
+local_sync_source = "/home/fekerr/src/fekerr-dev/logs"
+remote_sync_dest = "drive:2026LaptopsArchive/WSL_Historical_Archives/fekerr-dev-logs"
+
+[performance]
+max_transfers = 4
+max_checkers = 4
+bw_limit = "10M"

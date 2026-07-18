@@ -1,0 +1,23 @@
+# ==============================================================================
+# temp_work_script - Fixed Path
+# ==============================================================================
+
+# Using the path confirmed by 'which python'
+export IRISLIME_ROOT="/c/Users/feker/src/irislime"
+export PY_EXE="/c/Users/feker/src/irislime/.venv/Scripts/python.exe"
+export PATCH_TOOL="${IRISLIME_ROOT}/tools/patch_io.py"
+
+echo "[*] Checking for Python: ${PY_EXE}"
+if [ ! -f "${PY_EXE}" ]; then
+    echo "[!] ERROR: Still not found at ${PY_EXE}"
+else
+    echo "[+] Found it."
+fi
+
+pto() { "${PY_EXE}" "${PATCH_TOOL}" out "$@"; }
+pti() { "${PY_EXE}" "${PATCH_TOOL}" in "$@"; }
+
+pto1() { uv run python "${PATCH_TOOL}" out "$@"; }
+pti1() { uv run python "${PATCH_TOOL}" in "$@"; }
+
+echo "[+] temp_work_script loaded."

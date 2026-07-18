@@ -1,65 +1,230 @@
 # ==============================================================================
 # Filename:     config_win11
-# Purpose:      Idempotent Windows 11 environment loader (Synchronized to WSL)
+# Purpose:      Consolidated Windows 11 Git Bash Environment Loader
+# Type:         Sourced
+# Attribution:  fekerr & Antigravity (20260716 / Consolidated Stack)
 # ==============================================================================
 
+# 1. Guard: Prevent direct subshell execution
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    echo "[!] ERROR: Must SOURCE this file." >&2; exit 1
+    echo "[!] ERROR: You must SOURCE this file, not execute it." >&2
+    exit 1
 fi
 
-# 1. Input Handling
-# Capture the tag (arg 2) if it exists, otherwise keep current
-if [ -n "${2:-}" ]; then
-    export IRISLIME_PROMPT_TAG="${2}"
-fi
-
-# 2. Force Flag / Tear-down
+# 2. Argument Processing (force, unset, or custom tag)
+_ACTION=""
+_TAG=""
 if [ "${1:-}" == "force" ] || [ "${1:-}" == "--force" ]; then
-    echo "[!] Force reload detected. Cycling environment state..."
-    unset IRISLIME_READY
+    _ACTION="force"
+    _TAG="${2:-}"
+elif [ "${1:-}" == "unset" ] || [ "${1:-}" == "--unset" ]; then
+    _ACTION="unset"
+elif [ -n "${1:-}" ]; then
+    _TAG="${1}"
 fi
 
-# 3. Environment Check
-if [ -n "${IRISLIME_READY:-}" ]; then
-    echo "[!] Already loaded. Use 'source config_win11 force [tag]' to re-verify."
+# 3. Handle explicit environment unsetting
+if [ "${_ACTION}" == "unset" ]; then
+    echo "[!] Unsetting IrisLime host environment..."
+    unset IRISLIME_READY
+    unset IRISLIME_ROOT
+    unset PYTHON_VENV_EXE
+    unset IRISLIME_PLATFORM
+    unset INTEL_OPENVINO_DIR
+    unset OpenVINO_DIR
+    unset OPENSSL_ROOT_DIR
+    unset ONEAPI_DEVICE_SELECTOR
+    unset ZES_ENABLE_SYSMAN
+    unset TCM_ENABLE
+    unset IRISLIME_MODELS_DIR
+    unset IRISLIME_TEST_MODEL
+    unset IRISLIME_DEBUG_WATCHDOG
+    unset IRISLIME_PROMPT_TAG
+    
+    # Remove custom functions and aliases
+    unset -f ps7 pto pti set_prompt
+    unalias extract_telemetry quick_litert test_history probe_hardware test_runner build_runner files2clip clip2files pack2clip patch_incoming 2>/dev/null
+    
+    if command -v deactivate >/dev/null 2>&1; then
+        deactivate
+        echo "[+] Host virtual environment deactivated."
+    fi
+    echo "[+] IrisLime host environment unset."
+    unset _ACTION _TAG
     return 0
 fi
 
-# 4. Virtual Env Sync
-if [ -f ".venv/Scripts/activate" ]; then
-    source ".venv/Scripts/activate"
-    echo "[+] Virtual environment activated (.venv)."
-    if command -v uv >/dev/null 2>&1; then uv sync; fi
-else
-    echo "[!] Warning: Host venv missing."
+# 4. Force Reload Handling
+if [ "${_ACTION}" == "force" ]; then
+    echo "[!] Force reload detected. Cycling host environment state..."
+    unset IRISLIME_READY
+    if [ -n "${_TAG}" ]; then
+        export IRISLIME_PROMPT_TAG="${_TAG}"
+    else
+        export IRISLIME_PROMPT_TAG="default"
+    fi
+elif [ -n "${_TAG}" ]; then
+    export IRISLIME_PROMPT_TAG="${_TAG}"
 fi
 
-# 5. Hardware Toolchains & Variables
-export INTEL_OPENVINO_DIR="C:/Program Files/WindowsApps/IntelCorporation.OpenVINOToolkit.2026.2.0_2026.2.0.0_x64__aqcv7fbxf4wm4"
-export IRISLIME_PLATFORM="win11_native"
-export ONEAPI_DEVICE_SELECTOR="opencl:1"
+# 5. Idempotency Check
+if [ -n "${IRISLIME_READY:-}" ]; then
+    echo "[!] IrisLime environment is already loaded. Use 'source config_win11 force' to re-verify."
+    unset _ACTION _TAG
+    return 0
+fi
 
-# 6. Prompt Sync Logic (The "WSL Mirror")
-# ==============================================================================
-# Tightened Prompt Logic (Matches WSL Engine Room Aesthetic)
-# =_============================================================================
+# 6. Define Roots & Activate Python Virtual Environment
+export IRISLIME_ROOT="C:/Users/feker/src/irislime"
+export PYTHON_VENV_EXE="${IRISLIME_ROOT}/.venv/Scripts/python.exe"
+VENV_PATH="${IRISLIME_ROOT}/.venv"
 
-set_prompt() {
-    local exit_code=$?
-    local short_host=${HOSTNAME%%.*}
-    local tag="${IRISLIME_PROMPT_TAG:-default}"
-    local ts=$(date +"%y%m_%H%M_%S")
+if [ -f "${VENV_PATH}/Scripts/activate" ]; then
+    if [[ "${VIRTUAL_ENV:-}" != "" ]]; then
+        deactivate >/dev/null 2>&1 || unset VIRTUAL_ENV
+    fi
+    source "${VENV_PATH}/Scripts/activate"
+    echo "[+] Native host virtual environment activated (${VENV_PATH})."
     
-    # Use a standard ASCII safe checkmark
-    local status_symbol=$( [ $exit_code -eq 0 ] && echo "OK" || echo "!" )
+    # Sync dependencies via uv
+    if command -v uv >/dev/null 2>&1; then
+        echo "[*] Auditing and syncing host runtimes with project lockfile..."
+        uv sync
+    fi
+else
+    echo "[!] Host virtual environment folder not found at ${VENV_PATH}." >&2
+    if command -v uv >/dev/null 2>&1; then
+        echo "[*] Bootstrapping fresh host environment automatically via uv..."
+        uv sync
+        source "${VENV_PATH}/Scripts/activate"
+    else
+        echo "[!] Critical: 'uv' tool absent. Run 'pip install uv && uv sync' to provision toolchains." >&2
+    fi
+fi
 
-    local git_info=$(type __git_ps1 >/dev/null 2>&1 && __git_ps1 ' (%s)')
+# 7. Verify Hardware Toolchains
+echo "[*] Verifying inherited hardware environment variables..."
+if command -v cl.exe &> /dev/null; then
+    echo "[+] Validated Microsoft C/C++ Compiler infrastructure is active."
+else
+    echo "[-] Warning: cl.exe not detected. Ensure this profile tab runs VS2022 Dev tools." >&2
+fi
 
-    PS1="${USER}@${short_host}(1003):[${tag}]: \w${git_info} ${ts}_${status_symbol}\n; "
+if [ -n "${ONEAPI_ROOT:-}" ] || [ -n "${MKLROOT:-}" ]; then
+    echo "[+] Validated Intel oneAPI hardware variables are active in session memory."
+else
+    echo "[-] Warning: Intel oneAPI vectors absent. Check your terminal profile chaining." >&2
+fi
+
+# 8. Set Hardware & Compilation Variables
+export INTEL_OPENVINO_DIR="C:/Program Files/WindowsApps/IntelCorporation.OpenVINOToolkit.2026.2.0_2026.2.0.0_x64__aqcv7fbxf4wm4"
+export OpenVINO_DIR="${INTEL_OPENVINO_DIR}/runtime/cmake"
+export IRISLIME_PLATFORM="win11_native"
+export OPENSSL_ROOT_DIR="C:/Program Files/OpenSSL-Win64"
+
+# Hardware Acceleration, Selectors, and Core Scaling
+export ONEAPI_DEVICE_SELECTOR="opencl:1"
+export ZES_ENABLE_SYSMAN=1
+export TCM_ENABLE=1
+
+# Centralized Model Target Interpolation
+export IRISLIME_MODELS_DIR="../models"
+export IRISLIME_TEST_MODEL="${IRISLIME_TEST_MODEL:-$IRISLIME_MODELS_DIR/tinyllama-1.1b-chat-v1.0.Q4_0.gguf}"
+
+# Load local overrides if present
+if [ -f "${IRISLIME_ROOT}/config_local.sh" ]; then
+    source "${IRISLIME_ROOT}/config_local.sh"
+fi
+
+# 9. Path prepending for compilers & runtime DLLs (Fixes 0xC0000135 DLL errors)
+OPENVINO_BIN_POS="/c/Program Files/WindowsApps/IntelCorporation.OpenVINOToolkit.2026.2.0_2026.2.0.0_x64__aqcv7fbxf4wm4/runtime/bin/intel64/Release"
+OPENVINO_ALT_POS="/c/Program Files/WindowsApps/IntelCorporation.OpenVINOToolkit.2026.2.0_2026.2.0.0_x64__aqcv7fbxf4wm4/runtime/bin"
+OPENSSL_BIN_POS="/c/Program Files/OpenSSL-Win64/bin"
+INTEL_COMPILER_BIN="/c/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/bin"
+
+export PATH="${INTEL_COMPILER_BIN}:${OPENVINO_BIN_POS}:${OPENVINO_ALT_POS}:${OPENSSL_BIN_POS}:${PATH}"
+
+# 10. Node.js Version Management via NVM
+if command -v nvm &> /dev/null; then
+    nvm use 20 --silent >/dev/null 2>&1 || true
+    echo "[+] Node.js Toolchain synchronized via native system engine (version: $(node -v 2>/dev/null))."
+else
+    echo "[!] Warning: Native nvm.exe missing. Native UI loops may fail dependencies."
+fi
+
+# 11. PowerShell Bridge & IO Patching Helpers
+ps7() {
+    "/c/Program Files/PowerShell/7/pwsh.exe" "$@"
+}
+pto() { 
+    "${PYTHON_VENV_EXE}" "${IRISLIME_ROOT}/tools/patch_io.py" out "$@"
+}
+pti() { 
+    "${PYTHON_VENV_EXE}" "${IRISLIME_ROOT}/tools/patch_io.py" in "$@"
 }
 
-PROMPT_COMMAND=set_prompt
+# 12. Convenience Automation Shortcuts
+alias extract_telemetry="uv run tools/extract_telemetry.py"
+alias quick_litert="./tools/quick_test_litert.py"
+alias test_history="uv run tools/test_rerun_menu.py"
+alias probe_hardware="uv run tools/probe_hardware.py"
+alias test_runner="uv run tools/test_runner.py --debug_watchdog"
+alias build_runner="uv run tools/build_runner.py --debug_watchdog"
+alias files2clip="uv run python tools/files2clip"
+alias clip2files="uv run python tools/clip2files"
+alias pack2clip=pto
+alias patch_incoming=pti
 
+export IRISLIME_DEBUG_WATCHDOG=1
+
+# 13. Dynamic, colorful multi-line prompt loaded from config_win_promptwork
+if [ -f "${IRISLIME_ROOT}/config_win_promptwork" ]; then
+    source "${IRISLIME_ROOT}/config_win_promptwork"
+else
+    # Fallback to high-visibility inline definition if config_win_promptwork is missing
+    set_prompt() {
+        local exit_code=$?
+        local short_host=${HOSTNAME%%.*}
+        local tag="${IRISLIME_PROMPT_TAG:-default}"
+        local ts=$(date +"%y%m_%H%M_%S")
+        
+        # ANSI Escape sequence wrappers for non-printing characters
+        local c_reset="\[\e[0m\]"
+        local c_user="\[\e[36m\]"       # Cyan
+        local c_host="\[\e[94m\]"       # Light/Bright Blue
+        local c_tag="\[\e[35m\]"        # Purple
+        local c_time="\[\e[90m\]"       # Gray
+        local c_path="\[\e[33m\]"       # Yellow
+        local c_green="\[\e[32m\]"      # Green (Success / Git)
+        local c_red="\[\e[31m\]"        # Red (Failure)
+        
+        local status_symbol=""
+        if [ $exit_code -eq 0 ]; then
+            status_symbol="${c_green}✓${c_reset}"
+        else
+            status_symbol="${c_red}! (exit: ${exit_code})${c_reset}"
+        fi
+        
+        local git_info=$(type __git_ps1 >/dev/null 2>&1 && __git_ps1 ' (%s)')
+        if [ -n "${git_info}" ]; then
+            git_info="${c_green}${git_info}${c_reset}"
+        fi
+
+        # Colored components
+        local host_part="${c_user}${USER}${c_reset}@${c_host}${short_host}${c_reset}(1003)"
+        local tag_part="[${c_tag}${tag}${c_reset}]"
+        local path_part="${c_path}\w${c_reset}"
+        local time_part="${c_time}${ts}${c_reset}"
+
+        # Prompt layout
+        PS1="\n${host_part} ${tag_part} - ${time_part} [${status_symbol}]\n${path_part}${git_info}\n\n; "
+    }
+    PROMPT_COMMAND=set_prompt
+fi
+
+# 14. Clean up script-local variables
+unset _ACTION _TAG
+
+# Final readiness marker
 export IRISLIME_READY=1
-echo "[+] IrisLime environment is ready."
-
+echo "[+] Environment Loaded (Hardened Paths, DLL Fixes, WSL Prompt Mirror Active)."

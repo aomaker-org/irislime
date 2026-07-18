@@ -1,0 +1,97 @@
+================================================================================
+PATH:        docs/agy_review_irislime.txt
+PURPOSE:     Derived AI rules and operational guidelines from workspace files.
+TARGET:      All developers, scripts, and AI context loaders.
+LINEAGE:     fekerr-dev / Derived Rules
+UPDATED:     20260715_162300
+Integrity-Hash: 00b610787415c8d194bc87d86e86f6020fcbe435f2ad1534cd30c876cb0884ac
+================================================================================
+
+# Derived AI Rules Specification
+
+This document details the complete set of operational guardrails, development workflows, logging requirements, and hardware configuration rules derived from the fekerr-dev and irislime workspaces.
+
+---
+
+## 1. Observability, Logging, and Formatting Rules
+
+* RULE 1: Maximum Observability & Verbose Methods
+  - Description: Print clear, timestamped status reports for all automated steps, file transfers, or state transitions. Save execution metrics for command runs, and use profiling wrappers (like pipe2clip or Out-TraceClip) to preserve stdout, stderr, and timings.
+  - Source: docs/OPERATIONAL_RULES.txt (Lines 10-15)
+
+* RULE 2: No Silent Stream Discarding
+  - Description: Never pipe stdout or stderr to /dev/null unless strictly unavoidable. If a null pipe is used, add a detailed comment explaining the engineering constraint. Alternatively, redirect output to a temporary file and filter.
+  - Source: docs/OPERATIONAL_RULES.txt (Lines 17-23)
+
+* RULE 3: Additive State Modification
+  - Description: Prefer appending configurations over destructive overwrites. Generate temporary backups before automated modifications, and save logs to timestamp-labeled files rather than recycling static paths.
+  - Source: docs/OPERATIONAL_RULES.txt (Lines 25-31)
+
+* RULE 4: Metadata Headers and Tracing Signatures
+  - Description: Every custom script, configuration, or log archive must begin and end with structured ASCII headers/footers detailing path, lineage, and purpose. Critical control assets must implement self-referential Integrity-Hash signatures.
+  - Source: docs/OPERATIONAL_RULES.txt (Lines 32-37)
+
+* RULE 5: Simple ASCII Interchange for Markdown
+  - Description: Do not use native Markdown (.md) as primary working files to prevent UI truncation or clipping. Use plain ASCII text (.txt) with clean, human-scannable block structures.
+  - Source: docs/OPERATIONAL_RULES.txt (Lines 38-44)
+
+---
+
+## 2. Environment & Path Constraints
+
+* RULE 6: System Topology Adherence
+  - Description: Strictly follow the physical filesystem paths, compiler backends (MSVC native 64-bit Optimizing Compiler cl.exe), and terminal shells validated in the workspace. Do not assume abstract defaults.
+  - Source: irislime/AI.md (Lines 9-20)
+
+* RULE 7: Mute Input Boundary Errors
+  - Description: All visual and audible terminal input boundary errors must be muted via bellStyle: none and GNU Readline set bell-style none configurations inside ~/.inputrc.
+  - Source: irislime/AI.md (Line 22)
+
+* RULE 8: Cross-Platform Path Alignment
+  - Description: Never utilize virtualized drive-letter mappings (e.g., G:, H:). All data references between Windows hosts and Linux/WSL2 guests must evaluate via native cross-platform loopbacks (\\wsl.localhost\Ubuntu-24.04\) or localized home nodes (--cd ~).
+  - Source: irislime/AI.md (Line 36)
+
+* RULE 9: Python Environment Isolation
+  - Description: All Python execution steps must route exclusively through the native uv package manager (uv run). Avoid contaminating global system environments by running self-contained, ephemeral sandboxes.
+  - Source: irislime/AI.md (Line 37)
+
+---
+
+## 3. Git Workflows & Sandboxing
+
+* RULE 10: Non-Destructive History Retention
+  - Description: Dangling feature branches should be merged, settled, and closed cleanly without deleting structural code history or forced squashing. The commit forensic timeline must remain intact.
+  - Source: irislime/AI_next.md (Lines 12-13) & irislime/docs/design_decisions.md (Lines 81-86)
+
+* RULE 11: Submodule Sandboxing & Isolation
+  - Description: To avoid staging accidental submodule pointer updates when modifying code inside submodules (like llama.cpp), isolate the submodule using git config submodule.<name>.ignore all.
+  - Source: irislime/docs/git_submodule_notes.md (Lines 33-42)
+
+* RULE 12: Formal Submodule Commits
+  - Description: Do not stage submodule updates from the root parent repository. Changes must be committed and pushed within the submodule first, and then the root repository link index updated explicitly.
+  - Source: irislime/docs/git_submodule_notes.md (Lines 68-73)
+
+* RULE 13: Parallel Forensic Branch Isolation
+  - Description: When an AI tool session experiences structural drift or compiler path misalignment, freeze and timestamp the active working branch immediately (e.g., forensics/ai-drift-session-YYYYMMDD), restore the mainline develop/main branch, and merge corrections via structured reconciliation commits.
+  - Source: irislime/docs/design_decisions.md (Lines 87-92)
+
+---
+
+## 4. Hardware Mappings & Cache Rules
+
+* RULE 14: Hardware-Aware Model Quantization Limits
+  - Description: Generative inference on shared-memory integrated GPU architectures (Intel Iris Xe) is bandwidth-bound. Mandate 4-bit and 5-bit quantization layers (Q4_K_M and Q5_K_M GGUF profiles) to increase functional memory bus cache hit rates.
+  - Source: irislime/docs/design_decisions.md (Lines 27-33)
+
+* RULE 15: Execution Unit (EU) Density Qualification
+  - Description: Filter target SLM execution environments to GPU chips featuring 80 to 96 Execution Units (EUs) to utilize DP4A dot-product execution density.
+  - Source: irislime/docs/design_decisions.md (Lines 34-39)
+
+* RULE 16: Decoupled High-Density Asset Storage
+  - Description: Store large compiled binary weights in external user-space caches (~/.cache/irislime/models/) and link them to the repo using symbolic links (models/) to keep the repository history footprint lightweight.
+  - Source: irislime/docs/design_decisions.md (Lines 71-76)
+
+================================================================================
+Integrity-Hash: 00b610787415c8d194bc87d86e86f6020fcbe435f2ad1534cd30c876cb0884ac
+EOF:         docs/agy_review_irislime.txt
+================================================================================

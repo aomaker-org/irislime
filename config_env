@@ -23,6 +23,7 @@ fi
 if [ "${1:-}" == "unset" ]; then
     echo "[!] Unsetting IrisLime environment..."
     unset IRISLIME_READY
+    unset IRISLIME_ROOT
     unset ONEAPI_ROOT
     unset MKLROOT
     unset ONEAPI_DEVICE_SELECTOR
@@ -33,6 +34,10 @@ if [ "${1:-}" == "unset" ]; then
     unset ZES_ENABLE_SYSMAN
     unset DEBUGINFOD_CACHE_PATH
     unset TCM_ENABLE
+    
+    # Remove custom functions and aliases
+    unset -f pto pti
+    unalias files2clip clip2files pack2clip patch_incoming 2>/dev/null
     
     # Cleanly revert NVM configurations if registered
     if command -v nvm >/dev/null 2>&1; then
@@ -55,7 +60,8 @@ if [ -n "${IRISLIME_READY:-}" ]; then
 fi
 
 # 5. Activate Python Virtual Environment via uv Standard Layout (.venv)
-VENV_PATH=".venv"
+export IRISLIME_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VENV_PATH="${IRISLIME_ROOT}/.venv"
 if [ -f "${VENV_PATH}/bin/activate" ]; then
     if [[ "${VIRTUAL_ENV:-}" != "" ]]; then
         deactivate >/dev/null 2>&1 || unset VIRTUAL_ENV
@@ -137,6 +143,18 @@ alias build_runner="uv run tools/build_runner.py"
 alias extract_telemetry="uv run tools/extract_telemetry.py"
 alias test_runner="uv run tools/test_runner.py"
 alias quick_litert="./tools/quick_test_litert.py"
+
+# Structured Text I/O Helpers & Aliases
+pto() {
+    python "${IRISLIME_ROOT}/tools/patch_io.py" out "$@"
+}
+pti() {
+    python "${IRISLIME_ROOT}/tools/patch_io.py" in "$@"
+}
+alias files2clip="uv run python ${IRISLIME_ROOT}/tools/files2clip"
+alias clip2files="uv run python ${IRISLIME_ROOT}/tools/clip2files"
+alias pack2clip=pto
+alias patch_incoming=pti
 
 export IRISLIME_READY=1
 echo "[+] IrisLime environment is ready."

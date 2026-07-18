@@ -1,0 +1,9 @@
+# 1. Export core workspace fabric (uid1000)
+wsl --export ubu26_0715 - | rclone rcat gdrive-chunked:id1000/ubu26_0715_review.tar --progress
+
+# 2. Export heavy telemetry analytics node (id1003)
+wsl --export Ubuntu-24.04 - | rclone rcat gdrive-chunked:id1003/ubuntu_2404_review.tar --progress
+
+# 3. Export structural preferences workspace (1001)
+wsl --export Ubuntu-26.04 - | rclone rcat gdrive-chunked:1001/ubuntu_2604_review.tar --progress
+

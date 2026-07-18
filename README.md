@@ -33,6 +33,7 @@ Before executing local builds or validation testing sequences, orient yourself w
 3. ?? **[Training and Onboarding Repository](training/README.md)**: Architectural reference center documenting team Git workflow models, squash-merge rationales, and cross-OS encoding troubleshooting.
 
 ## Core Workspace Taxonomy
+* `fekerr-dev/`: Centralized PowerShell 7 host toolkit and container bootstrap stratum. Holds host execution scripts (`ps7/`), container initialization recipes (`irislime_ubu26_init/`), and workspace integrity utilities.
 * `config_env`: Idempotent session environment gate loader. Initializes localized Python virtual environments and maps Intel system variables.
 * `scratch/`: Engineering sandbox workspace. Holds point-in-time snapshot utilities, local backlog indices, and validation scripts (`run_test000.sh`, `run_test002.sh`).
 * `tools/`: Maintained background orchestration utilities and automated headless text extraction engines.
