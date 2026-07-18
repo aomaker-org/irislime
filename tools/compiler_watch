@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Path:        tools/compiler_watch
+# Purpose:     Scrolling Compiler Process Monitor with Live Keyboard Intercept
+# Target OS:   Ubuntu 26.04 LTS / WSL2 Subsystem (Core12 Workstation Platform)
+# Lineage:     Unified Asset Specification / Diagnostics Suite
+# Updated:     20260710_0548 (Scroll-back retention and 'q' key loop breaking)
+# ==============================================================================
+
+set -eo pipefail
+
+TARGET_REGEX='make|gmake|cmake|ccache|icpx|g\+\+|vulkan|build_runner'
+
+echo "=================================================================="
+echo "[+] IRISLIME STREAMING COMPILER WATCH UTILITY RUNNING"
+echo "=================================================================="
+echo "  [*] Mode: Vertical Scrolling Stream (Scrollback Preserved)"
+echo "  [*] Control: Press [q] at any time to exit cleanly"
+echo "=================================================================="
+echo ""
+
+while true; do
+    TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+    ACTIVE_PROCESSES=$(ps -eo pid,nlwp,psr,%cpu,%mem,etime,comm,args --forest | grep -E "${TARGET_REGEX}" | grep -v grep || true)
+    
+    if [ -z "${ACTIVE_PROCESSES}" ]; then
+        # Ambient trace message keeping the screen space compact when idle
+        echo "[${TIMESTAMP}] Workspace baseline nominal. Waiting for compiler fork..."
+    else
+        # Print a clear, chronological frame boundary that naturally pushes older frames up
+        echo ""
+        echo ">>> --- [FRAME UPDATE: ${TIMESTAMP}] --- <<<"
+        echo "PID    NLWP PSR %CPU  %MEM ELAPSED  COMMAND/ARGS"
+        echo "------------------------------------------------------------------"
+        ps -eo pid,nlwp,psr,%cpu,%mem,etime,args --forest | grep -E "${TARGET_REGEX}" | grep -v grep || true
+        echo "------------------------------------------------------------------"
+    fi
+    
+    # Non-blocking interactive gate: 
+    # Read 1 character (-n 1), silently (-s), with a strict 2-second timeout (-t 2)
+    # This acts as our smart 2s sleep cycle, instantly breaking if 'q' is pressed
+    if read -s -t 2 -n 1 key; then
+        if [[ "${key}" == "q" || "${key}" == "Q" ]]; then
+            echo ""
+            echo "[+] Keyboard exit flag intercepted. Releasing compiler_watch loop wrapper cleanly."
+            break
+        fi
+    fi
+done
+
+# end of file: tools/compiler_watch

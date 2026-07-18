@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.13)
+project(MKLProbe LANGUAGES C CXX)
+message(STATUS "[SANDBOX] Running direct find_package scan...")
+find_package(MKL CONFIG REQUIRED PATHS $ENV{MKLROOT})
+message(STATUS "[SANDBOX] Success! Imported Targets: ${MKL_IMPORTED_TARGETS}")

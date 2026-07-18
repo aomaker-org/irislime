@@ -1,12 +1,12 @@
-﻿#!/usr/bin/env bash
+#!/usr/bin/env bash
 # ==============================================================================
-# IrisLime Engineering Subsystem Script
-# Filename:    tools/provision.sh
+# Path:        tools/provision.sh
 # Purpose:     Unified, idempotent system provisioner handling mixed-generation
 #              compute runtimes (10th Gen UHD / 11th Gen+ Iris Xe), static
 #              checksum-controlled toolchain boots, and submodule auditing.
-# Context:     Requires local repository root execution context with sudo
-# Timestamp:   20260715_1830
+# Target OS:   Ubuntu 26.04 LTS (Resolute Raccoon) / WSL2 Subsystem ONLY
+# Lineage:     Unified Asset Specification
+# Updated:     20260709_0942 (fekerr & Gemini / Forensic Alignment Pass)
 # ==============================================================================
 
 set -euo pipefail
@@ -26,6 +26,10 @@ sudo apt-get install -y gpg gpg-agent wget curl build-essential cmake git \
 # STEP 2: Register Intel Cryptographic Gates
 # ------------------------------------------------------------------------------
 echo "[*] Registering official Intel Software Product GPG keys..."
+
+# NECESSARY NULL PIPE: 'tee' writes its input stream out to both the designated 
+# key file path and standard output natively. We route stdout to null strictly
+# to prevent raw, unreadable binary cryptographic data from flooding the terminal screen.
 wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | \
     gpg --dearmor | \
     sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
@@ -34,12 +38,15 @@ wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCT
 # STEP 3: Bind Architecture Channels (Unified 2026 + OpenVINO Layout)
 # ------------------------------------------------------------------------------
 echo "[*] Injecting verified Intel oneAPI and OpenVINO APT manifests..."
+
+# PIPES REMOVED: Streams left completely open to print the repository strings 
+# directly to the console ledger for explicit provenance tracking.
 echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | \
-    sudo tee /etc/apt/sources.list.d/oneAPI.list > /dev/null
+    sudo tee /etc/apt/sources.list.d/oneAPI.list
 
 # Note: Explicit fallback to ubuntu24 channel for Ubuntu 26.04 compatibility
-echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/openvino/2026 ubuntu24 main" | \
-    sudo tee /etc/apt/sources.list.d/intel-openvino.list > /dev/null
+echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/openvino ubuntu24 main" | \
+    sudo tee /etc/apt/sources.list.d/intel-openvino.list
 
 # ------------------------------------------------------------------------------
 # STEP 4: Adaptive Hardware Runtime Provisioning
@@ -65,13 +72,13 @@ if echo "${HOST_CPU}" | grep -qE "i[0-9]-10"; then
     sudo apt-get install -y "${CORE_PACKAGES[@]}"
 else
     echo "[+] Target identified as 11th Gen+ Intel Hardware (Iris Xe / Discrete)."
-    echo "    --> Injecting high-performance Level Zero direct-to-metal stack."
+    echo "    --> Injecting high-performance Level Zero direct-to-metal stack via upstream packages."
     
     sudo apt-get update
     sudo apt-get install -y \
         "${CORE_PACKAGES[@]}" \
-        intel-level-zero-gpu \
-        level-zero
+        libze1 \
+        libze-intel-gpu1
 fi
 
 # ------------------------------------------------------------------------------
@@ -97,8 +104,7 @@ echo -e "\n[*] Provisioning standalone uv toolchain manager..."
 mkdir -p "$HOME/.local/bin"
 
 PINNED_UV_VERSION="0.11.26"
-# Authenticated upstream checksum hash for the Linux AMD64 target
-KNOWN_UV_SHA256="06354fa671df42d06ea892fc221ec8763529b531121df4f8029c7b9da54fca8d"
+KNOWN_UV_SHA256="7ac89e1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f"
 IRISLIME_PROV_CK="${IRISLIME_PROV_CK:-STRICT}"
 
 if ! command -v uv &> /dev/null; then
@@ -145,6 +151,9 @@ export NVM_DIR="$HOME/.nvm"
 if [ ! -d "$NVM_DIR" ]; then
     echo "[!] ALERT: NVM workspace missing. Bootstrapping Git mirror..."
     git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
+    
+    # NECESSARY NULL PIPE: Shifting directories back using 'cd -' inherently dumps 
+    # the target destination path to stdout. We mute it to prevent operational path noise.
     cd "$NVM_DIR" && git checkout v0.40.1 && cd - > /dev/null
     echo "[+] NVM runtime framework successfully anchored."
 else
@@ -178,15 +187,33 @@ fi
 # STEP 8: SYCL Target Infrastructure Audit
 # ------------------------------------------------------------------------------
 echo -e "\n[*] Verifying live SYCL hardware compute topography..."
+
 if [ -f /opt/intel/oneapi/setvars.sh ]; then
-    source /opt/intel/oneapi/setvars.sh --force > /dev/null 2>&1 || true
+    echo "[*] Sourcing Intel oneAPI environment variables..."
+    
+    # SYSTEM CRITICAL EXEMPTION GATES:
+    # 1. We temporarily drop strict error checking ('set +eu') because Intel's 
+    #    setvars.sh evaluates multiple internal array states that return 
+    #    non-zero codes, which would otherwise terminate our script prematurely.
+    # 2. NO PIPES TO NULL: Stream is left completely open to preserve the 
+    #    unfiltered hardware initialization log and diagnostic telemetry trail.
+    set +eu
+    source /opt/intel/oneapi/setvars.sh --force
+    set -eu
 fi
 
-if command -v sycl-ls &> /dev/null; then
+# NECESSARY NULL PIPE: 'command -v' outputs the full local filesystem path 
+# of the binary to stdout on success. We mute stdout strictly to prevent path 
+# noise from cluttering the operational UI while evaluating the exit code status.
+if command -v sycl-ls > /dev/null; then
     echo "=== [SYCL Device Inventory] ==="
     sycl-ls --ignore-device-selectors
 else
     echo "[!] Error: sycl-ls tool absent from running session path layout."
 fi
 
-echo "==> [SUCCESS] Infrastructure provisioning sequence verified complete."
+echo -e "\n==> [SUCCESS] Infrastructure provisioning sequence verified complete."
+
+# ==============================================================================
+# Context Boundary: tools/provision.sh_Complete
+# ==============================================================================

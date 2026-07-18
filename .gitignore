@@ -11,7 +11,7 @@ env/
 htmlcov/
 dist/
 build/
-logs/builds/
+# logs/builds/
 *.egg-info/
 
 # --- Rust ---
@@ -70,3 +70,4 @@ scratch/
 win11build/
 build/
 logs/
+.irislime_heartbeat
