@@ -34,15 +34,19 @@ def check_handshake():
     print(f"Remote Target  : {manifest.get('remote_destination')}")
     print("----------------------------------------------------------")
 
+    win_receipt = Path("/mnt/c/Users/feker/src/irislime/tools/windows_rclone_receipt.json")
+    if not receipt_path.exists() and win_receipt.exists():
+        receipt_path = win_receipt
+        try:
+            import shutil
+            shutil.copy2(win_receipt, root / "tools" / "windows_rclone_receipt.json")
+        except Exception:
+            pass
+
     if not receipt_path.exists():
-        # Check if receipt exists in Windows path fallback
-        win_receipt = Path("/mnt/c/Users/feker/src/irislime/tools/windows_rclone_receipt.json")
-        if win_receipt.exists():
-            receipt_path = win_receipt
-        else:
-            print("[STATUS] PENDING: Windows rclone transfer has not completed yet.")
-            print("         Waiting for tools/windows_rclone_receipt.json handshake receipt.")
-            return False
+        print("[STATUS] PENDING: Windows rclone transfer has not completed yet.")
+        print("         Waiting for tools/windows_rclone_receipt.json handshake receipt.")
+        return False
 
     with open(receipt_path, "r", encoding="utf-8") as f:
         receipt = json.load(f)

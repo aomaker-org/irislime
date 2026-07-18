@@ -1,0 +1,9 @@
+{
+  "status": "SUCCESS",
+  "machine_id": "core12",
+  "wsl_ubuntu_id": "1003",
+  "package": "20260718_logs_core12_1003.zip",
+  "remote_destination": "gdrive:transfer/20260718_logs_core12_1003",
+  "verified": true,
+  "transferred_at_utc": "2026-07-18T23:05:08Z"
+}
