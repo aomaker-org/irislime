@@ -130,6 +130,9 @@ def find_rclone_binary() -> str:
     system_rclone = shutil.which("rclone")
     if system_rclone:
         return system_rclone
+    winget_rclone = Path("/mnt/c/Users/feker/AppData/Local/Microsoft/WinGet/Links/rclone.exe")
+    if winget_rclone.is_file():
+        return str(winget_rclone)
     return str(ws_bin)
 
 def perform_rclone_upload(rclone_bin: str, local_archive: Path, remote_folder: str, dry_run: bool = False) -> bool:
