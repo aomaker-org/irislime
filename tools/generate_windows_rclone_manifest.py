@@ -35,7 +35,7 @@ def main():
         "wsl_ubuntu_id": DEFAULT_WSL_ID,
         "zip_package": zip_name,
         "remote_destination": remote_dest,
-        "windows_rclone_cmd": f'rclone copy "{zip_name}" "{remote_dest}" --progress --drive-chunk-size 64M --transfers 4',
+        "windows_rclone_cmd": f'rclone copyto "{zip_name}" "{remote_dest}/{zip_name}" --progress --drive-chunk-size 64M --transfers 4',
         "windows_verify_cmd": f'rclone ls "{remote_dest}"',
         "doc_ledger": str(doc_manifest.relative_to(root)) if doc_manifest.exists() else ""
     }

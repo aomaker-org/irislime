@@ -4,7 +4,7 @@
   "wsl_ubuntu_id": "1003",
   "zip_package": "20260718_logs_core12_1003.zip",
   "remote_destination": "gdrive:transfer/20260718_logs_core12_1003",
-  "windows_rclone_cmd": "rclone copy \"20260718_logs_core12_1003.zip\" \"gdrive:transfer/20260718_logs_core12_1003\" --progress --drive-chunk-size 64M --transfers 4",
+  "windows_rclone_cmd": "rclone copyto \"20260718_logs_core12_1003.zip\" \"gdrive:transfer/20260718_logs_core12_1003/20260718_logs_core12_1003.zip\" --progress --drive-chunk-size 64M --transfers 4",
   "windows_verify_cmd": "rclone ls \"gdrive:transfer/20260718_logs_core12_1003\"",
   "doc_ledger": "docs/log_archive_20260718_core12_1003.md"
 }

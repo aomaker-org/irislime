@@ -45,7 +45,7 @@ Set-Location C:\Users\feker\src\irislime
 
 ### Option C: Manual Command Invocation
 ```cmd
-rclone.exe copy 20260718_logs_core12_1003.zip gdrive:transfer/20260718_logs_core12_1003 --progress --drive-chunk-size 64M --transfers 4
+rclone.exe copyto 20260718_logs_core12_1003.zip gdrive:transfer/20260718_logs_core12_1003/20260718_logs_core12_1003.zip --progress --drive-chunk-size 64M --transfers 4
 rclone.exe ls gdrive:transfer/20260718_logs_core12_1003
 ```
 
