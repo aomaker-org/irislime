@@ -118,8 +118,11 @@ echo.
 echo [*] Verifying remote payload delivery on gdrive...
 "%RCLONE_EXE%" ls "%REMOTE_DEST%"
 
+echo {{"status": "SUCCESS", "machine_id": "{DEFAULT_MACHINE_ID}", "wsl_ubuntu_id": "{DEFAULT_WSL_ID}", "package": "%ZIP_FILE%", "remote_destination": "%REMOTE_DEST%", "verified": true}} > tools\windows_rclone_receipt.json
+
 echo.
 echo [SUCCESS] Log archive package transferred and verified on gdrive:!
+echo [HANDSHAKE] Handshake receipt written to tools\windows_rclone_receipt.json
 echo.
 """
     bat_path = root / "tools" / "windows_rclone_sync.bat"
@@ -187,7 +190,22 @@ Write-Host "[*] Executing rclone copyto to $RemoteDest/$ZipFile..." -ForegroundC
 if ($LASTEXITCODE -eq 0) {{
     Write-Host "`n[*] Verifying remote payload delivery..." -ForegroundColor Green
     & $RcloneExe ls "$RemoteDest"
+
+    # Write Cross-Host Handshake Receipt for WSL
+    $ReceiptData = [PSCustomObject]@{{
+        status = "SUCCESS"
+        machine_id = "{DEFAULT_MACHINE_ID}"
+        wsl_ubuntu_id = "{DEFAULT_WSL_ID}"
+        package = $ZipFile
+        remote_destination = $RemoteDest
+        verified = $true
+        transferred_at_utc = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+    }} | ConvertTo-Json -Depth 3
+
+    Set-Content -Path "tools\\windows_rclone_receipt.json" -Value $ReceiptData -Encoding UTF8
+
     Write-Host "`n[SUCCESS] Payload verified on $RemoteDest!" -ForegroundColor Cyan
+    Write-Host "[HANDSHAKE] Handshake receipt written to tools\\windows_rclone_receipt.json" -ForegroundColor Green
 }} else {{
     Write-Error "[!] Rclone transfer failed with exit code $LASTEXITCODE"
 }}

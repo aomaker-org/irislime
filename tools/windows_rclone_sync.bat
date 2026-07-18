@@ -58,6 +58,9 @@ echo.
 echo [*] Verifying remote payload delivery on gdrive...
 "%RCLONE_EXE%" ls "%REMOTE_DEST%"
 
+echo {"status": "SUCCESS", "machine_id": "core12", "wsl_ubuntu_id": "1003", "package": "%ZIP_FILE%", "remote_destination": "%REMOTE_DEST%", "verified": true} > tools\windows_rclone_receipt.json
+
 echo.
 echo [SUCCESS] Log archive package transferred and verified on gdrive:!
+echo [HANDSHAKE] Handshake receipt written to tools\windows_rclone_receipt.json
 echo.

@@ -57,7 +57,22 @@ Write-Host "[*] Executing rclone copyto to $RemoteDest/$ZipFile..." -ForegroundC
 if ($LASTEXITCODE -eq 0) {
     Write-Host "`n[*] Verifying remote payload delivery..." -ForegroundColor Green
     & $RcloneExe ls "$RemoteDest"
+
+    # Write Cross-Host Handshake Receipt for WSL
+    $ReceiptData = [PSCustomObject]@{
+        status = "SUCCESS"
+        machine_id = "core12"
+        wsl_ubuntu_id = "1003"
+        package = $ZipFile
+        remote_destination = $RemoteDest
+        verified = $true
+        transferred_at_utc = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+    } | ConvertTo-Json -Depth 3
+
+    Set-Content -Path "tools\windows_rclone_receipt.json" -Value $ReceiptData -Encoding UTF8
+
     Write-Host "`n[SUCCESS] Payload verified on $RemoteDest!" -ForegroundColor Cyan
+    Write-Host "[HANDSHAKE] Handshake receipt written to tools\windows_rclone_receipt.json" -ForegroundColor Green
 } else {
     Write-Error "[!] Rclone transfer failed with exit code $LASTEXITCODE"
 }
