@@ -56,8 +56,7 @@
       50%/5h quota throttling gates (pausing 10 minutes per 5-minute cycle when exceeded).
 * [ ] AGY Single-Core Window Restriction: Enforce agy operating on a single primary core basis
       rather than spawning scattered terminal windows (except for isolated experiments).
-* [ ] WSL Ubuntu [dash] Integration: Enable Ubuntu bash CLI to invoke host Get-TerminalDashboard.ps1
-      and output wsl_node_telemetry.json status cards into [dash].
+* [ ] WSL Ubuntu [mtfdash] Integration: Enable Ubuntu bash CLI to invoke host Get-TerminalDashboard.ps1 via 'mtfdash' alias (bypassing /usr/bin/dash collision).
 * [ ] GitHub Branch Protection Rules: Enforce strict linear commit tracking histories
       and branch protection without force-push permissions.
 * [ ] ASCII Text Interchange Converter: Validate tools/ascii2md.py to enable zero-loss
