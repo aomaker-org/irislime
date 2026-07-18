@@ -85,7 +85,14 @@ class BuildOrchestrator:
         """Core execution block managing compilation forks and tracking metrics."""
         self.pre_flight_setup()
         
-        cmd = ["make", f"build-{self.target}", f"PROFILE={self.profile}", f"LOG_FILE_PATH={str(self.log_file)}"]
+        cmd = [
+            "make",
+            f"build-{self.target}",
+            f"PROFILE={self.profile}",
+            f"BUILD_DIR={str(self.target_dir)}",
+            f"CMAKE_BUILD_TYPE={self.profile}",
+            f"LOG_FILE_PATH={str(self.log_file)}"
+        ]
         
         process = subprocess.Popen(
             cmd,

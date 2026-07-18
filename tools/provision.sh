@@ -6,7 +6,7 @@
 #              checksum-controlled toolchain boots, and submodule auditing.
 # Target OS:   Ubuntu 26.04 LTS (Resolute Raccoon) / WSL2 Subsystem ONLY
 # Lineage:     Unified Asset Specification
-# Updated:     20260709_0942 (fekerr & Gemini / Forensic Alignment Pass)
+# Updated:     20260715_2115 (fekerr & Gemini / Symmetrical Alias Injection)
 # ==============================================================================
 
 set -euo pipefail
@@ -20,7 +20,8 @@ echo "==> [START] Launching Unified IrisLime Provisioning Sequence..."
 echo "[*] Synchronizing base system repositories and deploying utilities..."
 sudo apt-get update
 sudo apt-get install -y gpg gpg-agent wget curl build-essential cmake git \
-    clinfo libtbb-dev ocl-icd-opencl-dev opencl-headers libssl-dev ccache
+    clinfo libtbb-dev ocl-icd-opencl-dev opencl-headers libssl-dev ccache \
+    libvulkan-dev vulkan-tools glslang-tools glslc spirv-headers
 
 # ------------------------------------------------------------------------------
 # STEP 2: Register Intel Cryptographic Gates
@@ -104,7 +105,7 @@ echo -e "\n[*] Provisioning standalone uv toolchain manager..."
 mkdir -p "$HOME/.local/bin"
 
 PINNED_UV_VERSION="0.11.26"
-KNOWN_UV_SHA256="7ac89e1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f"
+KNOWN_UV_SHA256="6426a73c3837e6e2483ee344cbc00f36394d179afcba6183cb77437e67db4af0"
 IRISLIME_PROV_CK="${IRISLIME_PROV_CK:-STRICT}"
 
 if ! command -v uv &> /dev/null; then
@@ -147,6 +148,11 @@ fi
 # STEP 5.5: Idempotent User-Space NVM Provisioning Pass
 # ------------------------------------------------------------------------------
 echo "[*] Auditing Node Version Manager (NVM) user-space configurations..."
+
+# Supress global detached head warnings during tagged Git checkouts (NVM / other tools)
+echo "[*] Silencing global Git detached HEAD warnings..."
+git config --global advice.detachedHead false
+
 export NVM_DIR="$HOME/.nvm"
 if [ ! -d "$NVM_DIR" ]; then
     echo "[!] ALERT: NVM workspace missing. Bootstrapping Git mirror..."
@@ -184,6 +190,32 @@ else
 fi
 
 # ------------------------------------------------------------------------------
+# STEP 7.5: Establish Symmetrical Systems Diagnostic Toolbelt
+# ------------------------------------------------------------------------------
+echo "[*] Anchoring custom systems engineering diagnostic toolbelt..."
+
+# Inject sedline and aliaser into ~/.bashrc dynamically if absent
+if ! grep -q "aliaser()" "$HOME/.bashrc"; then
+    echo "[*] Appending 'sedline' and 'aliaser' utility blocks to ~/.bashrc..."
+    cat << 'EOF' >> "$HOME/.bashrc"
+
+# ==============================================================================
+# DIAGNOSTIC TOOLBELT & CUSTOM ALIAS MANAGER
+# ==============================================================================
+
+# Print specific line from a file instantly and exit
+sedline() {
+    iython /home/fekerr/src/fekerr-dev/tools/pipe2clip.py'
+alias br='uv run /home/fekerr/src/irislime/tools/build_runner.py'
+alias tr='uv run /home/fekerr/src/irislime/tools/test_runner.py'
+alias btr='uv run /home/fekerr/src/irislime/tools/bbptests_runner.py --profile vulkan_debug'
+alias sign='uv run python /home/fekerr/src/fekerr-dev/tools/hash_signer.py sign'
+alias verify='uv run python /home/fekerr/src/fekerr-dev/tools/hash_signer.py verify'
+alias rl='unset FEKERR_DEV_READY; unset FEK_RUN_TYPE; source ~/.bashrc'
+alias woof='powershell.exe -NoProfile -Command '\''[Console]::Beep(380, 80); [Console]::Beep(290, 120)'\'' 2>/dev/null &'
+EOF
+
+# ------------------------------------------------------------------------------
 # STEP 8: SYCL Target Infrastructure Audit
 # ------------------------------------------------------------------------------
 echo -e "\n[*] Verifying live SYCL hardware compute topography..."
@@ -213,7 +245,3 @@ else
 fi
 
 echo -e "\n==> [SUCCESS] Infrastructure provisioning sequence verified complete."
-
-# ==============================================================================
-# Context Boundary: tools/provision.sh_Complete
-# ==============================================================================

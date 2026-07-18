@@ -6,17 +6,13 @@
 # Updated:      20260710_0105 (fekerr & Gemini / Telemetry Unblinding Pass)
 # ==============================================================================
 
-LITERT_PROFILE ?= release
+LITERT_PROFILE ?= $(if $(PROFILE),$(shell echo "$(PROFILE)" | tr '[:upper:]' '[:lower:]'),release)
 
-ifeq ($(LITERT_PROFILE),debug)
-	BUILD_DIR        := build/sycl_debug
-	CMAKE_BUILD_TYPE := Debug
-	LITERT_LINK_DIR  := $(CURDIR)/build/litert_debug
-else
-	BUILD_DIR        := build/sycl_relwithdebinfo
-	CMAKE_BUILD_TYPE := RelWithDebInfo
-	LITERT_LINK_DIR  := $(CURDIR)/build/litert_release
-endif
+# Target-specific variables for sycl targets to avoid polluting global namespace
+build-sycl clean-sycl: BUILD_DIR        = $(if $(filter debug,$(LITERT_PROFILE)),build/sycl_debug,build/sycl_relwithdebinfo)
+build-sycl clean-sycl: CMAKE_BUILD_TYPE = $(if $(filter debug,$(LITERT_PROFILE)),Debug,RelWithDebInfo)
+build-sycl clean-sycl: LITERT_LINK_DIR  = $(if $(filter debug,$(LITERT_PROFILE)),$(CURDIR)/build/litert_debug,$(CURDIR)/build/litert_release)
+
 
 .PHONY: build-sycl clean-sycl
 
@@ -37,6 +33,9 @@ build-sycl: bootstrap-headers ## Configure and compile Intel SYCL target
 		-DMKL_DIR="$$M_DIR" \
 		-DMKL_ROOT="$$M_ROOT" \
 		-DIRISLIME_LITERT_DIR="$$P_PATH" \
+		-DLLAMA_BUILD_TESTS=ON \
+		-DCMAKE_C_COMPILER_LAUNCHER=ccache \
+		-DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
 		$(CMAKE_FLAGS) && \
 	cmake --build . -j$(NUM_BUILD_JOBS) \
 		--config $(CMAKE_BUILD_TYPE) & \
