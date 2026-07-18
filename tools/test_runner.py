@@ -372,8 +372,8 @@ def run_evaluation_pass():
                         "-b", str(b),
                         "-ngl", str(ngl)
                     ]
-                    if backend.lower() not in ("litert", "openvino"):
-                        bench_args.extend(["--backend", backend])
+                    if backend.lower() not in ("litert", "openvino", "base"):
+                        bench_args.extend(["--device", backend])
                     
                     code, out, err, duration = execute_subprocess_target(bench_args, env)
                     

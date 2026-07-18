@@ -22,6 +22,9 @@ build-vulkan: ## Configure and compile the portable Mesa Vulkan compute target w
 	cmake ../../$(ENGINE_DIR) \
 		-DGGML_VULKAN=ON \
 		-DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) \
+		-DLLAMA_BUILD_TESTS=ON \
+		-DCMAKE_C_COMPILER_LAUNCHER=ccache \
+		-DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
 		$(CMAKE_FLAGS) >> $(LOG_FILE_PATH) 2>&1 && \
 	cmake --build . -j$(NUM_BUILD_JOBS) --config $(CMAKE_BUILD_TYPE) >> $(LOG_FILE_PATH) 2>&1; \
 	STATUS=$$?; \
