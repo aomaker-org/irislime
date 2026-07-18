@@ -1,0 +1,38 @@
+# ==============================================================================
+# PATH:        irislime_ubu26_init/AGY_INGEST.agy
+# PURPOSE:     Target structure data mappings for agy intake loops.
+# TARGET:      Antigravity AI context loaders
+# LINEAGE:     fekerr-dev / Automation Metadata
+# UPDATED:     20260715_143500
+# Integrity-Hash: 6a2fedd55ca3ccd90bc581cacfc1cc00b68673b538957523df3cbfc84a7107bf
+# ==============================================================================
+
+workspace:
+  name: "fekerr-dev"
+  owner: "fekerr_1004"
+  paths:
+    core_root: "$HOME/src/fekerr-dev"
+    active_tools: "$HOME/src/fekerr-dev/tools"
+    init_scripts: "$HOME/src/fekerr-dev/irislime_ubu26_init"
+    docs: "$HOME/src/fekerr-dev/docs"
+
+active_tools_index:
+  - name: "pipe2clip"
+    binary: "python3 $HOME/src/fekerr-dev/tools/pipe2clip.py"
+    desc: "Timing-aware stdout/stderr concurrency capture pipeline."
+  - name: "files2clip"
+    binary: "python3 $HOME/src/fekerr-dev/tools/files2clip.py"
+    desc: "Workspace packaging and markdown serialization simulator."
+  - name: "hash_signer"
+    binary: "python3 $HOME/src/fekerr-dev/tools/hash_signer.py"
+    desc: "Self-referential SHA-256 integrity check and tag manager."
+
+session_context:
+  sync_timestamp: "20260715_143500"
+  git_branch: "main"
+  operating_rules: "$HOME/src/fekerr-dev/docs/OPERATIONAL_RULES.txt"
+  history_log: "$HOME/src/fekerr-dev/docs/SESSION_RECONSTRUCTION.txt"
+
+# Integrity-Hash: 6a2fedd55ca3ccd90bc581cacfc1cc00b68673b538957523df3cbfc84a7107bf
+# EOF:         irislime_ubu26_init/AGY_INGEST.agy
+# ==============================================================================

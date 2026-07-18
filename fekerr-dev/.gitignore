@@ -1,0 +1,6 @@
+logs/
+rclone_cache/
+staging_tars/
+*.zip
+*.log
+system_telemetry_report.html

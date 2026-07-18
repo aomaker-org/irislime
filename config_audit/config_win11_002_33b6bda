@@ -1,0 +1,66 @@
+# ==============================================================================
+# Filename:     config_win11
+# Purpose:      Idempotent Windows 11 environment loader (Synchronized to WSL)
+# ==============================================================================
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    echo "[!] ERROR: Must SOURCE this file." >&2; exit 1
+fi
+
+# 1. Input Handling
+# Capture the tag (arg 2) if it exists, otherwise keep current
+if [ -n "${2:-}" ]; then
+    export IRISLIME_PROMPT_TAG="${2}"
+fi
+
+# 2. Force Flag / Tear-down
+if [ "${1:-}" == "force" ] || [ "${1:-}" == "--force" ]; then
+    echo "[!] Force reload detected. Cycling environment state..."
+    unset IRISLIME_READY
+fi
+
+# 3. Environment Check
+if [ -n "${IRISLIME_READY:-}" ]; then
+    echo "[!] Already loaded. Use 'source config_win11 force [tag]' to re-verify."
+    return 0
+fi
+
+# 4. Virtual Env Sync
+if [ -f ".venv/Scripts/activate" ]; then
+    source ".venv/Scripts/activate"
+    echo "[+] Virtual environment activated (.venv)."
+    if command -v uv >/dev/null 2>&1; then uv sync; fi
+else
+    echo "[!] Warning: Host venv missing."
+fi
+
+# 5. Hardware Toolchains & Variables
+export INTEL_OPENVINO_DIR="C:/Program Files/WindowsApps/IntelCorporation.OpenVINOToolkit.2026.2.0_2026.2.0.0_x64__aqcv7fbxf4wm4"
+export IRISLIME_PLATFORM="win11_native"
+export ONEAPI_DEVICE_SELECTOR="opencl:1"
+
+# 6. Prompt Sync Logic (The "WSL Mirror")
+# ==============================================================================
+# Tightened Prompt Logic (Matches WSL Engine Room Aesthetic)
+# =_============================================================================
+
+set_prompt() {
+    local exit_code=$?
+    # Use only the first part of the hostname (e.g., LAPTOP-AJPE53SG)
+    local short_host=${HOSTNAME%%.*}
+    local tag="${IRISLIME_PROMPT_TAG:-default}"
+    local ts=$(date +"%y%m_%H%M_%S")
+    local status_symbol=$( [ $exit_code -eq 0 ] && echo "✓" || echo "!" )
+
+    # Only show git branch if we are in a git repo to save horizontal space
+    local git_info=$(type __git_ps1 >/dev/null 2>&1 && __git_ps1 ' (%s)')
+
+    # Format: user@host(1003):[tag]: path branch ts_status
+    PS1="${USER}@${short_host}(1003):[${tag}]: \w${git_info} ${ts}_${status_symbol}\n; "
+}
+
+PROMPT_COMMAND=set_prompt
+
+export IRISLIME_READY=1
+echo "[+] IrisLime environment is ready."
+

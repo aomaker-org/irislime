@@ -10,6 +10,7 @@ The repository manages advanced local hardware acceleration implementations (Int
 
 The workspace is organized into explicit structural domains to separate engine sources, automated pipelines, orchestration telemetry logs, and instructional sandboxes:
 
+* **`fekerr-dev/`** - Centralized PowerShell 7 host toolkit and container bootstrap stratum (`ps7/`, `irislime_ubu26_init/`, workspace integrity signers).
 * **`infra/`** - Authoritative system makefile macro engines (`vulkan.mk`, `sycl.mk`) managing localized compilation parameters, profile layouts, and environment checks.
 * **`llama.cpp/`** - Local framework fork version-locked to the active Intel performance patch vectors (`remotes/origin/feature/sycl-openvino-intel-patches`).
 * **`deps/`** - Immutable system and optimization dependencies, including the core `litert-lm` engine tracks.

@@ -1,0 +1,63 @@
+================================================================================
+PATH:        docs/irislime_review.txt
+PURPOSE:     Comprehensive Architectural and Codebase Review of irislime.
+TARGET:      All developers, scripts, and AI context loaders.
+LINEAGE:     fekerr-dev / Workspace Reviews
+UPDATED:     20260715_162000
+Integrity-Hash: ce08e493b9529464ce899a3eb8b5ddb2153863439637787b9747102ce8af4365
+================================================================================
+
+# IrisLime Architecture & Operational Review
+
+This document provides a detailed architectural review of the `irislime` edge AI co-design sandbox, detailing its intent, system structure, supply-chain strategies, telemetry profiling hooks, and build orchestration tools.
+
+---
+
+## 1. System Intent & Vision
+IrisLime (Iris + SLM) is an experimental co-design sandbox optimized for executing local, small-scale large language model (SLM) inference on Intel Iris Xe integrated graphics.
+It sets up a compute bridge between the Windows 11 host graphics layer and a WSL2-virtualized Linux environment using the Intel oneAPI developer toolkit and OpenVINO runtime libraries.
+
+Key focus areas include:
+* Hardware Abstraction Loops: Running stable execution matrices across OpenVINO, SYCL, and Vulkan backends.
+* Supply Chain Decoupling: Separating the root code repository from upstream changes and high-density binary model weights.
+* AI-Agent Integration: Providing a clean, structured interface for autonomous context and test execution loops.
+
+---
+
+## 2. Directory Layout & Taxonomy
+* config_env: Sourced environment gate script. Performs local Python venv configuration, sets up compiler variables, and links Intel libraries.
+* tools/: Maintained background scripts for automated build compilation, matrix testing, telemetry capture, and context transfers.
+* infra/: Static compiler configs, cache indexes, and local host git filter overrides.
+* models/: Sourced as a symbolic link pointing to ~/.cache/irislime/models/ to avoid storing multi-gigabyte binary weights in Git.
+* llama.cpp/: Pinned Git submodule pointer pointing to a custom-patched fork of the inference engine.
+
+---
+
+## 3. Git-Native Supply Chain & Version Decoupling
+To shield OOT compile rules from upstream API drift, IrisLime implements strict submodule tracking constraints:
+* Submodule Version Pinning: Tracks immutable commit hashes within submodules/llama.cpp.
+* Sandbox Isolation: Instructs Git via local overrides (`git config submodule.llama.cpp.ignore all`) to blind the parent repo to experimental submodule modifications.
+* Large Binary Handling: Implements symbolic link bridges for GGUF weights, maintaining lightweight repository trees.
+* Non-Destructive History (Parallel Forensic Philosophy): Rather than squashing history, AI-assisted development drift is captured on separate frozen forensic branches, preserving complete troubleshooting visibility.
+
+---
+
+## 4. Telemetry, Monitoring, and Gated Matrix Execution
+A core feature of the IrisLime co-design framework is its data-driven evaluation pipeline:
+* Central Control Blueprint (matrix_control.json): Standardized declaration of disk space check parameters, target test models, compile overrides, context/batch ranges, and level-zero/opencl env overrides.
+* Gated Matrix Test Runner (tools/run_matrix_tests.py): Iterates over all backend configurations (OpenVINO, SYCL, Vulkan, LiteRT) and executes performance checks on specified model permutations, logging results to both screen and file.
+* Hardware & Thermal Watchdog (tools/extract_telemetry.py): Monitors hardware utilization and thermal metrics, preventing thermal throttling or hardware damage during extended execution cycles.
+
+---
+
+## 5. Summary of Main Utilities (tools/)
+* provision.sh: Idempotent user-space developer stack builder. Audits host graphics generation, installs Intel level-zero-gpu drivers (for 11th Gen+) or defaults to legacy OpenCL (for 10th Gen), and installs cmake/ccache.
+* build_runner.py / builder.py: Builds target backend variations into build/ directory based on the blueprint rules in matrix_control.json.
+* files2clip / clip2files: Bidirectional clipboard context packaging engines. files2clip serializes workspace source files into a standard structure, and clip2files parses that structure to reconstruct files under WSL2.
+* chrono_audit.py: Runs precise, timing-aware diagnostics on model inference speed (tokens/sec) and latency delta profiles.
+* multicap_runner.py: Runs parallel multi-model capture operations and dumps consolidated execution telemetry.
+
+================================================================================
+Integrity-Hash: ce08e493b9529464ce899a3eb8b5ddb2153863439637787b9747102ce8af4365
+EOF:         docs/irislime_review.txt
+================================================================================

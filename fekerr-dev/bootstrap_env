@@ -1,0 +1,268 @@
+# ==============================================================================
+# Path:        ~/src/fekerr-dev/bootstrap_env
+# Purpose:     Idempotent environment loader with nested prompt help namespaces,
+#              uv alignments, clean double-line PS1 with GID and History count,
+#              and machine-readable alias cache.
+# Target:      Ubuntu 26.04 LTS / WSL2 / LXC Subsystem ONLY
+# Lineage:     fekerr-dev / Unified Asset Specification
+# Integrity-Hash: 42bd81119992f4a927fe1b166f351f88ac8d66e8d0503f25200642f19212de5e
+# ==============================================================================
+
+# 1. Guard: Prevent direct subshell execution
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    echo "[!] ERROR: You must SOURCE this file, not execute it." >&2
+    return 1 2>/dev/null || exit 1
+fi
+
+# 2. Intercept and Parse Input Parameters
+LOCAL_TAG=""
+SILENT_MODE=0
+FORCE_RELOAD=0
+
+for arg in "$@"; do
+    case "$arg" in
+        "silent")
+            SILENT_MODE=1
+            ;;
+        "force"|"--force")
+            FORCE_RELOAD=1
+            ;;
+        "unset")
+            echo "[!] Unsetting fekerr-dev environment..."
+            unset FEKERR_DEV_READY
+            unset FEK_USER
+            unset FEK_RUN_TYPE
+            rm -f "$HOME/.logs/shell/alias_cache"
+            if command -v deactivate >/dev/null 2>&1; then
+                deactivate
+                echo "[+] Virtual environment deactivated."
+            fi
+            return 0
+            ;;
+        *)
+            LOCAL_TAG="$arg"
+            ;;
+    esac
+done
+
+# 3. Handle Force Reload Requests
+if [ $FORCE_RELOAD -eq 1 ]; then
+    [ $SILENT_MODE -eq 0 ] && echo "[!] Force reload detected. Cycling environment state..."
+    unset FEKERR_DEV_READY
+fi
+
+# 4. Process Runtime Tag Assertions
+if [ -n "${LOCAL_TAG}" ]; then
+    export FEK_RUN_TYPE="${LOCAL_TAG}"
+elif [ -z "${FEK_RUN_TYPE:-}" ] && [ -z "${ISLM_RUN_TYPE:-}" ]; then
+    [ $SILENT_MODE -eq 0 ] && echo "[i] Tip: To tag your prompt context, try: '. bootstrap_env \"my tag\"'"
+else
+    export FEK_RUN_TYPE="${FEK_RUN_TYPE:-${ISLM_RUN_TYPE:-}}"
+fi
+
+# 5. Idempotency Check
+if [ -n "${FEKERR_DEV_READY:-}" ]; then
+    [ $SILENT_MODE -eq 0 ] && echo "[!] Environment already active."
+    return 0
+fi
+
+# 6. Activate Python Virtual Environment via uv Standard Layout (.venv)
+VENV_PATH=".venv"
+if [ ! -f "${VENV_PATH}/bin/activate" ] && [ -f "$HOME/src/${FEK_RUN_TYPE}/.venv/bin/activate" ]; then
+    VENV_PATH="$HOME/src/${FEK_RUN_TYPE}/.venv"
+fi
+
+if [ -f "${VENV_PATH}/bin/activate" ]; then
+    if [[ "${VIRTUAL_ENV:-}" != "" ]]; then
+        deactivate >/dev/null 2>&1 || unset VIRTUAL_ENV
+    fi
+    source "${VENV_PATH}/bin/activate"
+    [ $SILENT_MODE -eq 0 ] && echo "[+] Virtual environment activated (${VENV_PATH})."
+else
+    [ $SILENT_MODE -eq 0 ] && echo "[!] Virtual environment folder not found at ${VENV_PATH}." >&2
+fi
+
+# STATE GUARD: CAPTURE INITIAL INTERACTIVE TERMINAL SHELL FLAGS
+_FEK_ORIG_SET_U=0
+case "$-" in *u*) _FEK_ORIG_SET_U=1;; esac
+
+# 7. Global Identity Configurations
+_REAL_UID=$(id -u 2>/dev/null || echo "1003")
+_REAL_GID=$(id -g 2>/dev/null || echo "1003")
+export FEK_USER="${FEK_USER:-fekerr_${_REAL_UID}}"
+
+# RESTORE ORIGINAL VOLATILE SHELL FLAG CONFIGURATIONS
+if [ "${_FEK_ORIG_SET_U}" -eq 1 ]; then set -u; else set +u; fi
+unset _FEK_ORIG_SET_U
+
+# 8. Optimized Interactive Prompt Geometry (Double-line with GID, Date, & History #)
+_IS_BOOT_INT="false"
+case "$-" in *i*) _IS_BOOT_INT="true";; esac
+
+if [ "$_IS_BOOT_INT" = "true" ]; then
+    # Format: user@host(gid):[tag]: path YYMM_HHMM_HIST# \n;
+    export PS1='\[\033[01;32m\]\u@\h\[\033[00m\](\[\033[01;36m\]'"${_REAL_GID}"'\[\033[00m\]):\[\033[01;35m\]${FEK_RUN_TYPE:+[$FEK_RUN_TYPE]:}\[\033[00m\] \[\033[01;34m\]\w\[\033[00m\] \[\033[01;33m\]$(date +%y%m_%H%M)_!\n; \[\033[00m\]'
+fi
+unset _REAL_UID _REAL_GID
+
+# 9. Decoupled Path Executable Alignments
+alias files2clip="uv run python ~/src/fekerr-dev/tools/files2clip.py"
+alias pipe2clip="uv run python ~/src/fekerr-dev/tools/pipe2clip.py"
+alias sign="uv run python ~/src/fekerr-dev/tools/hash_signer.py sign"
+alias verify="uv run python ~/src/fekerr-dev/tools/hash_signer.py verify"
+alias agy-menu="/usr/local/bin/agy-menu"
+alias agy-dash="/usr/local/bin/agy-dash"
+
+if [ -f "/mnt/c/Windows/System32/clip.exe" ]; then
+    alias clip="/mnt/c/Windows/System32/clip.exe"
+fi
+
+# ==============================================================================
+# WRITE MACHINE-READABLE ALIAS CACHE (For pipe2clip parsing)
+# ==============================================================================
+mkdir -p "$HOME/.logs/shell"
+cat << 'CACHE_EOF' > "$HOME/.logs/shell/alias_cache"
+files2clip=uv run python /home/fekerr/src/fekerr-dev/tools/files2clip.py
+pipe2clip=uv run python /home/fekerr/src/fekerr-dev/tools/pipe2clip.py
+sign=uv run python /home/fekerr/src/fekerr-dev/tools/hash_signer.py sign
+verify=uv run python /home/fekerr/src/fekerr-dev/tools/hash_signer.py verify
+agy-menu=/usr/local/bin/agy-menu
+agy-dash=/usr/local/bin/agy-dash
+clip=/mnt/c/Windows/System32/clip.exe
+CACHE_EOF
+
+# ==============================================================================
+# 10. NESTED HELP DIRECTORY DATA
+# ==============================================================================
+_print_triple_click_cheatsheet() {
+    echo -e "reload"
+    echo -e "prompt help"
+    echo -e "prompt help verbose"
+    echo -e "agy"
+    echo -e "pipe2clip"
+    echo -e "files2clip"
+    echo -e "uv pip list"
+    echo -e "sign"
+    echo -e "verify"
+    echo -e "tail -n 20 -f ~/.logs/shell/bashrc_history.jsonl"
+    echo -e "tail -n 50 -f \$(ls -t ~/.gemini/antigravity-cli/brain/*/.system_generated/logs/*.jsonl 2>/dev/null | head -n 1)"
+}
+
+_print_verbose_help() {
+    _CUR_UID=$(id -u 2>/dev/null || echo "1003")
+    _VENV_STATUS="Active (${VENV_PATH:-None})"
+    [ -z "${VIRTUAL_ENV:-}" ] && _VENV_STATUS="None"
+
+    echo -e "\n\033[01;36m==================================================\033[00m"
+    echo -e "       \033[01;32mFEKERR-DEV WORKSPACE DIAGNOSTICS & HELP\033[00m"
+    echo -e "\033[01;36m==================================================\033[00m"
+    echo -e "  * Active User/UID: \033[01;33m${USER} (${_CUR_UID})\033[00m"
+    echo -e "  * Workspace Path:  \033[01;35m${PWD}\033[00m"
+    echo -e "  * Python Venv:     \033[01;37m${_VENV_STATUS}\033[00m"
+    echo -e "--------------------------------------------------"
+    echo -e "  \033[01;32mCOMMAND MANUAL DIRECTORY:\033[00m"
+    echo -e "  * reload"
+    echo -e "    Wipes local workspace locks and boots the menu."
+    echo -e "  * agy"
+    echo -e "    Launches your active interactive AI assistant."
+    echo -e "  * pipe2clip <cmd>"
+    echo -e "    Executes a process, labels stdout/stderr, and copies the timeline trace."
+    echo -e "  * files2clip"
+    echo -e "    Gathers workspace file contents into the Windows system clipboard."
+    echo -e "  * uv pip list"
+    echo -e "    Fast-indexes installed python dependencies inside your uv virtual environment."
+    echo -e "  * sign <file> / verify <file>"
+    echo -e "    Provides self-referential cryptographic signature and modification detection."
+    echo -e "==================================================\033[00m\n"
+    unset _CUR_UID _VENV_STATUS
+}
+
+_print_command_specific_help() {
+    case "$1" in
+        "reload")
+            echo -e "\n[Command Help] reload"
+            echo -e "  Usage:       reload"
+            echo -e "  Description: Instantly recycles your terminal variables and returns you"
+            echo -e "               to the main interactive .bashrc workspace selection menu.\n"
+            ;;
+        "agy")
+            echo -e "\n[Command Help] agy"
+            echo -e "  Usage:       agy [ingest <file> | run <script>]"
+            echo -e "  Description: Starts the Antigravity AI CLI workspace interface."
+            echo -e "               Supports direct script execution and schema ingestion.\n"
+            ;;
+        "pipe2clip")
+            echo -e "\n[Command Help] pipe2clip"
+            echo -e "  Usage:       pipe2clip <command> [arguments...]"
+            echo -e "  Description: Intercepts stdout and stderr lines, prefixes relative timestamps"
+            echo -e "               and streams, and loads the total log block directly to clipboard.\n"
+            ;;
+        "files2clip")
+            echo -e "\n[Command Help] files2clip"
+            echo -e "  Usage:       files2clip"
+            echo -e "  Description: Packages workspace files based on config parameters straight"
+            echo -e "               to your host machine's clipboard for context loading.\n"
+            ;;
+        "uv pip list"|"pip")
+            echo -e "\n[Command Help] uv pip list"
+            echo -e "  Usage:       uv pip list"
+            echo -e "  Description: Standard pip list is obsolete. Use uv pip list for near-instant"
+            echo -e "               package checking within your active virtual environment.\n"
+            ;;
+        "sign"|"verify"|"hash")
+            echo -e "\n[Command Help] sign / verify"
+            echo -e "  Usage:       sign <file> | verify <file>"
+            echo -e "  Description: Signs files with normalized SHA-256 integrity-hashes or verifies"
+            echo -e "               them, skipping the verification line itself to prevent collision.\n"
+            ;;
+        *)
+            echo -e "\n[!] No specific help entry found for target: $1"
+            echo -e "    Type 'prompt help verbose' for a list of valid commands.\n"
+            ;;
+    esac
+}
+
+# ==============================================================================
+# 11. UNIFIED PROMPT CONTROLLER FUNCTION
+# ==============================================================================
+prompt() {
+    if [ "${1:-}" = "help" ]; then
+        case "${2:-}" in
+            "")
+                _print_triple_click_cheatsheet
+                ;;
+            "verbose")
+                _print_verbose_help
+                ;;
+            *)
+                _print_command_specific_help "$2"
+                ;;
+        esac
+    elif [ "${1:-}" = "reload" ]; then
+        reload
+    else
+        echo "[!] Usage: prompt [help | reload]"
+        echo "    Type 'prompt help' for your triple-click options list."
+    fi
+}
+
+export FEKERR_DEV_READY=1
+
+# 12. Sourced Bootstrap Ingress Dashboard
+if [ $SILENT_MODE -eq 0 ] && [ "$_IS_BOOT_INT" = "true" ]; then
+    echo -e "\n\033[01;36m==================================================\033[00m"
+    echo -e "       \033[01;32mFEKERR-DEV WORKSPACE INITIALIZED (1003)\033[00m"
+    echo -e "\033[01;36m==================================================\033[00m"
+    echo -e "  \033[01;32mTRIPLE-CLICK CHEATSHEET:\033[00m"
+    _print_triple_click_cheatsheet
+    echo -e "\033[01;36m==================================================\033[00m\n"
+fi
+
+unset _IS_BOOT_INT SILENT_MODE
+
+# ==============================================================================
+# Integrity-Hash: 42bd81119992f4a927fe1b166f351f88ac8d66e8d0503f25200642f19212de5e
+# EOF:         ~/src/fekerr-dev/bootstrap_env
+# Status:      Verified / Release Candidate Active
+# Tracking:    Fekerr Dev Sourced Environment Load Complete
+# ==============================================================================
