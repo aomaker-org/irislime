@@ -4,9 +4,11 @@
 # Purpose: Compiles a dynamic point-in-time snapshot ledger before trunk merges.
 # 20260712 copilot | fix heredoc variable escaping: removed backslashes so
 #                    bash expands $(...) and ${...} correctly inside the block
+# 20260719 copilot | fix PROJECT_ROOT: script is in scratch/prototypes/, so
+#                    two levels up are needed to reach the repository root
 # ==========================================================================
 
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$PROJECT_ROOT"
 
 TS="$(date +%Y%m%d_%H%M%S)"
