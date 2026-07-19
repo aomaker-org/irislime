@@ -59,6 +59,7 @@
 * [x] WSL Ubuntu [mtfdash] Integration: Enable Ubuntu bash CLI to invoke host get-mtfterminaldashboard.ps1 via 'mtfdash' function in config_env (bypassing /usr/bin/dash collision).
 * [x] AGY mtfdash Mesh Bridge: Implemented tools/agy_mtfdash_bridge.py for AGY task telemetry, subagent status, and mtfdash command listening.
 * [x] llama.cpp mtfdash Mesh Bridge: Implemented tools/llamacpp_mtfdash_bridge.py for llama.cpp model inference metrics, SYCL/OpenVINO backend reporting, and mtfdash prompt injection.
+* [x] Cross-Subsystem Rclone Delegation & mtfdash User Guide: Implemented rclone-delegate feature in tools/mtfdash_node_manager.py and created docs/MTFDASH_USER_AND_INTEROP_GUIDE.md.
 * [ ] GitHub Branch Protection Rules: Enforce strict linear commit tracking histories
       and branch protection without force-push permissions.
 * [ ] ASCII Text Interchange Converter: Validate tools/ascii2md.py to enable zero-loss
