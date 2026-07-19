@@ -38,6 +38,43 @@ def ensure_nodes_dir():
     """Ensures the logs/nodes directory exists."""
     NODES_DIR.mkdir(parents=True, exist_ok=True)
 
+def get_tree_context() -> dict:
+    """Inspects host computer name, WSL distro tree, and git working directory branch/sha."""
+    is_wsl = "wsl" in platform.release().lower() or "microsoft" in platform.release().lower()
+    distro = os.environ.get("WSL_DISTRO_NAME", "Host Win11" if not is_wsl else "Ubuntu-WSL")
+    host_computer = socket.gethostname()
+    
+    branch = "unknown"
+    sha = "unknown"
+    try:
+        res_b = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=WORKSPACE_ROOT, capture_output=True, text=True)
+        if res_b.returncode == 0:
+            branch = res_b.stdout.strip()
+        res_s = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=WORKSPACE_ROOT, capture_output=True, text=True)
+        if res_s.returncode == 0:
+            sha = res_s.stdout.strip()
+    except Exception:
+        pass
+
+    unc_path = str(WORKSPACE_ROOT)
+    if is_wsl:
+        try:
+            res_u = subprocess.run(["wslpath", "-w", str(WORKSPACE_ROOT)], capture_output=True, text=True)
+            if res_u.returncode == 0:
+                unc_path = res_u.stdout.strip()
+        except Exception:
+            pass
+
+    return {
+        "host_computer": host_computer,
+        "subsystem_type": "WSL2 Guest" if is_wsl else "Win11 Host",
+        "distro_name": distro,
+        "workspace_path": str(WORKSPACE_ROOT),
+        "windows_unc_path": unc_path,
+        "git_branch": branch,
+        "git_sha": sha,
+    }
+
 def get_system_capabilities() -> dict:
     """Gathers local subsystem capabilities and state metrics."""
     is_wsl = "wsl" in platform.release().lower() or "microsoft" in platform.release().lower()
@@ -102,6 +139,7 @@ def register_heartbeat(node_id: str = None, status: str = "active", narrative: s
         "status": status,
         "last_seen": time.time(),
         "last_seen_iso": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "tree_context": get_tree_context(),
         "capabilities": get_system_capabilities(),
         "narrative": f"[v1.8.6] {narrative}",
         "pendinginjectedcommand": pending_cmd,
@@ -248,12 +286,20 @@ def print_mesh_matrix():
     else:
         for nid, ndata in active.items():
             caps = ndata.get("capabilities", {})
+            tree = ndata.get("tree_context", {})
             os_name = caps.get("os", "Unknown OS")
+            host_comp = tree.get("host_computer", ndata.get("hostname", "Unknown Host"))
+            distro = tree.get("distro_name", "Win11")
+            branch = tree.get("git_branch", "main")
+            sha = tree.get("git_sha", "")
+            workspace = tree.get("workspace_path", "")
             seen = ndata.get("last_seen_iso", "N/A")
             narrative = ndata.get("narrative", "")
             cmd = ndata.get("pendinginjectedcommand") or "<none>"
             print(f" * Node ID:    {nid}")
-            print(f"   OS/Target:  {os_name} (PID {ndata.get('pid')})")
+            print(f"   Host/Tree:  [{host_comp}] <---> [{distro}] (Branch: {branch}@{sha})")
+            print(f"   OS/PID:     {os_name} (PID {ndata.get('pid')})")
+            print(f"   Path:       {workspace}")
             print(f"   Last Seen:  {seen}")
             print(f"   Pending Cmd:{cmd}")
             print(f"   Narrative:  {narrative}")

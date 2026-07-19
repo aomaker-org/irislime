@@ -56,21 +56,34 @@ python3 tools/mtfdash_node_manager.py discover
  Active Nodes: 3 | Stale Nodes: 0
 ------------------------------------------------------------------------
  * Node ID:    win11_host_core12_4102
-   OS/Target:  Windows 11 (PID 4102)
+   Host/Tree:  [Core12-Laptop] <---> [Win11 Host] (Branch: main@e9da461)
+   OS/PID:     Windows 11 (PID 4102)
+   Path:       C:\Users\feker\src\irislime
    Last Seen:  2026-07-19T02:14:00Z
    Narrative:  [v1.8.6] Serviced rclone request: copyto 20260718_logs.zip gdrive:transfer/
 ------------------------------------------------------------------------
  * Node ID:    wsl_ubuntu_sandbox_17
-   OS/Target:  WSL2 Ubuntu 26.04 (PID 17)
+   Host/Tree:  [Core12-Laptop] <---> [ubu26_0715] (Branch: feature/mtfdash-host-tree-tracking@e9da461)
+   OS/PID:     WSL2 Ubuntu 26.04 (PID 17)
+   Path:       /home/fekerr/src/irislime
    Last Seen:  2026-07-19T02:14:02Z
    Narrative:  [v1.8.6] Delegated rclone copy to Win11 host
 ------------------------------------------------------------------------
  * Node ID:    llamacpp_sandbox_20
-   OS/Target:  Intel SYCL / oneAPI (PID 20)
+   Host/Tree:  [Core12-Laptop] <---> [ubu26_0715] (Branch: main@e9da461)
+   OS/PID:     Intel SYCL / oneAPI (PID 20)
+   Path:       /home/fekerr/src/irislime/llama.cpp
    Last Seen:  2026-07-19T02:14:01Z
    Narrative:  [v1.8.6] Inference completed (127.97 tok/s)
 ------------------------------------------------------------------------
 ```
+
+### 2.3 Host Computer & WSL Subsystem Tree Tracking
+`mtfdash` inspects and embeds host environment context into each node's registry JSON state (`tree_context`):
+* **Host Computer:** `host_computer` (e.g., `Core12-Laptop`).
+* **Subsystem Distro Tree:** `distro_name` (`WSL_DISTRO_NAME` env var, e.g., `ubu26_0715`, `Ubuntu-26.04`, or `Win11 Host`).
+* **Git Working Branch & Commit SHA:** `git_branch` and `git_sha` active on that filesystem tree.
+* **Workspace Root Path:** Local POSIX path and translated Windows UNC path (`windows_unc_path`).
 
 ---
 

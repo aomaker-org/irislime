@@ -60,6 +60,7 @@
 * [x] AGY mtfdash Mesh Bridge: Implemented tools/agy_mtfdash_bridge.py for AGY task telemetry, subagent status, and mtfdash command listening.
 * [x] llama.cpp mtfdash Mesh Bridge: Implemented tools/llamacpp_mtfdash_bridge.py for llama.cpp model inference metrics, SYCL/OpenVINO backend reporting, and mtfdash prompt injection.
 * [x] Cross-Subsystem Rclone Delegation & mtfdash User Guide: Implemented rclone-delegate feature in tools/mtfdash_node_manager.py and created docs/MTFDASH_USER_AND_INTEROP_GUIDE.md.
+* [x] Host Computer & WSL Subsystem Tree Tracking: Added get_tree_context() to tools/mtfdash_node_manager.py tracking host computer name, WSL distro name (e.g. ubu26_0715), workspace paths, and active git branch/SHA.
 * [ ] GitHub Branch Protection Rules: Enforce strict linear commit tracking histories
       and branch protection without force-push permissions.
 * [ ] ASCII Text Interchange Converter: Validate tools/ascii2md.py to enable zero-loss
