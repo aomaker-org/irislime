@@ -168,6 +168,31 @@ def _inject_command(node_id: str, command: str):
         except Exception as e:
             print(f"[!] Failed to inject command to {node_id}: {e}", file=sys.stderr)
 
+def delegate_rclone_operation(rclone_args: str) -> bool:
+    """Submits an rclone operation request from a WSL node to the Win11 host node."""
+    ensure_nodes_dir()
+    # Locate active Win11 host node
+    nodes = discover_nodes()["active"]
+    host_node_id = None
+    for nid, ndata in nodes.items():
+        if "win11" in nid.lower() or "win11" in ndata.get("capabilities", {}).get("os", "").lower():
+            host_node_id = nid
+            break
+            
+    if not host_node_id:
+        print("[!] No active Win11 host node found on mtfdash mesh to service rclone request.", file=sys.stderr)
+        print("[i] Falling back to local WSL rclone bridge execution...")
+        bridge_script = WORKSPACE_ROOT / "tools" / "wsl_rclone_bridge.py"
+        if bridge_script.is_file():
+            res = subprocess.run([sys.executable, str(bridge_script)] + rclone_args.split())
+            return res.returncode == 0
+        return False
+        
+    cmd_payload = f"rclone:{rclone_args}"
+    _inject_command(host_node_id, cmd_payload)
+    print(f"[+] Rclone operation '{rclone_args}' delegated to Win11 host node '{host_node_id}'.")
+    return True
+
 def process_inbox(node_id: str = None) -> list:
     """Reads and clears pending injected commands for this node."""
     ensure_nodes_dir()
@@ -184,9 +209,20 @@ def process_inbox(node_id: str = None) -> list:
             if cmd:
                 print(f"[*] Node '{node_id}' processing command: {cmd}")
                 executed.append(cmd)
+                
+                # Check if command is an rclone delegation request
+                if cmd.startswith("rclone:"):
+                    r_op = cmd.split("rclone:", 1)[1].strip()
+                    print(f"[*] servicing delegated rclone request on host: {r_op}")
+                    bridge_script = WORKSPACE_ROOT / "tools" / "wsl_rclone_bridge.py"
+                    if bridge_script.is_file():
+                        subprocess.run([sys.executable, str(bridge_script)] + r_op.split())
+                    data["narrative"] = f"[v1.8.6] Serviced rclone request: {r_op}"
+                else:
+                    data["narrative"] = f"[v1.8.6] Executed command: {cmd}"
+
                 # Clear command after reading
                 data["pendinginjectedcommand"] = None
-                data["narrative"] = f"[v1.8.6] Executed command: {cmd}"
                 data["last_seen"] = time.time()
                 atomic_write_json(file_path, data)
         except Exception as e:
@@ -244,6 +280,10 @@ def main():
     # process-inbox
     subparsers.add_parser("process-inbox", help="Check and execute pending commands for this node")
     
+    # rclone-delegate
+    rcl_parser = subparsers.add_parser("rclone-delegate", help="Delegate rclone operation to active Win11 host node")
+    rcl_parser.add_argument("rclone_args", help="Rclone command arguments string (e.g. 'copyto file.zip gdrive:path')")
+    
     args = parser.parse_args()
     
     if args.subcommand == "register":
@@ -257,6 +297,8 @@ def main():
         send_command(args.target, args.command)
     elif args.subcommand == "process-inbox":
         process_inbox()
+    elif args.subcommand == "rclone-delegate":
+        delegate_rclone_operation(args.rclone_args)
 
 if __name__ == "__main__":
     main()
