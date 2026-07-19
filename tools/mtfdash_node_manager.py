@@ -2,7 +2,7 @@
 """
 Path:        tools/mtfdash_node_manager.py
 Purpose:     WSL / Win11 mtfdash local disk-based node discovery, heartbeat registry,
-             and interprocess command-passing mesh engine.
+             mesh issue logging & broadcasting, and interprocess command mesh.
 Lineage:     irislime / fekerr-dev Architecture
 Updated:     20260718 (fekerr & Antigravity)
 """
@@ -22,6 +22,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 WORKSPACE_ROOT = SCRIPT_DIR.parent
 NODES_DIR = WORKSPACE_ROOT / "logs" / "nodes"
+MESH_ISSUES_FILE = NODES_DIR / "mesh_issues.jsonl"
 
 # Heartbeat timeout threshold in seconds
 HEARTBEAT_TIMEOUT_SEC = 15
@@ -114,6 +115,67 @@ def atomic_write_json(file_path: Path, data: dict):
         json.dump(data, f, indent=2)
     tmp_path.replace(file_path)
 
+def log_and_broadcast_issue(node_id: str = None, message: str = "", severity: str = "ERROR", broadcast_mesh: bool = True) -> dict:
+    """
+    Logs an mtfdash issue to logs/nodes/mesh_issues.jsonl AND broadcasts it
+    across active node registry files in the mesh.
+    """
+    ensure_nodes_dir()
+    if not node_id:
+        node_id = get_node_identity()
+
+    now_ts = time.time()
+    iso_ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    
+    issue_record = {
+        "timestamp": now_ts,
+        "timestamp_iso": iso_ts,
+        "node_id": node_id,
+        "severity": severity.upper(),
+        "message": message,
+    }
+
+    # 1. Append to persistent mesh_issues.jsonl
+    try:
+        with open(MESH_ISSUES_FILE, "a", encoding="utf-8") as f:
+            f.write(json.dumps(issue_record) + "\n")
+    except Exception as e:
+        print(f"[!] Failed to write to mesh_issues.jsonl: {e}", file=sys.stderr)
+
+    # 2. Update local node file state
+    file_path = NODES_DIR / f"node_{node_id}.json"
+    if file_path.is_file():
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            
+            data["status"] = "ISSUE"
+            data["narrative"] = f"[BROADCAST {severity.upper()}] {message}"
+            data["last_seen"] = now_ts
+            data["last_seen_iso"] = iso_ts
+            
+            recent = data.get("recent_issues", [])
+            recent.insert(0, issue_record)
+            data["recent_issues"] = recent[:10]
+            
+            atomic_write_json(file_path, data)
+        except Exception as e:
+            print(f"[!] Failed to update node state for issue: {e}", file=sys.stderr)
+
+    # 3. Broadcast alert command payload to active nodes if requested
+    if broadcast_mesh:
+        try:
+            active_mesh = discover_nodes()["active"]
+            alert_cmd = f"mesh_alert:{severity.lower()}:{message}"
+            for target_nid in active_mesh:
+                if target_nid != node_id:
+                    _inject_command(target_nid, alert_cmd)
+        except Exception:
+            pass
+
+    print(f"[!] [BROADCAST {severity.upper()}] Node '{node_id}': {message}", file=sys.stderr)
+    return issue_record
+
 def register_heartbeat(node_id: str = None, status: str = "active", narrative: str = "Node online"):
     """Registers or updates the local node heartbeat file in logs/nodes/."""
     ensure_nodes_dir()
@@ -122,13 +184,15 @@ def register_heartbeat(node_id: str = None, status: str = "active", narrative: s
     
     file_path = NODES_DIR / f"node_{node_id}.json"
     
-    # Retain existing pending command if present
+    # Retain existing pending command and recent issues if present
     pending_cmd = None
+    recent_issues = []
     if file_path.is_file():
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 existing = json.load(f)
                 pending_cmd = existing.get("pendinginjectedcommand")
+                recent_issues = existing.get("recent_issues", [])
         except Exception:
             pass
 
@@ -142,6 +206,7 @@ def register_heartbeat(node_id: str = None, status: str = "active", narrative: s
         "tree_context": get_tree_context(),
         "capabilities": get_system_capabilities(),
         "narrative": f"[v1.8.6] {narrative}",
+        "recent_issues": recent_issues[:10],
         "pendinginjectedcommand": pending_cmd,
     }
     
@@ -149,46 +214,79 @@ def register_heartbeat(node_id: str = None, status: str = "active", narrative: s
     return payload
 
 def discover_nodes() -> dict:
-    """Scans logs/nodes/*.json and returns active vs stale nodes on the host."""
+    """
+    Scans logs/nodes/*.json and returns active, stale, and corrupt nodes.
+    Prevents discovery errors ('v' view members crash prevention).
+    """
     ensure_nodes_dir()
     active_nodes = {}
     stale_nodes = {}
+    corrupt_nodes = {}
     now = time.time()
     
     for fpath in NODES_DIR.glob("node_*.json"):
         try:
             with open(fpath, "r", encoding="utf-8") as f:
                 data = json.load(f)
+            
+            if not isinstance(data, dict):
+                corrupt_nodes[fpath.name] = "Content is not a JSON object"
+                continue
+
             node_id = data.get("node_id", fpath.stem.replace("node_", ""))
             last_seen = data.get("last_seen", 0)
             
+            # Ensure safe fallback data structures
+            if "tree_context" not in data or not isinstance(data["tree_context"], dict):
+                data["tree_context"] = {}
+            if "capabilities" not in data or not isinstance(data["capabilities"], dict):
+                data["capabilities"] = {}
+
             if (now - last_seen) <= HEARTBEAT_TIMEOUT_SEC:
                 active_nodes[node_id] = data
             else:
                 stale_nodes[node_id] = data
-        except Exception:
+        except Exception as e:
+            corrupt_nodes[fpath.name] = str(e)
             continue
             
-    return {"active": active_nodes, "stale": stale_nodes}
+    return {"active": active_nodes, "stale": stale_nodes, "corrupt": corrupt_nodes}
+
+def get_recent_broadcast_issues(limit: int = 5) -> list:
+    """Reads the last N broadcasted mesh issues from logs/nodes/mesh_issues.jsonl."""
+    if not MESH_ISSUES_FILE.is_file():
+        return []
+    records = []
+    try:
+        with open(MESH_ISSUES_FILE, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        records.append(json.loads(line))
+                    except Exception:
+                        continue
+    except Exception:
+        pass
+    return records[-limit:]
 
 def send_command(target_node_id: str, command: str) -> bool:
     """Injects a command payload into a target node's inbox on disk."""
     ensure_nodes_dir()
     
-    # If targeting all active nodes or specific target
     if target_node_id == "all":
         nodes = discover_nodes()["active"]
         if not nodes:
-            print("[!] No active nodes discovered to send command.", file=sys.stderr)
+            log_and_broadcast_issue("system", "send-cmd failed: No active nodes discovered.", severity="WARNING")
             return False
-        for nid, node_data in nodes.items():
+        for nid in nodes:
             _inject_command(nid, command)
         print(f"[+] Command dispatched to {len(nodes)} active node(s).")
         return True
     else:
         file_path = NODES_DIR / f"node_{target_node_id}.json"
         if not file_path.is_file():
-            print(f"[!] Target node '{target_node_id}' not found in registry.", file=sys.stderr)
+            log_and_broadcast_issue("system", f"send-cmd failed: Target node '{target_node_id}' not found.", severity="WARNING")
             return False
         _inject_command(target_node_id, command)
         print(f"[+] Command dispatched to target node '{target_node_id}'.")
@@ -204,12 +302,11 @@ def _inject_command(node_id: str, command: str):
             data["last_seen"] = time.time()
             atomic_write_json(file_path, data)
         except Exception as e:
-            print(f"[!] Failed to inject command to {node_id}: {e}", file=sys.stderr)
+            log_and_broadcast_issue(node_id, f"Failed to inject command '{command}': {e}", severity="ERROR")
 
 def delegate_rclone_operation(rclone_args: str) -> bool:
     """Submits an rclone operation request from a WSL node to the Win11 host node."""
     ensure_nodes_dir()
-    # Locate active Win11 host node
     nodes = discover_nodes()["active"]
     host_node_id = None
     for nid, ndata in nodes.items():
@@ -218,8 +315,7 @@ def delegate_rclone_operation(rclone_args: str) -> bool:
             break
             
     if not host_node_id:
-        print("[!] No active Win11 host node found on mtfdash mesh to service rclone request.", file=sys.stderr)
-        print("[i] Falling back to local WSL rclone bridge execution...")
+        log_and_broadcast_issue("wsl_node", "No active Win11 host node found to service rclone delegation. Falling back to local.", severity="WARNING")
         bridge_script = WORKSPACE_ROOT / "tools" / "wsl_rclone_bridge.py"
         if bridge_script.is_file():
             res = subprocess.run([sys.executable, str(bridge_script)] + rclone_args.split())
@@ -248,8 +344,13 @@ def process_inbox(node_id: str = None) -> list:
                 print(f"[*] Node '{node_id}' processing command: {cmd}")
                 executed.append(cmd)
                 
-                # Check if command is an rclone delegation request
-                if cmd.startswith("rclone:"):
+                if cmd.startswith("mesh_alert:"):
+                    parts = cmd.split(":", 2)
+                    sev = parts[1] if len(parts) > 1 else "info"
+                    msg = parts[2] if len(parts) > 2 else cmd
+                    print(f"[!] [MESH ALERT RECEIVED] [{sev.upper()}] {msg}", file=sys.stderr)
+                    data["narrative"] = f"[v1.8.6] Received Mesh Alert: {msg}"
+                elif cmd.startswith("rclone:"):
                     r_op = cmd.split("rclone:", 1)[1].strip()
                     print(f"[*] servicing delegated rclone request on host: {r_op}")
                     bridge_script = WORKSPACE_ROOT / "tools" / "wsl_rclone_bridge.py"
@@ -259,51 +360,111 @@ def process_inbox(node_id: str = None) -> list:
                 else:
                     data["narrative"] = f"[v1.8.6] Executed command: {cmd}"
 
-                # Clear command after reading
                 data["pendinginjectedcommand"] = None
                 data["last_seen"] = time.time()
                 atomic_write_json(file_path, data)
         except Exception as e:
-            print(f"[!] Error processing inbox for {node_id}: {e}", file=sys.stderr)
+            log_and_broadcast_issue(node_id, f"Error processing inbox: {e}", severity="ERROR")
             
     return executed
 
 def print_mesh_matrix():
-    """Prints a formatted human-readable dashboard matrix of discovered nodes."""
+    """
+    Prints an expanded, multi-line dashboard matrix of discovered nodes and logged issues.
+    Fulfills 'v' view members error recovery and 'more lines need to be on the dashboard'.
+    """
     discovery = discover_nodes()
     active = discovery["active"]
     stale = discovery["stale"]
+    corrupt = discovery.get("corrupt", {})
+    recent_issues = get_recent_broadcast_issues(limit=5)
     
-    print("=" * 72)
-    print("               MTFDASH LOCAL DISK NODE DISCOVERY MATRIX             ")
-    print("=" * 72)
-    print(f" Registry Directory: {NODES_DIR}")
-    print(f" Active Nodes: {len(active)} | Stale Nodes: {len(stale)}")
-    print("-" * 72)
+    print("=" * 80)
+    print("           MTFDASH SYSTEM MEMBERS & LOCAL DISK NODE DISCOVERY MATRIX        ")
+    print("=" * 80)
+    print(f" Registry Directory : {NODES_DIR}")
+    print(f" Active Nodes       : {len(active)} | Stale Nodes: {len(stale)} | Corrupt Files: {len(corrupt)}")
+    print(f" Mesh Issues Logged : {len(recent_issues)} recent broadcast record(s)")
+    print("=" * 80)
     
+    # 1. Active Nodes Section (Expanded Lines)
+    print("\n--- ACTIVE MESH MEMBERS (ONLINE) ---")
     if not active:
         print(" [!] No active nodes detected in the last 15 seconds.")
     else:
         for nid, ndata in active.items():
-            caps = ndata.get("capabilities", {})
+            status = ndata.get("status", "ACTIVE").upper()
+            status_flag = f"[{status}]"
+            pid = ndata.get("pid", "N/A")
+            node_type = ndata.get("node_type", "subsystem_node")
+            
             tree = ndata.get("tree_context", {})
-            os_name = caps.get("os", "Unknown OS")
             host_comp = tree.get("host_computer", ndata.get("hostname", "Unknown Host"))
             distro = tree.get("distro_name", "Win11")
+            subsys_id = tree.get("subsystem_id", "")
+            subsys_str = f"{distro} (ID {subsys_id})" if subsys_id else distro
             branch = tree.get("git_branch", "main")
             sha = tree.get("git_sha", "")
             workspace = tree.get("workspace_path", "")
+            unc_path = tree.get("windows_unc_path", "")
+            
+            caps = ndata.get("capabilities", {})
+            os_name = caps.get("os", "Unknown OS")
+            py_ver = caps.get("python_version", "N/A")
+            venv = caps.get("virtual_env") or "None"
+            oneapi = "Active" if caps.get("oneapi_active") else "Inactive"
+            openvino = "Active" if caps.get("openvino_active") else "Inactive"
+            rclone = "Available" if caps.get("rclone_available") else "Missing"
+            
             seen = ndata.get("last_seen_iso", "N/A")
             narrative = ndata.get("narrative", "")
             cmd = ndata.get("pendinginjectedcommand") or "<none>"
-            print(f" * Node ID:    {nid}")
-            print(f"   Host/Tree:  [{host_comp}] <---> [{distro}] (Branch: {branch}@{sha})")
-            print(f"   OS/PID:     {os_name} (PID {ndata.get('pid')})")
-            print(f"   Path:       {workspace}")
-            print(f"   Last Seen:  {seen}")
-            print(f"   Pending Cmd:{cmd}")
-            print(f"   Narrative:  {narrative}")
-            print("-" * 72)
+            issues = ndata.get("recent_issues", [])
+
+            print(f" * Node ID      : {nid} {status_flag} (Type: {node_type} | PID: {pid})")
+            print(f"   Host/Tree    : [{host_comp}] <---> [{subsys_str}] (Branch: {branch}@{sha})")
+            print(f"   UNC Path     : {unc_path}")
+            print(f"   Local Path   : {workspace}")
+            print(f"   Capabilities : OS={os_name} | Python={py_ver} | Venv={venv}")
+            print(f"   Accelerators : oneAPI={oneapi} | OpenVINO={openvino} | Rclone={rclone}")
+            print(f"   Heartbeat    : Last Seen={seen} | Pending Cmd={cmd}")
+            print(f"   Narrative    : {narrative}")
+            if issues:
+                latest_issue = issues[0]
+                print(f"   Active Issue : [{latest_issue.get('severity')}] {latest_issue.get('message')}")
+            print("-" * 80)
+
+    # 2. Stale Nodes Section
+    print("\n--- STALE / OFFLINE MESH MEMBERS ---")
+    if not stale:
+        print(" [i] No stale nodes registered.")
+    else:
+        for nid, ndata in stale.items():
+            tree = ndata.get("tree_context", {})
+            host_comp = tree.get("host_computer", ndata.get("hostname", "Unknown Host"))
+            distro = tree.get("distro_name", "Unknown")
+            seen = ndata.get("last_seen_iso", "N/A")
+            narrative = ndata.get("narrative", "")
+            print(f" - Stale Node   : {nid}")
+            print(f"   Host/Distro  : [{host_comp}] <---> [{distro}]")
+            print(f"   Last Seen    : {seen}")
+            print(f"   Last Status  : {narrative}")
+            print("   " + "." * 76)
+
+    # 3. Corrupt Registry Files (Error Recovery)
+    if corrupt:
+        print("\n--- CORRUPT REGISTRY FILES (AUTO-RECOVERED) ---")
+        for fname, err in corrupt.items():
+            print(f" [!] File: {fname} | Error: {err}")
+
+    # 4. Broadcasted Mesh Issues Log Section
+    print("\n--- BROADCASTED MESH ISSUES & LOGS ---")
+    if not recent_issues:
+        print(" [✓] No mesh issues logged.")
+    else:
+        for r in recent_issues:
+            print(f" [!] [{r.get('timestamp_iso')}] [{r.get('severity')}] Node '{r.get('node_id')}': {r.get('message')}")
+    print("=" * 80)
 
 def main():
     parser = argparse.ArgumentParser(description="mtfdash Local Disk Node Discovery & IPC Engine")
@@ -316,8 +477,14 @@ def main():
     reg_parser.add_argument("--narrative", default="Node online", help="Narrative log entry")
     
     # discover
-    subparsers.add_parser("discover", help="Discover active nodes and print mesh matrix")
+    subparsers.add_parser("discover", help="Discover active nodes and print expanded mesh matrix")
     
+    # log-issue
+    issue_parser = subparsers.add_parser("log-issue", help="Log and broadcast an issue across mtfdash mesh")
+    issue_parser.add_argument("message", help="Issue description message")
+    issue_parser.add_argument("--node-id", default=None, help="Node ID reporting the issue")
+    issue_parser.add_argument("--severity", default="ERROR", help="Severity level (ERROR, WARNING, CRITICAL)")
+
     # send-cmd
     send_parser = subparsers.add_parser("send-cmd", help="Send a command to a target node")
     send_parser.add_argument("target", help="Target node ID or 'all'")
@@ -336,9 +503,10 @@ def main():
         payload = register_heartbeat(args.node_id, args.status, args.narrative)
         print(f"[+] Heartbeat updated for node '{payload['node_id']}'.")
     elif args.subcommand == "discover" or not args.subcommand:
-        # Default to registering self and printing matrix
         register_heartbeat(narrative="Discovery matrix view pass")
         print_mesh_matrix()
+    elif args.subcommand == "log-issue":
+        log_and_broadcast_issue(args.node_id, args.message, args.severity)
     elif args.subcommand == "send-cmd":
         send_command(args.target, args.command)
     elif args.subcommand == "process-inbox":
