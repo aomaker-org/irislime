@@ -217,6 +217,11 @@ mtfdash() {
 }
 alias mtfdash-status="powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"& 'C:\\Users\\feker\\src\\fekerr-dev\\ps7\\get-mtfterminaldashboard.ps1' -isolate -slot status\""
 
+# WSL to Win11 Rclone Bridge
+rclone() {
+    python3 "${IRISLIME_ROOT}/tools/wsl_rclone_bridge.py" "$@"
+}
+
 export IRISLIME_READY=1
 echo "[+] IrisLime shared configuration preferences cleanly evaluated."
 echo "[+] IrisLime environment is ready."
