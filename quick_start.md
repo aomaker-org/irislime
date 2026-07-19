@@ -40,11 +40,14 @@ make setup
 
 ## Step 3: Activate the Environment Session Gate
 
-Always source the system boot utility before executing compilation targets or running hardware validation loops. This evaluates the Intel toolchain environment variables, mounts your local python paths, and updates your prompt text to monitor history command counters:
+Always source the environment configuration script before executing compilation targets or running hardware validation loops. This evaluates the Intel toolchain environment variables, mounts your local python paths, and ensures correct hardware configuration for your OS:
 
 ```bash
-. scratch/boot.sh
+# For WSL2 Ubuntu Bash environments
+source config_env
 
+# For native Windows 11 builds (utilizing VS2022/VS2026, Intel setvars, etc.)
+# source config_win11
 ```
 
 ## Step 4: Execute the Hardware Validation Check
