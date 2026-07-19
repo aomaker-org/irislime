@@ -57,6 +57,8 @@
 * [ ] AGY Single-Core Window Restriction: Enforce agy operating on a single primary core basis
       rather than spawning scattered terminal windows (except for isolated experiments).
 * [x] WSL Ubuntu [mtfdash] Integration: Enable Ubuntu bash CLI to invoke host get-mtfterminaldashboard.ps1 via 'mtfdash' function in config_env (bypassing /usr/bin/dash collision).
+* [x] Local Disk Space Node Discovery & IPC: Implemented tools/mtfdash_node_manager.py for node heartbeat discovery, command injection, and state sharing over logs/nodes/*.json.
+* [x] IPC Topology Documentation: Created docs/INTERPROCESS_COMMUNICATION_TOPOLOGY.md detailing local disk mesh, named pipes, sockets, shared memory, and cross-host networking.
 * [ ] GitHub Branch Protection Rules: Enforce strict linear commit tracking histories
       and branch protection without force-push permissions.
 * [ ] ASCII Text Interchange Converter: Validate tools/ascii2md.py to enable zero-loss
