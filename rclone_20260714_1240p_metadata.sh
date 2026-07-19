@@ -29,9 +29,17 @@ for arg in "$@"; do
     esac
 done
 
+# Resolve rclone command and configuration path (supporting Win11 rclone)
+WIN11_CONF="/mnt/c/Users/feker/AppData/Roaming/rclone/rclone.conf"
+RCLONE_CMD=("rclone")
+
+if [ -f "$WIN11_CONF" ]; then
+    RCLONE_CMD+=("--config" "$WIN11_CONF")
+fi
+
 echo "[*] Initiating IrisLime Source Snapshot Migration..."
 
-rclone copy /home/fekerr/src/irislime \
+"${RCLONE_CMD[@]}" copy /home/fekerr/src/irislime \
     gdrive:2026LaptopsArchive/irislime/20260714_irislime_ubuntu26_core12 \
     --exclude-from .gitignore \
     --exclude ".venv/**" \
@@ -43,3 +51,4 @@ rclone copy /home/fekerr/src/irislime \
     -P
 
 echo "[+] Snapshot operation sequence completed."
+
