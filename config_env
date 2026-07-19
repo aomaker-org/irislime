@@ -217,8 +217,14 @@ mtfdash() {
 }
 alias mtfdash-status="powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"& 'C:\\Users\\feker\\src\\fekerr-dev\\ps7\\get-mtfterminaldashboard.ps1' -isolate -slot status\""
 alias mtfdash-nodes="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py discover"
+alias mtfdash-members="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py discover"
+alias mtfdash-matrix="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py discover"
 alias mtfdash-send="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py send-cmd"
 alias mtfdash-inbox="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py process-inbox"
+alias mtfdash-issue="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py log-issue"
+alias mtfdash-log="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py log-issue"
+alias mtfdash-register="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py register"
+alias mtfdash-rclone="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py rclone-delegate"
 alias agy-mtfdash="python3 ${IRISLIME_ROOT}/tools/agy_mtfdash_bridge.py"
 alias llama-mtfdash="python3 ${IRISLIME_ROOT}/tools/llamacpp_mtfdash_bridge.py"
 
