@@ -211,6 +211,12 @@ alias clip2files="uv run python ${IRISLIME_ROOT}/tools/clip2files"
 alias pack2clip=pto
 alias patch_incoming=pti
 
+# Terminal Dashboard (mtfdash v1.8.6) POSIX / WSL Interop Wrapper
+mtfdash() {
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'C:\Users\feker\src\fekerr-dev\ps7\get-mtfterminaldashboard.ps1' "$@"
+}
+alias mtfdash-status="powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"& 'C:\\Users\\feker\\src\\fekerr-dev\\ps7\\get-mtfterminaldashboard.ps1' -isolate -slot status\""
+
 export IRISLIME_READY=1
 echo "[+] IrisLime shared configuration preferences cleanly evaluated."
 echo "[+] IrisLime environment is ready."

@@ -23,15 +23,15 @@ specifications for:
     (the default /bin/sh POSIX system shell interpreter).
   - Attempting to name a Linux alias or script 'dash' collides directly with /usr/bin/dash.
 * Standardized Linux Alias:
-  - The Linux/WSL environment standardizes on the alias 'mtfdash' (MTF Profile Dashboard):
-    alias mtfdash="powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'C:\\Users\\feker\\src\\fekerr-dev\\ps7\\Get-TerminalDashboard.ps1'"
+  - The Linux/WSL environment standardizes on the alias 'mtfdash' (MTF Profile Dashboard v1.8.6):
+    mtfdash() { powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'C:\Users\feker\src\fekerr-dev\ps7\get-mtfterminaldashboard.ps1' "$@"; }
 
 3. WSL UBUNTU CLI PARTICIPATION IN [DASH] / MTFDASH
 * Shared Interop Telemetry Bridge:
   - Ubuntu sessions write local Linux subsystem status (Intel oneAPI version,
     OpenVINO CMake paths, active virtual environment, container uptime) to a shared
     JSON status pipe: 'logs/wsl_node_telemetry.json'.
-  - Get-TerminalDashboard.ps1 ingests 'logs/wsl_node_telemetry.json' during render
+  - get-mtfterminaldashboard.ps1 ingests 'logs/wsl_node_telemetry.json' during render
     passes to display a unified multi-OS matrix panel:
     [HOST: Win11 Core12] <---> [GUEST: WSL2 Ubuntu 26.04 LTS]
 * Lightweight POSIX Header Metronome:
@@ -46,7 +46,7 @@ specifications for:
   - Exception Gate: Multiple terminal windows for agy are prohibited unless
     explicitly flagged for isolated sandbox experiments (--experimental-multi-window).
 * Dashboard Visibility for AGY Tasks:
-  - Get-TerminalDashboard.ps1 will dynamically inspect .system_generated/tasks/
+  - get-mtfterminaldashboard.ps1 will dynamically inspect .system_generated/tasks/
     and brain/ conversation logs to monitor agy status.
   - Display AGY Telemetry Panel inside mtfdash:
     - Primary Core Status: [AGY CORE ACTIVE] / [IDLE]
@@ -54,8 +54,8 @@ specifications for:
     - Active Subagent Count & Background Task Heartbeats
 
 5. TODO & BACKLOG INTEGRATION ITEMS
-* [ ] WSL Interop Bridge: Update Get-TerminalDashboard.ps1 to parse wsl_node_telemetry.json.
-* [ ] POSIX Alias & Header: Add 'alias mtfdash' and 'mtfdash-status' into config_env to prevent /usr/bin/dash collision.
+* [ ] WSL Interop Bridge: Update get-mtfterminaldashboard.ps1 to parse wsl_node_telemetry.json.
+* [x] POSIX Alias & Header: Add 'mtfdash' bash function and 'mtfdash-status' into config_env to prevent /usr/bin/dash collision.
 * [ ] AGY Single-Core Guard: Implement tools/agy_core_guard.py to prevent accidental
       duplicate agy window launches.
 * [ ] AGY Panel in mtfdash: Add active agy task & subagent metronome widget to mtfdash.
