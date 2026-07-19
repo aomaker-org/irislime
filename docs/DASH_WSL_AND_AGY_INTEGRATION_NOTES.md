@@ -24,7 +24,7 @@ specifications for:
   - Attempting to name a Linux alias or script 'dash' collides directly with /usr/bin/dash.
 * Standardized Linux Alias:
   - The Linux/WSL environment standardizes on the alias 'mtfdash' (MTF Profile Dashboard v1.8.6):
-    mtfdash() { powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'C:\Users\feker\src\fekerr-dev\ps7\get-mtfterminaldashboard.ps1' "$@"; }
+    mtfdash() { pwsh.exe -NoProfile -ExecutionPolicy Bypass -File 'C:\Users\feker\src\fekerr-dev\ps7\Get-TerminalDashboard.ps1' "$@"; }
 
 3. WSL UBUNTU CLI PARTICIPATION IN [DASH] / MTFDASH
 * Shared Interop Telemetry Bridge:

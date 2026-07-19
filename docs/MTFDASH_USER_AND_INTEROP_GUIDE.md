@@ -28,7 +28,7 @@
   # Invoked via profile function or direct script call:
   mtfdash -slot auto -interval 5
   ```
-  *Backing Engine:* `ps7/get-mtfterminaldashboard.ps1`
+  *Backing Engine:* `ps7/Get-TerminalDashboard.ps1`
 
 * **WSL2 Ubuntu Guest Node (Bash CLI):**
   ```bash

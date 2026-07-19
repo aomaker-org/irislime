@@ -213,9 +213,9 @@ alias patch_incoming=pti
 
 # Terminal Dashboard (mtfdash v1.8.6) POSIX / WSL Interop Wrapper
 mtfdash() {
-    powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'C:\Users\feker\src\fekerr-dev\ps7\get-mtfterminaldashboard.ps1' "$@"
+    pwsh.exe -NoProfile -ExecutionPolicy Bypass -File 'C:\Users\feker\src\fekerr-dev\ps7\Get-TerminalDashboard.ps1' "$@"
 }
-alias mtfdash-status="powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"& 'C:\\Users\\feker\\src\\fekerr-dev\\ps7\\get-mtfterminaldashboard.ps1' -isolate -slot status\""
+alias mtfdash-status="pwsh.exe -NoProfile -ExecutionPolicy Bypass -Command \"& 'C:\\Users\\feker\\src\\fekerr-dev\\ps7\\Get-TerminalDashboard.ps1' -isolate -slot status\""
 alias mtfdash-nodes="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py discover"
 alias mtfdash-members="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py discover"
 alias mtfdash-matrix="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py discover"
@@ -234,7 +234,7 @@ rclone() {
 }
 
 # Auto-register WSL Node Heartbeat in local disk mesh
-python3 "${IRISLIME_ROOT}/tools/mtfdash_node_manager.py" register --narrative "WSL Ubuntu shell session loaded" >/dev/null 2>&1 || true
+python3 "${IRISLIME_ROOT}/tools/mtfdash_node_manager.py" register --narrative "WSL Ubuntu shell session loaded" || true
 
 export IRISLIME_READY=1
 echo "[+] IrisLime shared configuration preferences cleanly evaluated."
