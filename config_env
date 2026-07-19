@@ -219,6 +219,8 @@ alias mtfdash-status="powershell.exe -NoProfile -ExecutionPolicy Bypass -Command
 alias mtfdash-nodes="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py discover"
 alias mtfdash-send="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py send-cmd"
 alias mtfdash-inbox="python3 ${IRISLIME_ROOT}/tools/mtfdash_node_manager.py process-inbox"
+alias agy-mtfdash="python3 ${IRISLIME_ROOT}/tools/agy_mtfdash_bridge.py"
+alias llama-mtfdash="python3 ${IRISLIME_ROOT}/tools/llamacpp_mtfdash_bridge.py"
 
 # WSL to Win11 Rclone Bridge
 rclone() {
