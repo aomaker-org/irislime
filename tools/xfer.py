@@ -1,11 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # ==============================================================================
 # IDENTIFIER:  tools/xfer.py
 # AUTHOR:      fekerr & Gemini
 # VERSION:     1.7.0
 # TIMESTAMP:   20260714_0850
 # ==============================================================================
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import os
 import sys
