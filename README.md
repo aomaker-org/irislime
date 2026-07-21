@@ -1,5 +1,7 @@
 # IrisLime Core Engine Integration Platform
 
+Note: Files in this repo are being reorganized as a major refactor into the aomaker-org/edge-ai repo.
+
 Welcome to the IrisLime core local validation and edge AI workspace. This platform acts as an automated, unified integration layer optimized specifically for the Ubuntu 26.04 LTS / WSL2 subsystem running on Core12 multi-backend workstation architectures.
 
 The repository manages advanced local hardware acceleration implementations (Intel SYCL, OpenVINO, and Vulkan) for language model inference while serving as a local computing sandbox for model training and lossy text data compression research.
