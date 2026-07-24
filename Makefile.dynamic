@@ -1,0 +1,29 @@
+# Makefile.dynamic
+# Prototype for dynamically loading active configurations and handling missing subtrees.
+
+# 1. Glob all enabled configurations (*.mk) in subdirectories
+# This will ignore anything named *.mk.disabled or *_mk
+ENABLED_MODULES := $(wildcard infra/make/*.mk)
+# In a real scenario, you could dynamically search all subdirectories:
+# ENABLED_MODULES := $(wildcard */*.mk) $(wildcard */*/*.mk)
+
+# 2. Safely include them using -include so missing trees don't break the build
+-include $(ENABLED_MODULES)
+
+# 3. Demonstrate target
+.PHONY: all list-modules
+
+all: list-modules
+
+list-modules:
+	@echo "========================================================="
+	@echo " Dynamic Makefile Module Loader Prototype"
+	@echo "========================================================="
+	@echo "Enabled modules found and loaded:"
+	@for mod in $(ENABLED_MODULES); do \
+		echo "  [+] $$mod"; \
+	done
+	@echo "========================================================="
+	@echo "To 'disable' a module, rename it from .mk to ._mk or .mk.disabled"
+	@echo "If an entire tree is missing, the -include directive fails silently,"
+	@echo "allowing the build to adapt without breaking."
