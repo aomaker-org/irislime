@@ -87,3 +87,7 @@ echo "hmm"
 
 # end of todo.md
 
+
+- [ ] **Infrastructure / Environment Checks: WSL-Aware Disk Space Queries**
+      - Target: Any pre-flight checks validating disk capacity (e.g., `min_required_disk_space_gb` in matrix controls).
+      - Action: Ensure disk space queries are WSL-aware. They must query the underlying Windows Host capacity (e.g., via `wmic` or Powershell interoperability through `/mnt/c`) rather than relying on abstract Linux block device limits which do not accurately reflect true NVMe capacity under WSL2 dynamically allocating VHDXs.
