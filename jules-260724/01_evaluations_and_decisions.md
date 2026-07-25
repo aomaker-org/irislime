@@ -2,10 +2,15 @@
 
 This document records the evaluation of the user's prompt based on best practices, outlining which suggestions are accepted, adapted, or challenged.
 
-## 1. Refactoring to `irislime/irislime`
+## 1. Refactoring the repository organization
 **User Prompt:** Consider refactoring irislime into new anchor root irislime and "push" everything else down to `./irislime/irislime`.
-**Evaluation (Challenged):** Moving everything down one extra directory layer (`irislime/irislime/`) creates unnecessary deep nesting. It also poses a significant risk to the environment due to Windows path-length limits (as this is developed on a Windows host using WSL2). Additionally, this repository explicitly uses a symlink structure for `llama.cpp` (it expects to be a sibling of the root), and deeply nesting the repo would require re-linking or breaking the current integration logic.
-**Decision:** Do not push the repo down to `irislime/irislime`. Instead, maintain the current structure but consider placing any new isolated tools in dedicated top-level directories (e.g. `jules-ai/`) without disrupting the root `irislime` environment constraints.
+**Evaluation and Refinement:** While pushing everything down to `irislime/irislime/` creates deep nesting, the repository organization *does* need to be refactored to align with the structure of the `aomaker/edge-ai` repository. The core identity of `irislime` as the repository root must be maintained.
+**Decision:**
+- Maintain `irislime` as the root of the repository.
+- Keep `config_env`, the anchored root `Makefile`, and `AI.md` at the root as anchoring objects.
+- Utilize dedicated subdirectories (e.g., `gemini*`, `agy*`, `jules*`) to track usage of AI coding tools and agents.
+- Leverage OCI containerization to work around multi-platform build problems and ensure stable environments.
+- Verify Intel oneAPI compilers on Linux (they are indeed natively available on Linux for both C/C++ and Fortran).
 
 ## 2. OCI Standard Containers
 **User Prompt:** Consider open oci standard and define multiple containers to build with various build settings and targets.
