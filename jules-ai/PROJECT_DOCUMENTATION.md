@@ -15,7 +15,7 @@ The workspace is organized into explicit structural domains to separate engine s
 * **`jules-ai/`** - Dynamic project documentation and logic isolation directory.
 
 ## Core Operational Guardrails
-* **The Immutable Logging Paradigm:** Practice a strict "never delete, always append" forensic logging philosophy for file records and transaction tracking. Read-only scripts like `tools/enforce_readonly.sh` help assist this on archives without modifying git internals.
+* **The Immutable Logging Paradigm:** Practice a strict "never delete, always append" forensic logging philosophy for file records and transaction tracking. The use of read-only enforcement on archives remains an open exploration (demonstrated via `tools/enforce_readonly.sh`) rather than an active restriction.
 * **Cross-Platform Path Alignment:** Never utilize virtualized drive-letter mappings (`G:`, `H:`). All data references between host Windows and guest Linux boundaries must evaluate via native cross-platform loopbacks (`\\wsl.localhost\Ubuntu-24.04\`) or localized home nodes (`--cd ~`).
 * **Environment Isolation Guardrails:** All Python execution steps must route exclusively through the native `uv` toolchain manager. Avoid contaminating global system environments by running self-contained, ephemeral sandboxes (`uv run`).
 

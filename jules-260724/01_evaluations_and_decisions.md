@@ -19,11 +19,11 @@ This document records the evaluation of the user's prompt based on best practice
 
 ## 3. Read-Only Filesystem Attributes (Artifacts vs Source)
 **User Prompt:** Always append or create new files. Do not overwrite files. Consider maintaining read-only a filesystem attributes on all files to facilitate/assist this.
-**Evaluation and Refinement:** Applying read-only attributes to files under active Git management breaks typical workflows. However, applying these attributes to generated artifacts (formatted logs, telemetry, build objects) is a strong safeguard.
+**Evaluation and Refinement:** Applying read-only attributes to files under active Git management breaks typical workflows. While it was considered for generated artifacts, read-only enforcement remains an open idea and may not be actively utilized.
 **Decision:**
 - Keep active source code writable for normal Git operations.
-- Enforce read-only states strictly on generated artifacts and telemetry data.
-- Created `tools/enforce_readonly.sh` to demonstrate locking down archived logs.
+- The concept of enforcing read-only states on generated artifacts and telemetry data remains an open exploration.
+- Created `tools/enforce_readonly.sh` purely as an experimental demonstration for locking down archived logs, rather than an enforced rule.
 - Explore manifest/ledger methods (like `.stub` or `.pointer` files) to replace large local zip/tarball files on constrained machines, pointing to where they have been migrated in colder cloud storage.
 
 ## 4. Gitoxide (`gix`), Manifest Tools, and AI Model Management
