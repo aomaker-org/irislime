@@ -23,4 +23,6 @@ The workspace is organized into explicit structural domains to separate engine s
 A hardened compilation wrapper that enforces safe process isolation for macro builds (`tools/build_runner.py`). Target matrices are defined within `matrix_control.json` and optionally modeled into `infra/Containerfile.matrix` following standard OCI parameters.
 
 ## Storage Matrix and External Tracking
-* Storage arrays span NVMe arrays (`gaom:`, `gdrive:`) using external manifest tools. `rclone` acts as the standard ingress/egress tool for cold storage telemetry, mitigating git repository bloat.
+* Storage arrays span NVMe and cloud arrays (`gaom:`, `gdrive:`, `onedrive:`) using external manifest tools.
+* `rclone` and associated "chunker" mounts act as the standard ingress/egress tool for migrating large models and cold storage telemetry. This architecture avoids Git repository bloat.
+* To conserve space on developer constrained machines, large local binaries/archives should be managed via manifest trackers (e.g. DVC) or replaced with `.stub`/`.pointer` files mapping to their cloud equivalents.

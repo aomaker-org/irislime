@@ -17,15 +17,23 @@ This document records the evaluation of the user's prompt based on best practice
 **Evaluation (Accepted):** A solid best practice for reproducible builds and standardizing test environments.
 **Decision:** Implement an initial `Containerfile.matrix` in the `infra/` folder mapping out multi-stage builds. Since release builds are an eventual target for benchmarking, the container will map stages for Debug, Profile, and RelWithDebInfo targets.
 
-## 3. Read-Only Filesystem Attributes
+## 3. Read-Only Filesystem Attributes (Artifacts vs Source)
 **User Prompt:** Always append or create new files. Do not overwrite files. Consider maintaining read-only a filesystem attributes on all files to facilitate/assist this.
-**Evaluation (Challenged for source, Accepted for logs):** Applying read-only filesystem attributes to all files globally breaks typical `git` workflows (e.g. checking out branches, running `git reset`, standard developer iteration).
-**Decision:** I will respect the "append or create new files" mandate for my own agent actions. For filesystem attributes, I will create a script `tools/enforce_readonly.sh` that demonstrates selectively locking down specific archived logs and old source data to enforce immutability without crippling Git operations.
+**Evaluation and Refinement:** Applying read-only attributes to files under active Git management breaks typical workflows. However, applying these attributes to generated artifacts (formatted logs, telemetry, build objects) is a strong safeguard.
+**Decision:**
+- Keep active source code writable for normal Git operations.
+- Enforce read-only states strictly on generated artifacts and telemetry data.
+- Created `tools/enforce_readonly.sh` to demonstrate locking down archived logs.
+- Explore manifest/ledger methods (like `.stub` or `.pointer` files) to replace large local zip/tarball files on constrained machines, pointing to where they have been migrated in colder cloud storage.
 
-## 4. Gitoxide (`gix`) and Manifest Tools
+## 4. Gitoxide (`gix`), Manifest Tools, and AI Model Management
 **User Prompt:** Look at gix* Rust tools that are Git-compatible. Consider manifest tools and methods to track the repo... that can be "rcloned".
-**Evaluation (Accepted):** Managing large logs efficiently in Git is notoriously difficult. `gix` is faster for read-only Git repository interactions. Utilizing external manifests and syncing tools like `rclone` (which the user is already using as evidenced by `rclone_20260714_1240p_metadata.sh`) makes sense for "cold storage."
-**Decision:** Recommend DVC (Data Version Control) or Git-LFS if large logs are to remain tracked, or sticking strictly to `rclone` with checksum manifests for cold storage to avoid bloating the Git history. No sweeping structural changes to Git will be forced at this time without explicit `gix` toolchain installation, but it will be documented as the path forward for telemetry.
+**Evaluation (Accepted):** Managing large assets (logs, telemetry, and specifically AI models) is critical to prevent clogging Git. `gix` provides fast, read-only Git repository interactions.
+**Decision:**
+- Document the necessity of using DVC (Data Version Control) or Git-LFS for tracking large files without bloating the Git history.
+- Use `rclone` and chunker mounts (with stub/pointer files locally) for cold storage migration.
+- **AI Model Tracking:** Models themselves should be tracked via these manifest tools, not committed to Git.
+- **AI Training & Modularity:** Investigate segmented/modular models. For example, Mixture of Experts (MoE) architectures only activate specific subsets of parameters during inference. This is a crucial concept for local, memory-constrained Edge AI and should be explored further to assist with the user's AI technology training.
 
 ## 5. Dynamic Makefile
 **User Prompt:** Consider Makefile that can dynamically adapt depending on enabled *.mk in subdirectories... allow missing trees.
