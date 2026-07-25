@@ -1,0 +1,66 @@
+# ==============================================================================
+# Runner Configuration Blueprint (Scaffold)
+# Purpose: Replaces matrix_control.json to allow human-readable comments,
+# granular on/off switches for targets, and evolution towards OCI deployment.
+# ==============================================================================
+
+global_settings:
+  min_required_disk_space_gb: 5.0
+  test_model: "../models/qwen2.5-0.5b-instruct-q4_k_m.gguf"
+  hardware_db_path: "infra/cache/hardware_profile.json"
+
+# ------------------------------------------------------------------------------
+# Build & Test Targets
+# ------------------------------------------------------------------------------
+targets:
+  openvino:
+    # Master switch for the entire backend
+    enabled: true
+    parallel_jobs: 1
+
+    # Granular Profile Control
+    profiles:
+      debug:
+        enabled: true
+        track_telemetry: true
+      # Profiling builds are scaffolded but disabled for this current integration branch
+      relwithdebinfo:
+        enabled: false
+        track_telemetry: true
+      release:
+        enabled: true
+        track_telemetry: true
+
+    # Test Matrix Parameters
+    tests:
+      enabled: true
+      fail_fast: false
+      timeout_seconds: 1800
+      context_sizes: [128, 512, 2048]
+      batch_sizes: [16, 64, 128]
+      gpu_layers_offload: [-1, 0]
+
+    # Backend-specific environment variables injected prior to build
+    env:
+      GGML_OPENVINO_DEVICE: "CPU"
+      ONEAPI_DEVICE_SELECTOR: "opencl:1"
+      ZES_ENABLE_SYSMAN: "1"
+
+  # Additional backends follow the same granular schema
+  sycl:
+    enabled: true
+    parallel_jobs: 1
+    profiles:
+      debug:
+        enabled: true
+      relwithdebinfo:
+        enabled: false
+      release:
+        enabled: true
+    env:
+      ONEAPI_DEVICE_SELECTOR: "level0:gpu"
+
+  # Experimental targets could be defined here and kept entirely 'disabled: true'
+  # until required, avoiding "velocity exceeding human cognition."
+  experimental_gpu_v2:
+    enabled: false

@@ -19,6 +19,14 @@ ENV CMAKE_BUILD_TYPE=Debug
 # Add your debug specific logic here
 RUN echo "Building Debug Target"
 
+# Profiling Target (RelWithDebInfo)
+FROM builder-base AS target-profile
+ENV CMAKE_BUILD_TYPE=RelWithDebInfo
+ENV ENABLE_PROFILING=ON
+# Note: This profile is currently marked disabled in matrix_control configuration
+# but is scaffolded here for future integration mapping.
+RUN echo "Building Profiling Target"
+
 # Release Target (Benchmarking)
 FROM builder-base AS target-release
 ENV CMAKE_BUILD_TYPE=Release

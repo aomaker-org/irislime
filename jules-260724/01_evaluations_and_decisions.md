@@ -39,3 +39,11 @@ This document records the evaluation of the user's prompt based on best practice
 **User Prompt:** Consider Makefile that can dynamically adapt depending on enabled *.mk in subdirectories... allow missing trees.
 **Evaluation (Accepted):** Make natively supports dynamic inclusion and missing trees via `wildcard` and `-include`.
 **Decision:** Create a prototype `Makefile.dynamic` to demonstrate how Make can optionally build targets based on the presence of `.mk` versus disabled `_mk` extensions.
+
+## 6. Runner Execution Configuration Refactoring
+**User Prompt:** Scaffold or document a plan to refactor `matrix_control.json` into a commentable source code format (e.g., YAML or Python) placed in `./runner/*` to allow granular toggling of build targets/tests, evolving cleanly with OCI.
+**Evaluation (Accepted):** JSON does not support comments, which drastically reduces readability for human operators trying to toggle complex build matrices (like disabling `RelWithDebInfo` or experimental targets). Evolving this into YAML inside a dedicated `runner/` namespace aligns with standard CI/CD and OCI container practices.
+**Decision:**
+- Re-scaffolded `RelWithDebInfo` profiles but explicitly set them to `"enabled": false` to preserve the historical tree options without forcing them to build.
+- Created `runner/matrix_control.yaml` as a blueprint showing how configuration can be nested with human-readable explanations, root-level and target-level switches, and parameter definitions.
+- The next step in this project lifecycle will be updating `build_runner.py` and `test_runner.py` to ingest this YAML format natively, unifying the test and build pipelines under the `runner/` infrastructure.

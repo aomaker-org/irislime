@@ -17,6 +17,12 @@
           "track_telemetry": true
         },
         {
+          "name": "RelWithDebInfo",
+          "suffix": "relwithdebinfo",
+          "track_telemetry": true,
+          "enabled": false
+        },
+        {
           "name": "Release",
           "suffix": "release",
           "track_telemetry": true
@@ -44,6 +50,12 @@
           "name": "Debug",
           "suffix": "debug",
           "track_telemetry": true
+        },
+        {
+          "name": "RelWithDebInfo",
+          "suffix": "relwithdebinfo",
+          "track_telemetry": true,
+          "enabled": false
         },
         {
           "name": "Release",
