@@ -206,9 +206,9 @@ if ! grep -q "aliaser()" "$HOME/.bashrc"; then
 # Print specific line from a file instantly and exit
 sedline() {
     iython /home/fekerr/src/fekerr-dev/tools/pipe2clip.py'
-alias br='uv run /home/fekerr/src/irislime/tools/build_runner.py'
-alias tr='uv run /home/fekerr/src/irislime/tools/test_runner.py'
-alias btr='uv run /home/fekerr/src/irislime/tools/bbptests_runner.py --profile vulkan_debug'
+alias br='uv run "${IRISLIME_ROOT:-$HOME/src/irislime}"/tools/build_runner.py'
+alias tr='uv run "${IRISLIME_ROOT:-$HOME/src/irislime}"/tools/test_runner.py'
+alias btr='uv run "${IRISLIME_ROOT:-$HOME/src/irislime}"/tools/bbptests_runner.py --profile vulkan_debug'
 alias sign='uv run python /home/fekerr/src/fekerr-dev/tools/hash_signer.py sign'
 alias verify='uv run python /home/fekerr/src/fekerr-dev/tools/hash_signer.py verify'
 alias rl='unset FEKERR_DEV_READY; unset FEK_RUN_TYPE; source ~/.bashrc'

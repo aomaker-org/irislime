@@ -50,7 +50,7 @@ bootstrap-headers: ## Fetches missing Khronos OpenCL C++ bindings autonomously i
 		echo "[+] Khronos OpenCL C++ headers securely mapped to workspace tracking assets."; \
 	fi
 
-build-openvino: bootstrap-headers
+build-openvino: check-engine-submodule bootstrap-headers
 	@mkdir -p logs/builds/openvino_profile
 	@if [ ! -d "$(BUILD_DIR)" ] || [ ! -f "$(BUILD_DIR)/CMakeCache.txt" ]; then \
 		echo "[!] ALERT: CMake cache missing in $(BUILD_DIR). Launching self-healing generation pass..." ; \

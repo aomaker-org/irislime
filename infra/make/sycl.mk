@@ -16,7 +16,7 @@ build-sycl clean-sycl: LITERT_LINK_DIR  = $(if $(filter debug,$(LITERT_PROFILE))
 
 .PHONY: build-sycl clean-sycl
 
-build-sycl: bootstrap-headers ## Configure and compile Intel SYCL target
+build-sycl: check-engine-submodule bootstrap-headers ## Configure and compile Intel SYCL target
 	@echo "[Make] Profile Target Locked: LITERT_PROFILE=$(LITERT_PROFILE)"
 	@echo "[Make] Initializing Intel oneAPI SYCL inside: $(BUILD_DIR)"
 	@mkdir -p $(BUILD_DIR)
