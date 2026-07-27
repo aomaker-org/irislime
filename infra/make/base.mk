@@ -119,3 +119,14 @@ clean-base:
 	@echo "[Clean] Removing build/base_* directories"
 	rm -rf build/base_*
 
+
+.PHONY: check-engine-submodule
+
+ENGINE_DIR ?= llama.cpp
+
+check-engine-submodule: ## Dynamically check and fetch engine submodule if uninitialized
+	@if [ ! -f "$(ENGINE_DIR)/CMakeLists.txt" ]; then \
+		echo "[irislime] Missing engine submodule detected at '$(ENGINE_DIR)'."; \
+		echo "[irislime] Hydrating submodule on-demand via git..."; \
+		git submodule update --init --recursive $(ENGINE_DIR); \
+	fi

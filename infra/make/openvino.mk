@@ -1,3 +1,4 @@
+include infra/make/base.mk
 # ==============================================================================
 # Filename:    infra/make/openvino.mk
 # Purpose:     Intel OpenVINO Inference Acceleration Compilation Blueprint

@@ -1,3 +1,4 @@
+include infra/make/base.mk
 # ==============================================================================
 # Path:         infra/make/sycl.mk
 # Purpose:      Intel oneAPI SYCL Engine Compilation Blueprint (Profile-Aware)
