@@ -51,7 +51,7 @@ echo "------------------------------------------------------------------"
 
 if [ -f "${MODEL_PATH}" ]; then
     echo "[*] Executing llama-bench against model target..."
-    BENCH_OUT=$("${BENCH_BIN}" -m "${MODEL_PATH}" -r 2 -o json 2>/dev/null || true)
+    BENCH_OUT=$("${BENCH_BIN}" -m "${MODEL_PATH}" -r 2 -o json 2> "${LOG_DIR}/llama_bench_err.log" || true)
     
     if [ -n "${BENCH_OUT}" ]; then
         echo "${BENCH_OUT}" > "${LOG_DIR}/bench_${TIMESTAMP}.json"
@@ -63,7 +63,7 @@ if [ -f "${MODEL_PATH}" ]; then
     fi
 else
     echo "[!] Model file absent at ${MODEL_PATH}. Executing synthetic benchmark pass..."
-    BENCH_OUT=$("${BENCH_BIN}" -r 2 -o json 2>/dev/null || true)
+    BENCH_OUT=$("${BENCH_BIN}" -r 2 -o json 2> "${LOG_DIR}/llama_bench_err.log" || true)
     echo "${BENCH_OUT}" > "${LOG_DIR}/bench_synthetic_${TIMESTAMP}.json"
     echo "${TIMESTAMP},${GIT_HASH},vulkan_debug,synthetic,0.0,0.0,SUCCESS_SYNTHETIC" >> "${LOG_CSV}"
 fi

@@ -37,8 +37,9 @@ Integrity-Hash: 8492c10b789d012e345f678a901b234c567d890e123f456a789b012c345e6789
 * Git Remote History Preservation: When consolidating or removing redundant local AI directive files, preserve their historical commits on remote Git branches. Document all local file removals/archivals in './agy/log/archival.log'.
 * Branch Preservation: NEVER delete local or remote Git branches. All branches are retained for forensic lineage tracking.
 
-5. MAXIMUM OBSERVABILITY & STREAMING INTEGRITY
-* Zero Stream Discarding: NEVER pipe output streams to /dev/null unless strictly justified with explicit comments detailing engineering constraints.
+5. MAXIMUM OBSERVABILITY & STREAMING INTEGRITY (*** NO PIPE TO NULL ***)
+* STRICT NO PIPE TO NULL: NEVER pipe standard output or standard error to /dev/null across any script, command, tool, or makefile recipe. Hide nothing. Everything must remain 100% observable.
+* Forensic Audit Redirection: If output streams must be redirected away from active stdout/stderr to prevent terminal clutter, route them directly into timestamped audit log files under 'logs/' or '/tmp/' (e.g. '2>> /tmp/audit.log').
 * Stream Visibility: Makefiles and test scripts must stream text directly to stdout/stderr rather than hiding output in internal background processes.
 * Diagnostic Tracing: Use 'pipe2log' or 'pipe2clip' helpers to log diagnostic execution metrics.
 
