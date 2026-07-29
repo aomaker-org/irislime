@@ -77,3 +77,12 @@ logs/
 tools/bin/
 
 pr-36/local_artifacts/
+
+# --- Agent Inbox / Outbox Inter-Process Buffers ---
+inbox/*
+!inbox/.gitkeep
+!inbox/archive/
+inbox/archive/*
+!inbox/archive/.gitkeep
+outbox/*
+!outbox/.gitkeep
