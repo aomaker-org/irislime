@@ -35,11 +35,11 @@ SECTION 4: AI WORKFLOW, WATCHDOG & TELEMETRY ADVANCEMENTS
 190. [x] Event-Driven Low-Overhead Telemetry: Implement asynchronous background logging thread in build_runner.py reading /proc/stat and /proc/meminfo at 1Hz with gated host queries.
 200. [x] AGY Credit & Token Preservation Guard: Deploy tools/token_throttle_guard.py to enforce 50%/5h quota throttling gates.
 210. [x] Terminal TUI Integration (AGY / Jules): Test interactive multi-file workspace editing and automated planning/execution cycles within strict directory trust bounds.
-220. [x] WSL Ubuntu [mtfdash] Integration: Enable Ubuntu bash CLI to invoke host Get-TerminalDashboard.ps1 via 'mtfdash' alias.
+220. [x] Obsolete mftdash / mtfdash Purge & Terminal Integration: Purge obsolete mftdash references across repository.
 
 SECTION 5: GIT WORKSPACE MAINTENANCE & CLOUD AUTOMATION
 230. [x] Branch Consolidation Loop: Audit all local and remote feature branches, merging and closing tracking lines cleanly while preserving commit history.
-240. [ ] GitHub Branch Protection Rules: Enforce strict linear commit tracking histories without force-push permissions.
+240. [x] GitHub Branch Protection Rules: Enforce strict linear commit tracking histories without force-push permissions.
 250. [ ] GCP Cryptographic Provisioning & Task Injection: Activate Google Drive/Tasks API for Aomaker-Workspace-Automation and test push_to_workspace.py.
 260. [ ] Executive Elevator Pitch Refinement: Internalize Profile A (Infrastructure & Stability Engine) and Profile B (Hardware-Aware AI Optimizer) positioning.
 
