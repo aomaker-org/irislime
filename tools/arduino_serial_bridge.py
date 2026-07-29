@@ -104,19 +104,20 @@ def audit_and_connect_arduino():
     # 3. Connection Instructions & Bridge
     print("----------------------------------------------------------", flush=True)
     if arduino_port:
-        print(f"[+] Attempting serial handshake on target: {arduino_port}...", flush=True)
-        try:
-            with serial.Serial(arduino_port, 115200, timeout=2) as ser:
-                ser.write(b"PING\n")
-                time.sleep(0.5)
-                resp = ser.readline().decode("utf-8", errors="ignore").strip()
-                print(f"[+] Arduino Response > {resp if resp else 'ACK (No string output)'}", flush=True)
-                
-                ts = time.strftime("%Y-%m-%d %H:%M:%S")
-                with open(telemetry_csv, "a", encoding="utf-8") as f:
-                    f.write(f"{ts},{arduino_port},Arduino_USB,CONNECTED,Handshake_OK\n")
-        except Exception as e:
-            print(f"[!] Serial connection attempt note on {arduino_port}: {e}", flush=True)
+        print(f"[+] Attempting serial connection on target: {arduino_port}...", flush=True)
+        for baud in [9600, 115200]:
+            try:
+                with serial.Serial(arduino_port, baud, timeout=2) as ser:
+                    time.sleep(1.0)
+                    if ser.in_waiting > 0:
+                        resp = ser.read_all().decode("utf-8", errors="ignore").strip()
+                        print(f"[+] Arduino Response ({baud} baud) > {resp}", flush=True)
+                        ts = time.strftime("%Y-%m-%d %H:%M:%S")
+                        with open(telemetry_csv, "a", encoding="utf-8") as f:
+                            f.write(f"{ts},{arduino_port},Arduino_USB,CONNECTED,{baud}Baud_OK\n")
+                        break
+            except Exception as e:
+                print(f"[!] Serial connection attempt note on {arduino_port} ({baud} baud): {e}", flush=True)
     else:
         print("[!] NOTICE: Physical Arduino USB device not currently bound to WSL2.")
         print("    To bind a physical Arduino plugged into Windows host to WSL2 (usbipd v4+ syntax):")
