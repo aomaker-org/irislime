@@ -153,6 +153,12 @@ export ISLM_USER="${ISLM_USER:-default_node}"
 export IRISLIME_MODELS_DIR="../models"
 export IRISLIME_TEST_MODEL="${IRISLIME_TEST_MODEL:-$IRISLIME_MODELS_DIR/tinyllama-1.1b-chat-v1.0.Q4_0.gguf}"
 
+# Core AI Model Storage Root & Presets (C:\AI_models POSIX Mapping)
+export LOCAL_AI_MODELS_DIR="${LOCAL_AI_MODELS_DIR:-/mnt/c/AI_models}"
+export WIN_AI_MODELS_DIR="${WIN_AI_MODELS_DIR:-C:\\AI_models}"
+export TINYLLAMA_GGUF_PATH="${TINYLLAMA_GGUF_PATH:-${LOCAL_AI_MODELS_DIR}/TinyLlama-1.1B-Chat-v1.0-GGUF/tinyllama-1.1b-chat-v1.0.Q2_K.gguf}"
+export DEEPSEEK_R1_GGUF_PATH="${DEEPSEEK_R1_GGUF_PATH:-${LOCAL_AI_MODELS_DIR}/DeepSeek-R1-Distill-Llama-8B-GGUF/DeepSeek-R1-Distill-Llama-8B-Q4_K_M.gguf}"
+
 # Hardware Acceleration and Debugging Settings
 export ZES_ENABLE_SYSMAN=1
 export DEBUGINFOD_CACHE_PATH="$HOME/.cache/gdb_symbols"

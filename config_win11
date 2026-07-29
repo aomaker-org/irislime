@@ -156,6 +156,12 @@ fi
 ps7() {
     "/c/Program Files/PowerShell/7/pwsh.exe" "$@"
 }
+to_win_path() {
+    wslpath -w "$1" 2>/dev/null || echo "$1"
+}
+to_wsl_path() {
+    wslpath -u "$1" 2>/dev/null || echo "$1"
+}
 pto() { 
     "${PYTHON_VENV_EXE}" "${IRISLIME_ROOT}/tools/patch_io.py" out "$@"
 }
