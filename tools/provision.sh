@@ -28,12 +28,10 @@ sudo apt-get install -y gpg gpg-agent wget curl build-essential cmake git \
 # ------------------------------------------------------------------------------
 echo "[*] Registering official Intel Software Product GPG keys..."
 
-# NECESSARY NULL PIPE: 'tee' writes its input stream out to both the designated 
-# key file path and standard output natively. We route stdout to null strictly
-# to prevent raw, unreadable binary cryptographic data from flooding the terminal screen.
+# Cryptographic key file generation
 wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | \
     gpg --dearmor | \
-    sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
+    sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /tmp/intel_gpg_key.log
 
 # ------------------------------------------------------------------------------
 # STEP 3: Bind Architecture Channels (Unified 2026 + OpenVINO Layout)
@@ -62,7 +60,7 @@ CORE_PACKAGES=(
 )
 
 # Call the host win11 CIM engine across the boundary to isolate processor name
-HOST_CPU=$(powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Processor).Name" 2>/dev/null || echo "Unknown")
+HOST_CPU=$(powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Processor).Name" 2>> /tmp/provision_audit.log || echo "Unknown")
 echo "[+] Host processor identified: ${HOST_CPU}"
 
 if echo "${HOST_CPU}" | grep -qE "i[0-9]-10"; then
@@ -160,7 +158,7 @@ if [ ! -d "$NVM_DIR" ]; then
     
     # NECESSARY NULL PIPE: Shifting directories back using 'cd -' inherently dumps 
     # the target destination path to stdout. We mute it to prevent operational path noise.
-    cd "$NVM_DIR" && git checkout v0.40.1 && cd - > /dev/null
+    cd "$NVM_DIR" && git checkout v0.40.1 && cd - > /tmp/nvm_checkout.log
     echo "[+] NVM runtime framework successfully anchored."
 else
     echo "[+] Idempotency Check Passed: NVM configuration confirmed active."
@@ -170,7 +168,7 @@ fi
 # STEP 6: Submodule Forensic Audit & Realignment Loop
 # ------------------------------------------------------------------------------
 echo "[*] Auditing Git submodule configuration status variables..."
-if git submodule status 2>/dev/null | grep -q "^-"; then
+if git submodule status 2>> /tmp/provision_audit.log | grep -q "^-"; then
     echo "[!] ALERT: Uninitialized Git submodules detected in workspace!"
     git submodule update --init --recursive
     echo "[+] Submodule tracking vectors successfully initialized."
@@ -212,7 +210,7 @@ alias btr='uv run "${IRISLIME_ROOT:-$HOME/src/irislime}"/tools/bbptests_runner.p
 alias sign='uv run python /home/fekerr/src/fekerr-dev/tools/hash_signer.py sign'
 alias verify='uv run python /home/fekerr/src/fekerr-dev/tools/hash_signer.py verify'
 alias rl='unset FEKERR_DEV_READY; unset FEK_RUN_TYPE; source ~/.bashrc'
-alias woof='powershell.exe -NoProfile -Command '\''[Console]::Beep(380, 80); [Console]::Beep(290, 120)'\'' 2>/dev/null &'
+alias woof='powershell.exe -NoProfile -Command '\''[Console]::Beep(380, 80); [Console]::Beep(290, 120)'\'' 2>> /tmp/provision_audit.log &'
 EOF
 
 # ------------------------------------------------------------------------------
@@ -234,10 +232,7 @@ if [ -f /opt/intel/oneapi/setvars.sh ]; then
     set -eu
 fi
 
-# NECESSARY NULL PIPE: 'command -v' outputs the full local filesystem path 
-# of the binary to stdout on success. We mute stdout strictly to prevent path 
-# noise from cluttering the operational UI while evaluating the exit code status.
-if command -v sycl-ls > /dev/null; then
+if command -v sycl-ls 2>> /tmp/provision_audit.log; then
     echo "=== [SYCL Device Inventory] ==="
     sycl-ls --ignore-device-selectors
 else

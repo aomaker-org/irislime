@@ -20,7 +20,7 @@ BENCH_BIN=""
 
 if [ -f "build/vulkan_debug/bin/llama-bench" ]; then
     BENCH_BIN="build/vulkan_debug/bin/llama-bench"
-elif command -v llama-bench >/dev/null 2>&1; then
+elif command -v llama-bench 2>> /tmp/run_bench_audit.log; then
     BENCH_BIN="$(command -v llama-bench)"
 fi
 
@@ -30,7 +30,7 @@ if [ -z "${BENCH_BIN}" ]; then
 fi
 
 TIMESTAMP=$(date -u +"%Y%m%d_%H%M%S")
-GIT_HASH=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+GIT_HASH=$(git rev-parse --short HEAD 2>> /tmp/run_bench_audit.log || echo "unknown")
 MODEL_PATH="${IRISLIME_TEST_MODEL:-../models/tinyllama-1.1b-chat-v1.0.Q4_0.gguf}"
 LOG_DIR="logs/benchmarks"
 mkdir -p "${LOG_DIR}"

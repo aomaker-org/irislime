@@ -3,7 +3,7 @@
 # PURPOSE: Query non-elevated Windows host thermal zone from WSL.
 
 powershell.exe -NoProfile -Command '
-Get-CimInstance -ClassName Win32_PerfFormattedData_Counters_ThermalZoneInformation 2>$null | ForEach-Object {
+Get-CimInstance -ClassName Win32_PerfFormattedData_Counters_ThermalZoneInformation | ForEach-Object {
     $c = [math]::Round($_.Temperature - 273.15, 1)
     [PSCustomObject]@{
         Zone    = $_.Name
