@@ -118,11 +118,11 @@ def audit_and_connect_arduino():
         except Exception as e:
             print(f"[!] Serial connection attempt note on {arduino_port}: {e}", flush=True)
     else:
-        print("[!] NOTICE: Physical Arduino USB device not currently bound to WSL2.", flush=True)
-        print("    To bind a physical Arduino plugged into Windows host to WSL2, run:")
-        print("    1. Open PowerShell on Windows host:  powershell.exe")
-        print("    2. List connected USB devices:       usbipd wsl list")
-        print("    3. Attach Arduino to WSL2:           usbipd wsl attach --busid <BUSID>")
+        print("[!] NOTICE: Physical Arduino USB device not currently bound to WSL2.")
+        print("    To bind a physical Arduino plugged into Windows host to WSL2 (usbipd v4+ syntax):")
+        print("    1. Open PowerShell on Windows host:  pwsh.exe")
+        print("    2. List connected USB devices:       usbipd list")
+        print("    3. Attach Arduino to WSL2:           usbipd attach --wsl --busid <BUSID>")
         print("    4. Target port will appear at:       /dev/ttyACM0 or /dev/ttyUSB0")
         
         ts = time.strftime("%Y-%m-%d %H:%M:%S")
