@@ -156,6 +156,9 @@ fi
 ps7() {
     "/c/Program Files/PowerShell/7/pwsh.exe" "$@"
 }
+mtfdash() {
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w "${IRISLIME_ROOT:-.}/fekerr-dev/ps7/Get-TerminalDashboard.ps1" 2>> /tmp/config_win11_audit.log || echo "C:\\fekerr-dev\\ps7\\Get-TerminalDashboard.ps1")" "$@"
+}
 to_win_path() {
     wslpath -w "$1" 2>> /tmp/config_win11_audit.log || echo "$1"
 }

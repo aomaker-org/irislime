@@ -35,7 +35,7 @@ SECTION 4: AI WORKFLOW, WATCHDOG & TELEMETRY ADVANCEMENTS
 190. [x] Event-Driven Low-Overhead Telemetry: Implement asynchronous background logging thread in build_runner.py reading /proc/stat and /proc/meminfo at 1Hz with gated host queries.
 200. [x] AGY Credit & Token Preservation Guard: Deploy tools/token_throttle_guard.py to enforce 50%/5h quota throttling gates.
 210. [x] Terminal TUI Integration (AGY / Jules): Test interactive multi-file workspace editing and automated planning/execution cycles within strict directory trust bounds.
-220. [ ] WSL Ubuntu [mtfdash] Integration: Enable Ubuntu bash CLI to invoke host Get-TerminalDashboard.ps1 via 'mtfdash' alias.
+220. [x] WSL Ubuntu [mtfdash] Integration: Enable Ubuntu bash CLI to invoke host Get-TerminalDashboard.ps1 via 'mtfdash' alias.
 
 SECTION 5: GIT WORKSPACE MAINTENANCE & CLOUD AUTOMATION
 230. [ ] Branch Consolidation Loop: Audit all local and remote feature branches, merging and closing tracking lines cleanly while preserving commit history.

@@ -217,7 +217,10 @@ alias clip2files="uv run python ${IRISLIME_ROOT}/tools/clip2files"
 alias pack2clip=pto
 alias patch_incoming=pti
 
-# Terminal Dashboard (mtfdash v1.8.6) POSIX / WSL Interop Wrapper
+# Terminal Dashboard (mtfdash Task 220) POSIX / WSL Interop Wrapper
+mtfdash() {
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w "${IRISLIME_ROOT:-.}/fekerr-dev/ps7/Get-TerminalDashboard.ps1" 2>> /tmp/config_env_audit.log || echo "C:\\fekerr-dev\\ps7\\Get-TerminalDashboard.ps1")" "$@"
+}
 
 # WSL to Win11 Rclone Bridge
 rclone() {
