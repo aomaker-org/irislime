@@ -4,8 +4,10 @@
 # Filename:     tools/files2clip
 # Purpose:      Pack multi-target workspace assets and wildcards for LLM context
 # Type:         Executable / Sourced via Python interpreter
+# Version:      2026.07.28-v1
 # Attribution:  fekerr & Gemini (20260715 Out-of-Tree Explicit Path Bypass)
 # ==============================================================================
+
 import os
 import sys
 import glob
@@ -13,8 +15,9 @@ import subprocess
 import hashlib
 import argparse
 
-MAX_TRUNCATE_SIZE = 1024 * 1024  # 1MB safety gate
-MAX_CLIPBOARD_BYTES = 250 * 1024 # 250 KB safety ceiling to prevent browser freezes
+VERSION = "2026.07.28-v1"
+MAX_TRUNCATE_SIZE = 1024 * 1024   # 1MB safety gate
+MAX_CLIPBOARD_BYTES = 250 * 1024  # 250 KB safety ceiling to prevent browser freezes
 
 def get_tracked_files(include_untracked=False):
     """Parses the git index to enforce out-of-tree and workspace asset tracking."""
@@ -92,6 +95,10 @@ def main():
         description="Pack specific workspace targets into the clipboard container."
     )
     parser.add_argument(
+        "-v", "--version", action="version", version=f"files2clip {VERSION}",
+        help="Show program's version number and exit."
+    )
+    parser.add_argument(
         "targets", nargs="*", default=["."],
         help="Target files, directories, or wildcard patterns"
     )
@@ -112,7 +119,7 @@ def main():
     
     timestamp = subprocess.run(["date", "+%Y%m%d_%H%M%S"], capture_output=True, text=True).stdout.strip()
     wrapped_stream = (
-        f"# Stream Frame: {timestamp}_Workspace_Context_Payload\n"
+        f"# Stream Frame: {timestamp}_Workspace_Context_Payload | Generator: files2clip-{VERSION}\n"
         f"* **Target Scope Count:** {len(files_to_pack)} resolved files\n"
         f"-------------\n\n"
         f"{content}\n"
@@ -145,6 +152,7 @@ def main():
             # Generate the lightweight pointer for the clipboard
             wrapped_stream = (
                 f"=== CLIPBOARD OVERFLOW PROTECTION ===\n"
+                f"Generator: files2clip-{VERSION}\n"
                 f"Status: Safety Threshold Exceeded ({MAX_CLIPBOARD_BYTES / 1024:.1f} KB)\n"
                 f"Total Target Assets Combined: {len(files_to_pack)}\n"
                 f"Unpacked Payload Size: {payload_bytes / 1024:.2f} KB\n"
@@ -197,12 +205,18 @@ def main():
 
     if copied:
         if payload_bytes > MAX_CLIPBOARD_BYTES:
-            print(f"[+] Protection Active: Summary pointer loaded into clipboard.")
+            print(f"[+] Protection Active: Summary pointer loaded into clipboard (v{VERSION}).")
         else:
-            print(f"[+] Bundle generated successfully ({len(files_to_pack)} assets). Pushed to clipboard.")
+            print(f"[+] Bundle generated successfully ({len(files_to_pack)} assets | v{VERSION}). Pushed to clipboard.")
     else:
         print("[X] System Routing Fault: Clipboard sub-system could not be accessed natively.", file=sys.stderr)
         sys.exit(1)
 
 if __name__ == "__main__":
     main()
+
+# ==============================================================================
+# End of File:  tools/files2clip
+# Version:      2026.07.28-v1
+# Status:       Clean EOF / Defensive Boundary Established
+# ==============================================================================
