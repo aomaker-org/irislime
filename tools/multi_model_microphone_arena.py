@@ -205,7 +205,7 @@ def execute_microphone_arena():
             resp, tps, elapsed = run_model_turn(llama_bin, model, mic_prompt)
             print(f"  [Mic: {model.name}] > {resp}\n", flush=True)
             
-            dialogue_history.append(f"**{model.stem} (Loop {loop}):** {resp}")
+            dialogue_history.append(f"**{model.stem} (Loop {loop_count}):** {resp}")
             model_efficiency_scores[model.name].append(tps)
 
             # Telemetry Log
@@ -214,7 +214,7 @@ def execute_microphone_arena():
                 f.write(f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')},{model.name},{tps:.2f},{current_temp_f:.1f},{delta_f:.1f},{ram_avail},MIC_PASS_OK\n")
 
         # 15-Minute Efficiency Bonus Turn Check
-        if (time.time() - last_15m_bonus_time) >= EFFICIENCY_BONUS_INTERVAL_SEC or loop == max_loops:
+        if (time.time() - last_15m_bonus_time) >= EFFICIENCY_BONUS_INTERVAL_SEC:
             last_15m_bonus_time = time.time()
             # Calculate most efficient model by average TPS
             avg_tps = {m_name: (sum(scores)/len(scores) if scores else 0) for m_name, scores in model_efficiency_scores.items()}
