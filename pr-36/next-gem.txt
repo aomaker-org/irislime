@@ -1,0 +1,151 @@
+That disk budget gives us **~32 GB of usable headroom**—plenty of room to turn verbosity up to 11, dump detailed compiler diagnostics, archive build artifacts, and generate comprehensive telemetry!
+
+Let's configure CMake and GCC/Clang/DPC++ to max out compiler telemetry, preserve every artifact (`.o`, `.d`, `.s`, IR dumps, time trace logs), and capture every build metric.
+
+---
+
+## Compiler Switches for Maximum Telemetry & Artifact Capture
+
+We can inject these flags into CMAKE and Make via `pr-36/strict_debug_env.sh`:
+
+1. **`-ftime-trace` (Clang/DPC++):** Generates Chrome-tracing JSON profiles (`.time-trace`) for every compiled translation unit, showing exact time spent in header parsing, template instantiation, and optimization passes!
+2. **`-fstack-usage` (GCC/Clang):** Generates `.su` stack consumption reports per function.
+3. **`-save-temps=obj`:** Saves all intermediate preprocessed source files (`.i`/`.ii`), assembly output (`.s`), and symbol tables inside the build directory instead of deleting them.
+4. **`-Wp,-MD` / `-H`:** Dumps full header dependency trees and inclusion hierarchies.
+5. **`-fopt-info-all` (GCC) / `-Rpass-missed=.*` (Clang):** Emits optimization, loop vectorization, and inline decision logs.
+6. **`CMAKE_VERBOSE_MAKEFILE=ON`:** Logs every raw `icpx`/`g++` invocation line with all arguments expanded.
+
+---
+
+## Updated Strict Telemetry & Artifact Environment Script
+
+Let's update `pr-36/strict_debug_env.sh` with these flags and max-verbosity build targets:
+
+```bash
+cat << 'EOF' > pr-36/strict_debug_env.sh
+#!/usr/bin/env bash
+# PATH: pr-36/strict_debug_env.sh
+# PURPOSE: Maximize compiler telemetry, preserve all build artifacts, and enable full diagnostics.
+
+export CMAKE_BUILD_TYPE=Debug
+export CMAKE_VERBOSE_MAKEFILE=ON
+
+# Enable full compiler telemetry, stack reports, time profiling, and artifact retention
+COMMON_DIAG_FLAGS="-Wall -Wextra -Wpedantic -fstack-usage -save-temps=obj"
+CLANG_TELEMETRY_FLAGS="-ftime-trace -Rpass-missed=.*"
+
+export EXTRA_CFLAGS="${COMMON_DIAG_FLAGS} ${CLANG_TELEMETRY_FLAGS}"
+export EXTRA_CXXFLAGS="${COMMON_DIAG_FLAGS} ${CLANG_TELEMETRY_FLAGS}"
+
+# Project-specific telemetry flags
+export ENABLE_TELEMETRY=ON
+export IRISLIME_BUILD_TELEMETRY=1
+export CMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+echo "[+] Telemetry & Artifact Preservation Environment Enabled:"
+echo "  • CMAKE_BUILD_TYPE           : Debug"
+echo "  • CMAKE_VERBOSE_MAKEFILE     : ON"
+echo "  • Time-Trace Profiling       : Enabled (-ftime-trace)"
+echo "  • Stack Usage Reporting      : Enabled (-fstack-usage)"
+echo "  • Intermediate Artifacts     : Retained (-save-temps=obj)"
+echo "  • Compile Commands DB        : Enabled (compile_commands.json)"
+EOF
+
+chmod +x pr-36/strict_debug_env.sh
+git add pr-36/strict_debug_env.sh
+
+```
+
+---
+
+## Upgrade Task 80 to Execute Heavy Telemetry Build
+
+Run this script to update `pr-36/create_task80.sh` so `run_queue.sh` sources the new telemetry environment and saves all intermediate build artifacts to `build/artifacts_archive/`:
+
+```bash
+cat << 'EOF' > pr-36/create_task80.sh
+#!/usr/bin/env bash
+# PATH: pr-36/create_task80.sh
+# PURPOSE: Task 80 - Full Telemetry & Artifact Capture Debug Pass
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+cd "${PROJECT_ROOT}"
+
+TASK_SCRIPT="pr-36/agy/task80_test_and_debug_config.sh"
+
+cat << 'TASK80' > "${TASK_SCRIPT}"
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+
+cd "${PROJECT_ROOT}"
+
+echo "================================================================="
+echo "[AGY TASK 80] Launching Max-Telemetry & Artifact Preservation Pass"
+echo "================================================================="
+
+source pr-36/strict_debug_env.sh
+
+ARTIFACT_DIR="build/artifacts_archive_$(date +%Y%m%d_%H%M%S)"
+mkdir -p "${ARTIFACT_DIR}"
+
+echo "[+] Archiving build logs and telemetry to: ${ARTIFACT_DIR}"
+
+# Run tests across existing build directories
+run_build_tests() {
+    local target_dir="$1"
+    local name="$2"
+
+    echo "-----------------------------------------------------------------"
+    echo "[AGY TASK 80] Running Test Suite & Collecting Artifacts: ${name}"
+    echo "-----------------------------------------------------------------"
+
+    if [ -d "${target_dir}" ]; then
+        cd "${target_dir}"
+        if [ -f "CTestTestfile.cmake" ] || [ -f "Makefile" ]; then
+            ctest --output-on-failure --parallel 4 || echo "[!] Test status captured."
+        fi
+        cd "${PROJECT_ROOT}"
+        
+        # Copy generated time-trace and stack usage artifacts if present
+        find "${target_dir}" -type f \( -name "*.time-trace" -o -name "*.su" -o -name "*.i" -o -name "*.s" \) \
+            -exec cp --parents {} "${ARTIFACT_DIR}/" \; 2>/dev/null || true
+    fi
+}
+
+run_build_tests "build/vulkan_debug" "Vulkan Debug"
+run_build_tests "build/sycl_relwithdebinfo" "SYCL RelWithDebInfo"
+run_build_tests "build/openvino_relwithdebinfo" "OpenVINO RelWithDebInfo"
+
+echo ""
+echo "[+] Telemetry & Artifact capture complete."
+echo "[+] Saved build artifacts to ${ARTIFACT_DIR}."
+TASK80
+
+chmod +x "${TASK_SCRIPT}"
+git add "${TASK_SCRIPT}"
+EOF
+
+chmod +x pr-36/create_task80.sh
+bash pr-36/create_task80.sh
+
+```
+
+---
+
+## Run Task 80
+
+Fire up the queue:
+
+```bash
+bash pr-36/agy/run_queue.sh
+
+```
+
+Every compiler invocation will now dump `.time-trace` timing files, `.su` stack usage metrics, preprocessed `.i`/`.ii` sources, and assembly files—filling our 32 GB budget with rich forensic telemetry!

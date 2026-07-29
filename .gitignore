@@ -76,3 +76,4 @@ logs/
 *.chunk.*
 tools/bin/
 
+pr-36/local_artifacts/

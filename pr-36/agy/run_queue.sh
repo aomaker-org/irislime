@@ -20,3 +20,6 @@ fi
 
 git add pr-36/
 echo "[+] AGY Queue Processing Complete."
+echo '--- BEGIN AGY TASK: TASK_80 | Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ) ---'
+bash pr-36/agy/task80_test_and_debug_config.sh
+echo '--- END AGY TASK: TASK_80 ---'

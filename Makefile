@@ -37,11 +37,11 @@ help: ## Parse and display all available interface targets dynamically from modu
 	@echo "=================================================================="
 	@echo ""
 	@echo "Unified Proxy Targets (Preferred Cross-Platform Control):"
-	@echo "  \033[36mmake build\033[0m            -> Shunts execution to uv run tools/build_runner.py"
-	@echo "  \033[36mmake test\033[0m             -> Shunts execution to uv run tools/test_runner.py"
+	@printf "  $(CYAN)make build$(RESET)             -> Shunts execution to uv run tools/build_runner.py\n"
+	@printf "  $(CYAN)make test$(RESET)              -> Shunts execution to uv run tools/test_runner.py\n"
 	@echo ""
 	@echo "Legacy / Direct Subsystem Makefile Targets:"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2}'
+	@grep -h -E '^[a-zA-Z_.-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort -u | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2}'
 	@echo "=================================================================="
 
 # 3. Pull in the dynamic backend build recipes natively
