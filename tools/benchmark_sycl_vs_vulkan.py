@@ -21,14 +21,14 @@ def run_backend_bench(bench_bin: Path, model_path: Path) -> dict:
     if not bench_bin.exists():
         return {"pp_tps": 0.0, "tg_tps": 0.0, "status": "BINARY_MISSING"}
     
-    cmd = [str(bench_bin), "-o", "json"]
+    cmd = [str(bench_bin), "-o", "json", "-p", "128", "-n", "32", "-t", "4"]
     if model_path.exists():
         cmd.extend(["-m", str(model_path), "-r", "2"])
     else:
         cmd.extend(["-r", "2"])
 
     try:
-        res = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
         if res.returncode == 0 and res.stdout.strip():
             try:
                 data = json.loads(res.stdout.strip())
