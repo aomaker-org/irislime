@@ -82,8 +82,8 @@ def resolve_targets(targets, include_untracked=False):
             
             if os.path.isdir(path):
                 for root, dirs, files in os.walk(path):
-                    # Exclude VCS metadata directories (.git)
-                    dirs[:] = [d for d in dirs if d != '.git']
+                    # Exclude VCS metadata directories (.git) and archive buffers (archive)
+                    dirs[:] = [d for d in dirs if d not in ('.git', 'archive')]
                     for file in files:
                         full_path = os.path.join(root, file)
                         rel_path = os.path.relpath(full_path, start=os.getcwd())
