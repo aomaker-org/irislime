@@ -19,7 +19,7 @@ SECTION 2: PROVISIONING, BOOTSTRAP & OPENVINO ENVIRONMENT KNOBS
 70. [ ] Refactor config_env Bootstrap: Delegate config_env to config_wsl.sh / config_win11.sh and map aliases dynamically.
 80. [ ] Variable-Driven OpenVINO Channel Switching: Implement IRISLIME_OPENVINO_STREAM in tools/provision.sh (defaulting to STABLE with PREVIEW fallbacks).
 90. [x] OpenSSL System Verification: Complete integration of ShiningLight.OpenSSL.Dev package, setting OPENSSL_ROOT_DIR to resolve cpp-httplib HTTPS warnings.
-100. [ ] Log Cleanup & Archival Utility: Create script to sweep or archive logs older than 30 days into cold storage via rclone.
+100. [x] Log Cleanup & Archival Utility: Create script to sweep or archive logs older than 30 days into cold storage via rclone.
 110. [ ] Primality Header Daemon for Prompt: Implement lightweight bash/python history integer primality checker in $PS1 prompt telemetry string.
 
 SECTION 3: TESTING, PERFORMANCE BENCHMARKING & MODEL INTEGRATION
