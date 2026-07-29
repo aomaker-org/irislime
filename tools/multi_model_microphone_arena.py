@@ -171,19 +171,22 @@ def execute_microphone_arena():
             f.write(f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')},{model.name},{tps:.2f},{current_temp_f:.1f},{delta_f:.1f},{ram_avail},INTRO_OK\n")
 
     # --------------------------------------------------------------------------
-    # PHASE 2: PASSED MICROPHONE CONVERSATION LOOP
+    # PHASE 2: PASSED MICROPHONE CONVERSATION LOOP (30 MINUTES)
     # --------------------------------------------------------------------------
-    print("\n=== PHASE 2: PASSED MICROPHONE DIALOGUE LOOP ===", flush=True)
+    duration_sec = int(sys.argv[1]) if len(sys.argv) > 1 and sys.argv[1].isdigit() else 1800
+    print(f"\n=== PHASE 2: PASSED MICROPHONE DIALOGUE LOOP ({duration_sec // 60} MINUTES) ===", flush=True)
     start_arena_time = time.time()
     last_15m_bonus_time = time.time()
 
-    loop_count = 1
-    max_loops = 2
-
-    for loop in range(1, max_loops + 1):
-        print(f"\n--- Microphone Loop {loop} ---", flush=True)
+    loop_count = 0
+    while (time.time() - start_arena_time) < duration_sec:
+        loop_count += 1
+        print(f"\n--- Microphone Loop {loop_count} (Elapsed: {int(time.time() - start_arena_time)}s / {duration_sec}s) ---", flush=True)
         
         for model in models:
+            if (time.time() - start_arena_time) >= duration_sec:
+                break
+
             # Thermal & Load Guard Check
             current_temp_f = query_host_thermal_f()
             delta_f = current_temp_f - baseline_temp_f
@@ -193,7 +196,7 @@ def execute_microphone_arena():
 
             # 1-minute sleep before model collects history & responds
             print(f"[*] Inter-model pause ({INTER_MODEL_SLEEP_SECONDS}s) before passing mic to {model.name}...", flush=True)
-            time.sleep(5)  # Accelerated 5s for fast verification test run
+            time.sleep(INTER_MODEL_SLEEP_SECONDS)
 
             # Collect history thus far
             history_context = "\n".join(dialogue_history[-5:])
