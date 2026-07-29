@@ -39,6 +39,7 @@ class BuildOrchestrator:
         
         # Telemetry State Tracking Inodes
         self.last_known_size = 0
+        self.last_known_mtime = 0
         self.last_heartbeat_ts = 0
         self.ticker_active = False
         
@@ -126,13 +127,27 @@ class BuildOrchestrator:
                 except Empty:
                     break
                     
-            # --- Tier 2 tracking: Passive Filesystem Inode Log Growth Sentinel ---
+            # --- Tier 2 tracking: Passive Filesystem Inode Log & Build Dir mtime Growth Sentinel ---
             if self.log_file.exists():
                 try:
                     current_size = self.log_file.stat().st_size
-                    if current_size > self.last_known_size:
+                    current_mtime = self.log_file.stat().st_mtime
+                    if current_size > self.last_known_size or current_mtime > self.last_known_mtime:
                         self.last_known_size = current_size
+                        self.last_known_mtime = current_mtime
                         activity_detected = True
+                except OSError:
+                    pass
+
+            if self.target_dir.exists() and not activity_detected:
+                try:
+                    now = time.time()
+                    for item in self.target_dir.rglob("*"):
+                        if item.is_file():
+                            mtime = item.stat().st_mtime
+                            if (now - mtime) < poll_interval * 2:
+                                activity_detected = True
+                                break
                 except OSError:
                     pass
                     

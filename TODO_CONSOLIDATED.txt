@@ -31,7 +31,7 @@ SECTION 3: TESTING, PERFORMANCE BENCHMARKING & MODEL INTEGRATION
 
 SECTION 4: AI WORKFLOW, WATCHDOG & TELEMETRY ADVANCEMENTS
 170. [x] Documentation Alignment Pass: Rewrite README.md and QUICKSTART.md to integrate parameterized '. config_env [tag]' interfaces and external '../models/' topography.
-180. [ ] Intelligent Progress Watchdog Integration: Patch tools/build_runner.py to complement pipe streaming with atomic metadata filesystem mtime checks via pathlib.
+180. [x] Intelligent Progress Watchdog Integration: Patch tools/build_runner.py to complement pipe streaming with atomic metadata filesystem mtime checks via pathlib.
 190. [ ] Event-Driven Low-Overhead Telemetry: Implement asynchronous background logging thread in build_runner.py reading /proc/stat and /proc/meminfo at 1Hz with gated host queries.
 200. [ ] AGY Credit & Token Preservation Guard: Deploy tools/token_throttle_guard.py to enforce 50%/5h quota throttling gates.
 210. [ ] Terminal TUI Integration (AGY / Jules): Test interactive multi-file workspace editing and automated planning/execution cycles within strict directory trust bounds.
