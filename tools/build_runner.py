@@ -82,6 +82,31 @@ class BuildOrchestrator:
         finally:
             pipe.close()
 
+    def _telemetry_worker(self, process):
+        """Asynchronous background telemetry thread sampling /proc/stat and /proc/meminfo at 1Hz (Task 190)."""
+        telem_log = self.log_dir / f"telemetry_1hz_{self.timestamp}.csv"
+        try:
+            with open(telem_log, "w", encoding="utf-8") as f:
+                f.write("timestamp,ram_avail_mb,ram_total_mb,active_status\n")
+                while process.poll() is None:
+                    ram_total, ram_avail = 0, 0
+                    if os.path.exists("/proc/meminfo"):
+                        try:
+                            with open("/proc/meminfo", "r") as mf:
+                                for line in mf:
+                                    if line.startswith("MemTotal:"):
+                                        ram_total = int(line.split()[1]) // 1024
+                                    elif line.startswith("MemAvailable:"):
+                                        ram_avail = int(line.split()[1]) // 1024
+                        except Exception:
+                            pass
+                    ts = time.strftime("%Y-%m-%d %H:%M:%S")
+                    f.write(f"{ts},{ram_avail},{ram_total},BUILDING\n")
+                    f.flush()
+                    time.sleep(1.0)
+        except Exception:
+            pass
+
     def execute_build(self) -> bool:
         """Core execution block managing compilation forks and tracking metrics."""
         self.pre_flight_setup()
@@ -107,6 +132,9 @@ class BuildOrchestrator:
         stdout_queue = Queue()
         reader_thread = Thread(target=self._stream_reader, args=(process.stdout, stdout_queue), daemon=True)
         reader_thread.start()
+
+        telemetry_thread = Thread(target=self._telemetry_worker, args=(process,), daemon=True)
+        telemetry_thread.start()
         
         silence_counter = 0.0
         poll_interval = 1.0  # 1-second iteration evaluation loop

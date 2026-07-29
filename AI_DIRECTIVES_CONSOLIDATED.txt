@@ -20,11 +20,10 @@ Integrity-Hash: 8492c10b789d012e345f678a901b234c567d890e123f456a789b012c345e6789
   - Overwrite Protection: Never overwrite existing archived files. If a filename collision occurs in './inbox/archive/', append a timestamp or turn suffix (e.g. '_20260729_062711_t004.md').
   - Forensic Immutability: Upon moving ingested files to './inbox/archive/', set them read-only (chmod 444) to lock forensic receipts.
 * Git Noise Reduction & .gitignore Policy: Transient buffer files inside 'inbox/*' and 'outbox/*' are excluded from Git commits via .gitignore. Only empty directory '.gitkeep' anchors are tracked to preserve repository structure.
-* Outbox Turn Reporting: On every turn, generate a report in './outbox/*agy*nnn*.md' or './outbox/*gemini*nnn*.md' containing:
-  - ISO 8601 Timestamp.
-  - Incrementing sequence index 'nnn' (001, 002, 003, ...).
-  - Current prompt/response turn count.
-  - Summary of inbox ingestions, active directives, backlog status, and execution steps.
+* Outbox Turn Reporting & Lifecycle Management:
+  - Active Buffer ('./outbox/'): Holds only current/active turn artifacts (e.g. 'gemini_nnn_status_report.md' and '.gitkeep'). 'files2clip --everything outbox' packages only active turn outputs, keeping payloads compact and well below the 250 KB ceiling.
+  - Outbox Archival Target ('./outbox/archive/'): Processed turn status reports are swept into './outbox/archive/' via 'tools/archive_outbox.py' with no-clobber protection (mv -n) and read-only locks (chmod 444).
+  - Outbox Report Format: On every turn, generate a report in './outbox/*gemini*nnn*.md' or './outbox/*agy*nnn*.md' containing ISO 8601 Timestamp, sequence index 'nnn', turn count, and execution receipts.
 * Forensic Audit Logging: Maintain prompt/response conversation logs and task executions under './agy/log/' (e.g., './agy/log/agy_turn_nnn.log').
 
 3. SIMPLE ASCII INTERCHANGE FORMAT STANDARD

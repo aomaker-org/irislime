@@ -86,3 +86,6 @@ inbox/archive/*
 !inbox/archive/.gitkeep
 outbox/*
 !outbox/.gitkeep
+!outbox/archive/
+outbox/archive/*
+!outbox/archive/.gitkeep
