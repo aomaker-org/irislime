@@ -27,10 +27,10 @@ SECTION 3: TESTING, PERFORMANCE BENCHMARKING & MODEL INTEGRATION
 130. [x] DeepSeek-R1-Distill-Llama-8B GGUF Evaluation: Test pre-quantized Q4_K_M GGUF track on Iris Xe with explicit chat template markers (<|User|> / <|Assistant|>).
 140. [x] Automated Performance Dashboard Mapping: Build localized data aggregator to extract profiles from telemetry_matrix.csv and generate delta evaluations.
 150. [x] Thermal Throttling Cool-down Handlers: Implement temperature sensing loops to inject dynamic pause states between intensive hyperparameter evaluation runs.
-160. [ ] Resource-Aware Watchdog Monitors: Transition from pure console silence checks to direct system process counter checks.
+160. [x] Resource-Aware Watchdog Monitors: Transition from pure console silence checks to direct system process counter checks.
 
 SECTION 4: AI WORKFLOW, WATCHDOG & TELEMETRY ADVANCEMENTS
-170. [ ] Documentation Alignment Pass: Rewrite README.md and QUICKSTART.md to integrate parameterized '. config_env [tag]' interfaces and external '../models/' topography.
+170. [x] Documentation Alignment Pass: Rewrite README.md and QUICKSTART.md to integrate parameterized '. config_env [tag]' interfaces and external '../models/' topography.
 180. [ ] Intelligent Progress Watchdog Integration: Patch tools/build_runner.py to complement pipe streaming with atomic metadata filesystem mtime checks via pathlib.
 190. [ ] Event-Driven Low-Overhead Telemetry: Implement asynchronous background logging thread in build_runner.py reading /proc/stat and /proc/meminfo at 1Hz with gated host queries.
 200. [ ] AGY Credit & Token Preservation Guard: Deploy tools/token_throttle_guard.py to enforce 50%/5h quota throttling gates.

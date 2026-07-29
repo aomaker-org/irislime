@@ -1,38 +1,59 @@
 # IrisLime Quick Start Deployment Recipe
 
-This guide is the friction-free installation sequence for bringing up the IrisLime development environment on a newly cloned machine. Follow these exact terminal steps to link your trees, arm the environment, and execute your first hardware validation test.
+This guide details the deployment sequence for bringing up the IrisLime development environment on WSL2 / Windows 11 host workstations.
 
-# Create a centralized local storage directory for model binaries and link it
-mkdir -p ~/src/models
-ln -sf ~/src/models models
-```
+---
 
-## Step 2: Initialize the Environment & Dependencies
-Initialize the Python virtual environment and pull in required orchestration assets using the master Makefile:
+## 1. Local & External Model Storage Topography
 
-```bash
-cd ~/src/irislime
-
-# Initialize the virtual environment and install dependencies
-make setup
-```
-
-## Step 3: Boot the Shell Session
-Always source the private boot utility before compiling or running tests. This loads the Intel oneAPI toolchain compiler variables, activates the Python environment, and transforms your prompt to display active execution history counters:
+Model weights reside decoupled from code compilation trees to preserve repository cleanliness:
+- **POSIX Model Path (`LOCAL_AI_MODELS_DIR`)**: `/mnt/c/AI_models` (Windows 11 host storage) or sibling path `../models/`.
+- **Windows Host Path (`WIN_AI_MODELS_DIR`)**: `C:\AI_models`.
 
 ```bash
-. scratch/boot.sh
+# Verify model directory topography
+ls -la /mnt/c/AI_models
 ```
-*Note: You must **source** this script using `.` or `source`. Do not execute it directly.*
 
-## Step 4: Fire the Hardware Validation Test
-Run the latest unfiltered validation script to verify that your host machine's hardware profile is recognized and that the graphics layer can be reached safely via the OpenCL driver bypass:
+---
+
+## 2. Environment Initialization & Dependency Sync
+
+Initialize local Python virtual environments and sync toolchain dependencies via `uv`:
 
 ```bash
-bash scratch/run_test002.sh
+cd ~/src/irislime-pr-36
+
+# Sync virtual environment dependencies via uv
+uv sync
 ```
 
-## Step 5: Verify the Execution Output
-Once the test concludes, check that your environment successfully generated your unique hardware logs:
-1. **The Raw Log:** Review `scratch/run_test_002_console_*.log` to see the complete, unfiltered GDB terminal stream.
-2. **The Results Ledger:** Review `scratch/run_test_002.md` to see your machine's specific CPU identifier and execution status cleanly appended to the tracking table.
+---
+
+## 3. Parameterized Session Boot (`config_env` & `config_win11`)
+
+Source `config_env` (or `config_win11` under Windows Git Bash) with an optional prompt tag:
+
+```bash
+# Load environment with custom prompt tag
+. config_env vulkan_debug
+
+# Under Windows Git Bash:
+. config_win11 vulkan_debug
+```
+*Note: Always **source** using `.` or `source`.*
+
+---
+
+## 4. 1:1 Utility Aliases & Tooling Commands
+
+- **`files2clip [targets]`**: Pack workspace files into the system clipboard buffer (supports `-a` / `--everything` for full filesystem traversal).
+- **`build_runner`**: Run compilation passes via `uv run tools/build_runner.py`.
+- **`test_runner`**: Run test suite via `uv run tools/test_runner.py`.
+- **`run-bench.sh`**: Execute inference performance benchmarks.
+
+---
+
+## 5. Strict Observability Standard (`*** NO PIPE TO NULL ***`)
+
+All execution tools, scripts, and Makefiles strictly enforce zero stream discarding. No output is piped to `/dev/null`; stdout/stderr streams remain 100% visible or are logged directly to `./logs/` or `/tmp/` audit files.
