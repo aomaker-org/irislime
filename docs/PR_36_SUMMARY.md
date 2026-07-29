@@ -44,12 +44,19 @@ All execution tools, scripts, and Makefiles strictly enforce zero stream discard
 
 ---
 
-## 5. Multi-Backend Acceleration Matrix Receipts
+## 5. Multi-Backend Acceleration Matrix Receipts & Benchmark Comparison
+
+### Comparative Inference Performance (TinyLlama 1.1B Q2_K)
+
+| Acceleration Backend | GPU / Target Hardware | Prompt Evaluation ($pp$) | Text Generation ($tg$) | Key Finding / Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **Vulkan (`vulkan_debug`)** | Mesa Vulkan (`/dev/dri/renderD128`) | **2.84 tokens/sec** | **2.58 tokens/sec** | **Primary Baseline:** High stability & zero driver traps under WSL2. |
+| **Intel SYCL (`sycl_debug`)** | Intel(R) Graphics `[0x46a8]` (DPC++) | **0.27 tokens/sec** | **0.01 tokens/sec** | **Debug Profile Overhead:** Un-optimized GDB debug symbols & JIT translation. |
 
 1. **Vulkan Acceleration (`build/vulkan_debug/` & `build/vulkan_release/`):**
    - Direct cross-platform GPU offloading (`-ngl 99`) via Mesa Vulkan drivers without driver SIGSEGV traps.
 2. **Intel SYCL DPC++ Acceleration (`build/sycl_debug/`):**
-   - Compiled with `IntelLLVM 2026.1.0` (`icx`/`icpx`). Generated `libggml-sycl.so` (877 MB) and verified active execution on `SYCL GPU device 0`.
+   - Compiled with `IntelLLVM 2026.1.0` (`icx`/`icpx`). Generated `libggml-sycl.so` (877 MB) and verified active execution on `SYCL GPU device 0` (`Intel(R) Graphics [0x46a8]`).
 3. **Multi-Model Passed Microphone Arena (`tools/multi_model_microphone_arena.py`):**
    - Autonomous multi-turn round-robin arena evaluation between TinyLlama 1.1B (`C:\AI_models`) and Qwen 2.5 0.5B (`../models/`), complete with 15-minute efficiency bonus turns, thermal limit guards (+10 °F ceiling), and telemetry logging.
 4. **Dual-OS Thermal Correlator (`tools/correlate_thermal_streams.py`):**
