@@ -25,8 +25,14 @@ def run_backend_bench(bench_bin: Path, model_path: Path) -> dict:
     if model_path.exists():
         cmd.extend(["-m", str(model_path)])
 
+    env = os.environ.copy()
+    if "sycl" in str(bench_bin):
+        oneapi_lib = "/opt/intel/oneapi/compiler/2026.1/lib"
+        if Path(oneapi_lib).exists():
+            env["LD_LIBRARY_PATH"] = f"{oneapi_lib}:{env.get('LD_LIBRARY_PATH', '')}"
+
     try:
-        res = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=60, env=env)
         if res.returncode == 0 and res.stdout.strip():
             try:
                 data = json.loads(res.stdout.strip())
