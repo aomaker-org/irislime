@@ -23,7 +23,9 @@ def run_model_inference(binary_path: Path, model_path: Path, prompt_text: str, m
         "-p", prompt_text,
         "-n", str(max_tokens),
         "--temp", "0.7",
-        "-ngl", "99"
+        "-ngl", "99",
+        "--single-turn",
+        "--no-interactive"
     ]
     try:
         res = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
