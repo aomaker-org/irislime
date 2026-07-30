@@ -36,6 +36,7 @@ SECTION 4: AI WORKFLOW, WATCHDOG & TELEMETRY ADVANCEMENTS
 200. [x] AGY Credit & Token Preservation Guard: Deploy tools/token_throttle_guard.py to enforce 50%/5h quota throttling gates.
 210. [x] Terminal TUI Integration (AGY / Jules): Test interactive multi-file workspace editing and automated planning/execution cycles within strict directory trust bounds.
 220. [x] Obsolete mftdash / mtfdash Purge & Terminal Integration: Purge obsolete mftdash references across repository.
+225. [x] Complete mtfdash Subsystem Purge: Archive node manager/bridge scripts, purge shell functions/comments in config_env, and relocate interop docs to docs/archive/mtfdash/.
 
 SECTION 5: GIT WORKSPACE MAINTENANCE & CLOUD AUTOMATION
 230. [x] Branch Consolidation Loop: Audit all local and remote feature branches, merging and closing tracking lines cleanly while preserving commit history.

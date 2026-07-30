@@ -28,7 +28,7 @@ test: ## Execute localized Small Language Model verification loops across active
 
 docs: ## Generate Markdown (.md) from Simple ASCII Text Format (.txt) files
 	uv run python tools/ascii2md.py docs/ARCHITECTURAL_REVIEW_AND_BEST_PRACTICES.txt docs/ARCHITECTURAL_REVIEW_AND_BEST_PRACTICES.md
-	uv run python tools/ascii2md.py docs/AI_AGENT_REQUIREMENTS.txt docs/AI_AGENT_REQUIREMENTS.md
+	uv run python tools/ascii2md.py AI_DIRECTIVES_CONSOLIDATED.txt AI_DIRECTIVES_CONSOLIDATED.md
 	uv run python tools/ascii2md.py TODO_CONSOLIDATED.txt TODO_CONSOLIDATED.md
 
 help: ## Parse and display all available interface targets dynamically from modules

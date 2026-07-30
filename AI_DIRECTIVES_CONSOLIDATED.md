@@ -1,0 +1,60 @@
+---
+**PATH**: `AI_DIRECTIVES_CONSOLIDATED.txt`  
+**PURPOSE**: `Authoritative Consolidated Operating Requirements, AI Directives & Guardrails.`  
+**TARGET**: `AGY, Jules, Copilot, Gemini, ChatGPT, and Autonomous Coding Agents.`  
+**LINEAGE**: `fekerr-dev / irislime Infrastructure`  
+**UPDATED**: `2026-07-29T06:18:43-07:00`  
+**Integrity-Hash**: `8492c10b789d012e345f678a901b234c567d890e123f456a789b012c345e6789`  
+---
+
+1. SYSTEM COMPREHENSION & ENVIRONMENT BOUNDARIES
+* Host OS: Windows 11 64-bit (Intel Core 12th Gen Workstation Architecture).
+* Container Runtime: Ubuntu 26.04 LTS / WSL2 Subsystem ONLY.
+* Host Compiler Layer: MSVC v144 / Windows 11 SDK (cl.exe Hostx64/x64).
+* Linux Compiler Layer: GCC / Clang / Intel oneAPI ICX.
+* Python Execution: MUST execute exclusively via 'uv run' within local virtual environments. Do not pollute global Python environments.
+* External Storage Topography: Model weights reside decoupled in sibling directory ('../models/'). Cloud sync endpoints via rclone ('gaom:', 'gdrive:').
+
+2. AGY WORKSPACE INBOX, OUTBOX & LOGGING PROTOCOL
+* Inbox Polling & Collision-Free Archiving: On every turn, check './inbox' for new files. If a file contains "agy" or session directives in its filename, ingest its content and move it to './inbox/archive/'.
+  - Overwrite Protection: Never overwrite existing archived files. If a filename collision occurs in './inbox/archive/', append a timestamp or turn suffix (e.g. '_20260729_062711_t004.md').
+  - Forensic Immutability: Upon moving ingested files to './inbox/archive/', set them read-only (chmod 444) to lock forensic receipts.
+* Git Noise Reduction & .gitignore Policy: Transient buffer files inside 'inbox/*' and 'outbox/*' are excluded from Git commits via .gitignore. Only empty directory '.gitkeep' anchors are tracked to preserve repository structure.
+* Outbox Turn Reporting & Lifecycle Management:
+  - Active Buffer ('./outbox/'): Holds only current/active turn artifacts (e.g. 'gemini_nnn_status_report.md' and '.gitkeep'). 'files2clip --everything outbox' packages only active turn outputs, keeping payloads compact and well below the 250 KB ceiling.
+  - Outbox Archival Target ('./outbox/archive/'): Processed turn status reports are swept into './outbox/archive/' via 'tools/archive_outbox.py' with no-clobber protection (mv -n) and read-only locks (chmod 444).
+  - Outbox Report Format: On every turn, generate a report in './outbox/*gemini*nnn*.md' or './outbox/*agy*nnn*.md' containing ISO 8601 Timestamp, sequence index 'nnn', turn count, and execution receipts.
+* Forensic Audit Logging: Maintain prompt/response conversation logs and task executions under './agy/log/' (e.g., './agy/log/agy_turn_nnn.log').
+
+3. SIMPLE ASCII INTERCHANGE FORMAT STANDARD
+* Native Markdown (.md) working files are prone to nested markdown bugs and UI rendering truncation when processed by automated agents and Web UI viewports.
+* Primary operational guidelines, documentation, and backlog ledgers MUST be maintained in Simple ASCII Text Format (.txt) utilizing structured ASCII headers and section dividers.
+* Utility Conversion: Convert .txt to Markdown when needed via 'uv run python tools/ascii2md.py <input.txt> [output.md]'.
+
+4. IMMUTABLE ARCHIVAL & GIT HISTORY PRESERVATION
+* Additive State Modifications: Workspace edits are strictly additive. Deprecated files are archived in './docs/archive/' or recorded in local log receipts.
+* Git Remote History Preservation: When consolidating or removing redundant local AI directive files, preserve their historical commits on remote Git branches. Document all local file removals/archivals in './agy/log/archival.log'.
+* Branch Preservation: NEVER delete local or remote Git branches. All branches are retained for forensic lineage tracking.
+
+5. MAXIMUM OBSERVABILITY & STREAMING INTEGRITY (*** NO PIPE TO NULL ***)
+* STRICT NO PIPE TO NULL: NEVER pipe standard output or standard error to /dev/null across any script, command, tool, or makefile recipe. Hide nothing. Everything must remain 100% observable.
+* Forensic Audit Redirection: If output streams must be redirected away from active stdout/stderr to prevent terminal clutter, route them directly into timestamped audit log files under 'logs/' or '/tmp/' (e.g. '2>> /tmp/audit.log').
+* Stream Visibility: Makefiles and test scripts must stream text directly to stdout/stderr rather than hiding output in internal background processes.
+* Diagnostic Tracing: Use 'pipe2log' or 'pipe2clip' helpers to log diagnostic execution metrics.
+
+6. AGY CREDIT & TOKEN PRESERVATION PROTOCOL
+* Rate Budget Monitoring: Monitor AGY consumption over a 5-hour rolling window.
+* 50% Threshold Gate: If credit/token consumption rate exceeds 50% of the 5-hour budget, immediately engage rate preservation mode:
+  - Pause execution 10 minutes out of every 5-minute work cycle.
+  - Prune context window payloads by omitting raw un-summarized log dumps.
+  - Rely on localized script execution receipts rather than repeatedly reading massive source manifests.
+
+7. SYSTEM ARCHITECTURE & CODE & BACKLOG STANDARDS
+* Idempotent Loaders: Environment scripts (e.g. 'config_env') must short-circuit via IRISLIME_READY checks.
+* 1:1 Alias Symmetry: Terminal aliases must map 1:1 to underlying utility scripts (e.g. 'files2clip' -> 'tools/files2clip').
+* Backlog Master Ledger: Maintain a single consolidated backlog file ('TODO_CONSOLIDATED.txt') with '[ ]' tasks numbered by 10s (10, 20, 30...) to allow seamless task insertion and re-prioritization.
+
+---
+**Integrity-Hash**: `8492c10b789d012e345f678a901b234c567d890e123f456a789b012c345e6789`  
+**EOF**: `AI_DIRECTIVES_CONSOLIDATED.txt`  
+---

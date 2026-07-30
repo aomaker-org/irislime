@@ -73,6 +73,7 @@ logs/
 .irislime_heartbeat
 # --- Log Archiver & Cloud Streaming Artifacts ---
 *_logs_*.zip
+*.tar.xz
 *.chunk.*
 tools/bin/
 

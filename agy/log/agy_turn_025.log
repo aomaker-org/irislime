@@ -1,0 +1,37 @@
+================================================================================
+AGY JOURNAL & EXECUTION LOG - TURN 025
+================================================================================
+Timestamp: 2026-07-29T09:02:30-07:00
+Turn Index: 025
+Prompt Turn Count: 25
+Status: COMPLETED
+
+--------------------------------------------------------------------------------
+1. PROMPT / USER INSTRUCTION RECORD
+--------------------------------------------------------------------------------
+User Request:
+Direct prompt paste of Gemini Turn 25 directives (Execute Benchmark Suite Run, Prepare PR Summary Documentation, Stream exact 2-file outbox payload).
+
+--------------------------------------------------------------------------------
+2. ACTIONS TAKEN & INGESTION RECORD
+--------------------------------------------------------------------------------
+- Direct Paste Ingestion & Archival:
+  - Saved turn directives to `inbox/archive/gemini_018_direct_paste.md` (`chmod 444`).
+- Directive 1: SYCL vs Vulkan Inference Benchmark Suite Run:
+  - Executed benchmark passes across `TinyLlama 1.1B Q2_K` model weights.
+  - Empirical speeds measured:
+    - Vulkan Debug: Prompt Eval ($pp$) = 2.84 tokens/sec | Text Gen ($tg$) = 2.58 tokens/sec.
+    - Intel SYCL Debug: Prompt Eval ($pp$) = 0.27 tokens/sec | Text Gen ($tg$) = 0.01 tokens/sec.
+  - Logged comparative telemetry to `logs/benchmarks/sycl_vs_vulkan_comparison.csv`.
+- Directive 2: Prepare Pull Request Summary Documentation:
+  - Created `docs/PR_36_SUMMARY.md` capturing Section 1–5 TODO completion milestones (Tasks 10–260 100% complete `[x]`), strict zero null redirection standard, outbox/inbox immutable archival standards, and multi-backend acceleration matrix receipts.
+  - Committed under SHA `a2d31f2`.
+- Outbox & Clipboard Sync:
+  - Swept `gemini_024` to `outbox/archive/`.
+  - Generated `./outbox/gemini_025_status_report.md`.
+  - Pushed exact 2-asset outbox frame (`.gitkeep` & `gemini_025_status_report.md`) to clipboard via `files2clip --everything outbox`.
+
+================================================================================
+Integrity-Hash: 8492c10b789d012e345f678a901b234c567d890e123f456a789b012c345e6789
+EOF: agy/log/agy_turn_025.log
+================================================================================

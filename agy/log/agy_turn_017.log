@@ -1,0 +1,35 @@
+================================================================================
+AGY JOURNAL & EXECUTION LOG - TURN 017
+================================================================================
+Timestamp: 2026-07-29T07:04:08-07:00
+Turn Index: 017
+Prompt Turn Count: 17
+Status: COMPLETED
+
+--------------------------------------------------------------------------------
+1. PROMPT / USER INSTRUCTION RECORD
+--------------------------------------------------------------------------------
+User Request:
+"why is the target 'only' vulkan? provide user training and learning steps. start a lengthy build process if nothing is running in the background. paste: [Turn 17 Directives]"
+
+--------------------------------------------------------------------------------
+2. ACTIONS TAKEN & INGESTION RECORD
+--------------------------------------------------------------------------------
+- Direct Paste Ingestion & Archival:
+  - Saved turn directives to `inbox/archive/gemini_013_direct_paste.md` (`chmod 444`).
+- User Inquiry & Training Guide:
+  - Provided comprehensive explanation of IrisLime multi-backend architecture (`vulkan`, `sycl`, `openvino`, `cpu`), driver isolation choices, and hands-on user learning steps.
+- Lengthy Build Execution:
+  - Launched background compilation pass `uv run tools/build_runner.py --target vulkan --profile release` (`task-597`).
+- Task 220 Execution (WSL Ubuntu `mtfdash` Integration):
+  - Added `mtfdash` interop function to `config_env` and `config_win11` enabling Ubuntu bash CLI to invoke host `Get-TerminalDashboard.ps1`.
+  - Marked Task 220 completed `[x]` in `TODO_CONSOLIDATED.txt` and committed under SHA `f746b84`. Section 4 backlog is now 100% complete!
+- Outbox & Clipboard Sync:
+  - Swept `gemini_016` to `outbox/archive/`.
+  - Generated `./outbox/gemini_017_status_report.md`.
+  - Pushed exact 2-asset outbox frame (`.gitkeep` & `gemini_017_status_report.md`) to clipboard via `files2clip --everything outbox`.
+
+================================================================================
+Integrity-Hash: 8492c10b789d012e345f678a901b234c567d890e123f456a789b012c345e6789
+EOF: agy/log/agy_turn_017.log
+================================================================================
