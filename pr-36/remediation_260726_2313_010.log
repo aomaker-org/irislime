@@ -1,0 +1,55 @@
+=================================================================
+PR #36 Remediation Pass: Obsolete Demos & mtfdash Scrub
+Timestamp: 2026-07-27T06:13:37Z
+Root Path: /home/fekerr/src/irislime-pr-36
+=================================================================
+
+--- Task 1: Removing Obsolete run_demo Scripts ---
+rm 'tools/run_demo_20260620-batch.sh'
+rm 'tools/run_demo_20260620-batch_new.sh'
+rm 'tools/run_demo_20260620-interact.sh'
+rm 'tools/run_demo_20260620.sh'
+
+--- Task 2: Scrubbing Obsolete mtfdash Tooling ---
+rm 'docs/MTFDASH_USER_AND_INTEROP_GUIDE.md'
+rm 'tools/agy_mtfdash_bridge.py'
+rm 'tools/llamacpp_mtfdash_bridge.py'
+rm 'tools/mtfdash_node_manager.py'
+
+--- Task 3: Patching config_env to strip mtfdash functions/aliases ---
+[+] Scrubbed mtfdash references from config_env.
+
+--- Task 4: Self-Staging Review Artifacts ---
+[+] Staged pr-36/ and modified repository files.
+
+=================================================================
+Current Repository Working Tree Status:
+=================================================================
+On branch pr-36
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   config_env
+	deleted:    docs/MTFDASH_USER_AND_INTEROP_GUIDE.md
+	new file:   pr-36/audit_260726_2245_010.log
+	new file:   pr-36/audit_260726_2247_010.log
+	new file:   pr-36/gemini_001.sh
+	new file:   pr-36/pr-36-remediate.sh
+	new file:   pr-36/pr-36-review.sh
+	new file:   pr-36/remediation_260726_2313_010.log
+	deleted:    tools/agy_mtfdash_bridge.py
+	deleted:    tools/llamacpp_mtfdash_bridge.py
+	deleted:    tools/mtfdash_node_manager.py
+	deleted:    tools/run_demo_20260620-batch.sh
+	deleted:    tools/run_demo_20260620-batch_new.sh
+	deleted:    tools/run_demo_20260620-interact.sh
+	deleted:    tools/run_demo_20260620.sh
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   pr-36/remediation_260726_2313_010.log
+
+
+=================================================================
+End of Remediation Log
+=================================================================

@@ -1,0 +1,37 @@
+# Syntax: docker/podman build -f infra/Containerfile.matrix --target <stage> .
+# Open OCI Standard Container for irislime build targets
+
+# Base Builder Image
+FROM ubuntu:24.04 AS builder-base
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    git \
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /workspace
+
+# Debug Target
+FROM builder-base AS target-debug
+ENV CMAKE_BUILD_TYPE=Debug
+# Add your debug specific logic here
+RUN echo "Building Debug Target"
+
+# Profiling Target (RelWithDebInfo)
+FROM builder-base AS target-profile
+ENV CMAKE_BUILD_TYPE=RelWithDebInfo
+ENV ENABLE_PROFILING=ON
+# Note: This profile is currently marked disabled in matrix_control configuration
+# but is scaffolded here for future integration mapping.
+RUN echo "Building Profiling Target"
+
+# Release Target (Benchmarking)
+FROM builder-base AS target-release
+ENV CMAKE_BUILD_TYPE=Release
+# Add your release specific logic here
+RUN echo "Building Release Target (for benchmarking metrics)"
+
+# Default stage is the debug build to avoid default building the release
+FROM target-debug AS default

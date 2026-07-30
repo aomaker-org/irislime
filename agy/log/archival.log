@@ -1,0 +1,2 @@
+[2026-07-29T13:19:29Z] Archived redundant AI directive files (AI_next_work.md, AI_next.md, AI_AGENT_REQUIREMENTS.md/txt) into docs/archive/ai_directives/. Git remote history retained.
+[2026-07-30T07:38:00Z] Purged and archived mtfdash subsystem: Moved docs/INTERPROCESS_COMMUNICATION_TOPOLOGY.md, docs/DASH_WSL_AND_AGY_INTEGRATION_NOTES.md/txt to docs/archive/mtfdash/. Cleaned config_env comments and updated TODO_CONSOLIDATED ledger.

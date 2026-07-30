@@ -1,0 +1,36 @@
+===============================================================================
+AGY TASK EXECUTION AND FORENSIC LOGGING PROTOCOL
+===============================================================================
+
+1. OVERVIEW
+-------------------------------------------------------------------------------
+The AGY task framework provides an isolated, deterministic execution wrapper
+for review mechanics, task queuing, and automated remediation passes inside
+pr-36/agy/.
+
+2. CORE PRINCIPLES
+-------------------------------------------------------------------------------
+* Zero Stream Loss (No Null Piping):
+  All stdout and stderr streams remain fully un-piped and visible to the
+  terminal while simultaneously tee'd into timestamped log files.
+
+* Forensic Traceability and Log Locking:
+  Upon execution completion, task logs are set to read-only (chmod 444) to
+  ensure forensic integrity:
+  - Log location: pr-36/agy/logs/agy_<TASK_ID>_<TIMESTAMP>_<NNN>.log
+  - Immutable read-only mode prevents accidental modification or overwriting.
+
+* Isolated Review Scope:
+  All transient scripts, queues, and task runners are strictly contained
+  within pr-36/ to preserve core codebase cleanliness:
+  - pr-36/agy/run_agy_task.sh: Generic task wrapper.
+  - pr-36/agy/run_queue.sh: Sequential batch queue runner.
+  - pr-36/agy/QUEUE.md: Execution manifest.
+
+3. USAGE
+-------------------------------------------------------------------------------
+To execute a single task:
+  bash pr-36/agy/run_agy_task.sh <TASK_ID> bash <PATH_TO_SCRIPT>
+
+To run the full queued task list:
+  bash pr-36/agy/run_queue.sh

@@ -1,61 +1,39 @@
-# Workspace Specification & Operational Guardrails (`AI.md`)
+# Workspace Specification & AI Directives (`AI.md`)
 
-**Last Synced State:** July 4, 2026  
-**Host Architecture:** Windows 11 (Intel Core 12th Gen)  
+**Last Synced State:** July 29, 2026  
+**Host Architecture:** Windows 11 (Intel Core 12th Gen) / WSL2 Ubuntu 26.04 LTS  
 **Primary Repository Workspace:** `irislime`  
+**Master Directives Specification:** [AI_DIRECTIVES_CONSOLIDATED.txt](file:///home/fekerr/src/irislime-pr-36/AI_DIRECTIVES_CONSOLIDATED.txt)
 
 ---
 
-## 1. System Topology & Validated Environments
+## Executive Overview & Architectural Directives
 
-Any LLM/SLM context processing this workspace must adhere strictly to the
-physical file system paths and toolchains validated below. Do not assume
-abstract defaults.
+All AI agents (AGY, Jules, Copilot, Gemini, ChatGPT) operating within this codebase must adhere strictly to the consolidated specification defined in [AI_DIRECTIVES_CONSOLIDATED.txt](file:///home/fekerr/src/irislime-pr-36/AI_DIRECTIVES_CONSOLIDATED.txt).
 
-### 1.1 The Host Compiler Layer
-* **Compiler Backend:** Microsoft Visual C++ (MSVC) Native 64-bit Optimizing
-  Compiler.
-* **Validated Binary Node:**
-  `C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\cl.exe`
-* **Target Build Framework:** MSVC v144 / Windows 11 Unified SDK.
+### Core Guardrails Summary:
+1. **System Comprehension & Boundaries**:
+   - Host OS: Windows 11 64-bit (Intel Core 12th Gen Workstation).
+   - Linux Environment: Ubuntu 26.04 LTS WSL2.
+   - Python Execution: Route exclusively through `uv run` inside local `.venv`.
+   - External Model Storage: Decoupled sibling path `../models/`.
 
-### 1.2 Terminal Shell Interfaces
-* **Native Host Prompt:** Developer Git Bash (VS 2022) configured via dynamic
-  variable inheritance.
-  * *Launch Directive:* Loads `VsDevCmd.bat -arch=amd64` to securely stage
-    compiler variables (`INCLUDE`, `LIB`, `PATH`) into volatile memory before
-    dropping execution cleanly into the native MinGW64 Bash interpreter
-    (`bash-5.3$`).
-* **Linux Subsystem Workspace:** Isolated single instance of `Ubuntu-24.04` LTS
-  via WSL2.
-* **Persistent Shell Silencers:** All visual and audible input boundary errors
-  have been muted via terminal `bellStyle: none` options and GNU Readline
-  `set bell-style none` configurations inside `~/.inputrc`.
+2. **AGY Inbox / Outbox & Logging Workflow**:
+   - Check `./inbox` on every turn for `*agy*` files, ingest, and move to `./inbox/archive/`.
+   - Output turn status report in `./outbox/agy_nnn_turn_report.md` on every turn (Timestamp, incrementing index `nnn`, turn counter).
+   - Log all prompts and responses in `./agy/log/`.
 
-### 1.3 Local Storage Runtime Matrix
-* **Active SSD Storage Runway:** 78.84 GB free space allocated for active build
-  fragments, C++ linking spaces, and local SLM token parameters.
-* **Active Cloud Endpoints (`rclone`):**
-  * `gaom:` ƒ?" 4 TiB Primary Allocation Array
-  * `gdrive:` ƒ?" 5 TiB Architecture Drive
-* *Storage Policy:* All large legacy hypervisor fragments and historical
-  development tarballs have been permanently moved out of local storage sectors
-  and archived securely in cold cloud nodes.
+3. **Simple ASCII Text Standard**:
+   - Primary working docs are maintained in `.txt` using structured ASCII headers to avoid markdown rendering truncation issues.
+   - Convert to Markdown via `uv run python tools/ascii2md.py <input.txt> [output.md]`.
 
----
+4. **Immutable Archival & Git History**:
+   - Edits are strictly additive; historical AI directive files are archived under `docs/archive/ai_directives/`.
+   - Historical Git commits remain preserved on remote branches; local removals are tracked in `agy/log/archival.log`.
 
-## 2. Core Operational Guardrails
+5. **Observability & Token Preservation**:
+   - Zero `/dev/null` stream discarding without explicit justification.
+   - AGY token quota monitoring: engage throttling gates (10-minute cooldowns) if 5-hour usage exceeds 50%.
 
-* **The Immutable Logging Paradigm:** Practice a strict "never delete, always
-  append" forensic logging philosophy for file records and transaction
-  tracking.
-* **Cross-Platform Path Alignment:** Never utilize virtualized drive-letter
-  mappings (`G:`, `H:`). All data references between host Windows and guest
-  Linux boundaries must evaluate via native cross-platform loopbacks
-  (`\\wsl.localhost\Ubuntu-24.04\`) or localized home nodes (`--cd ~`).
-* **Environment Isolation Guardrails:** All Python execution steps must route
-  exclusively through the native `uv` toolchain manager. Avoid contaminating
-  global system environments by running self-contained, ephemeral sandboxes
-  (`uv run`).
-
----
+6. **Master Backlog Ledger**:
+   - Consolidated master task list maintained in `TODO_CONSOLIDATED.txt`, numbered by 10s (`10.`, `20.`, `30.`, ...).

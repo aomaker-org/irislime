@@ -32,5 +32,5 @@ litert-clean: ## Clear staging directories and invoke contextual out-of-tree Baz
 	rm -rf build/litert_release build/litert_debug
 	@if command -v bazel &> /dev/null && [ -d "$(LITERT_SRC)" ] && { [ -f "$(LITERT_SRC)/WORKSPACE" ] || [ -f "$(LITERT_SRC)/MODULE.bazel" ]; }; then \
 		echo "[-] Context shift: Entering workspace at $(LITERT_SRC) for cache expunge..."; \
-		cd $(LITERT_SRC) && bazel --output_base="$(HOME)/.cache/bazel_irislime" clean --expunge; \
+		cd $(LITERT_SRC) && bazel --output_base="${IRISLIME_CACHE_DIR:-$(HOME)/.cache/bazel_irislime}" clean --expunge; \
 	fi

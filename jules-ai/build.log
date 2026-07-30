@@ -1,0 +1,24 @@
+uv run tools/build_runner.py
+==================================================================
+[+] Executing Isolated Target: VULKAN | Profile: Debug
+==================================================================
+[+] Isolated Target Folder: /app/build/vulkan_debug
+[+] Persistent Log Target:  /app/logs/builds/vulkan_debug/build_20260725_101534.log
+[Watchdog Init] Activity monitoring initialized. Silence Budget: 600s
+==================================================================
+
+  [STREAM] > make[1]: Entering directory '/app'
+  [STREAM] > [Make] Initializing Vulkan SPIR-V compilation inside: /app/build/vulkan_debug
+  [STREAM] > [Make] Log Target Destination: /app/logs/builds/vulkan_debug/build_20260725_101534.log
+  [STREAM] > [!] Vulkan Compilation Macro Failed. Inspect /app/logs/builds/vulkan_debug/build_20260725_101534.log
+  [STREAM] > make[1]: *** [infra/make/vulkan.mk:20: build-vulkan] Error 1
+  [STREAM] > make[1]: Leaving directory '/app'
+
+[!] Build Execution Macro Failed with Exit Code: 2
+
+==================================================================
+[+] PROFILE PASS RESOLVED: FAILED
+[-] Root Manifest Updated: /app/build/build_status.json
+[-] Final Log Location:    /app/logs/builds/vulkan_debug/build_20260725_101534.log
+==================================================================
+make: *** [Makefile:24: build] Error 1

@@ -33,15 +33,39 @@ set_prompt() {
         git_info="${c_green}${git_info}${c_reset}"
     fi
 
+    # History Primality Checker (Task 110)
+    local hist_num=$(history 1 2>/dev/null | awk '{print $1}')
+    local prime_tag=""
+    if [ -n "${hist_num:-}" ]; then
+        local n=$((hist_num + 0))
+        local is_p=1
+        if [ $n -le 1 ]; then is_p=0
+        elif [ $n -le 3 ]; then is_p=1
+        elif [ $((n % 2)) -eq 0 ] || [ $((n % 3)) -eq 0 ]; then is_p=0
+        else
+            local i=5
+            while [ $((i * i)) -le $n ]; do
+                if [ $((n % i)) -eq 0 ] || [ $((n % (i + 2))) -eq 0 ]; then
+                    is_p=0
+                    break
+                fi
+                i=$((i + 6))
+            done
+        fi
+        if [ $is_p -eq 1 ]; then
+            prime_tag=" [${c_tag}P:${n}${c_reset}]"
+        fi
+    fi
+
     # Colored components
     local host_part="${c_user}${USER}${c_reset}@${c_host}${short_host}${c_reset}(1003)"
-    local tag_part="[${c_tag}${tag}${c_reset}]"
+    local tag_part="[${c_tag}${tag}${c_reset}]${prime_tag}"
     local path_part="${c_path}\w${c_reset}"
     local time_part="${c_time}${ts}${c_reset}"
 
     # Prompt layout:
     # 1. Blank line before
-    # 2. Metadata line: user@host [tag] - timestamp [status]
+    # 2. Metadata line: user@host [tag] [P:hist#] - timestamp [status]
     # 3. Path and git status (broken in the middle)
     # 4. Blank line after metadata/path
     # 5. Cursor input line

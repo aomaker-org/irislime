@@ -1,0 +1,45 @@
+=================================================================
+PR #36 Remediation Pass: provision.sh Path Leak Patch
+Timestamp: 2026-07-27T06:19:56Z
+Root Path: /home/fekerr/src/irislime-pr-36
+=================================================================
+
+--- Task 1: Refactoring Hardcoded Aliases in tools/provision.sh ---
+[+] Successfully parameterized IRISLIME_ROOT references in tools/provision.sh.
+
+--- Task 2: Self-Staging Modified Files ---
+[+] Staged tools/provision.sh and pr-36/ assets.
+
+=================================================================
+Current Repository Working Tree Status:
+=================================================================
+On branch pr-36
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   config_env
+	deleted:    docs/MTFDASH_USER_AND_INTEROP_GUIDE.md
+	new file:   pr-36/audit_260726_2245_010.log
+	new file:   pr-36/audit_260726_2247_010.log
+	new file:   pr-36/gemini_001.sh
+	new file:   pr-36/pr-36-remediate.sh
+	new file:   pr-36/pr-36-review.sh
+	new file:   pr-36/remediation_260726_2313_010.log
+	new file:   pr-36/remediation_260726_2319_010.log
+	deleted:    tools/agy_mtfdash_bridge.py
+	deleted:    tools/llamacpp_mtfdash_bridge.py
+	deleted:    tools/mtfdash_node_manager.py
+	modified:   tools/provision.sh
+	deleted:    tools/run_demo_20260620-batch.sh
+	deleted:    tools/run_demo_20260620-batch_new.sh
+	deleted:    tools/run_demo_20260620-interact.sh
+	deleted:    tools/run_demo_20260620.sh
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   pr-36/remediation_260726_2319_010.log
+
+
+=================================================================
+End of Remediation Log
+=================================================================

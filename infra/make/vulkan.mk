@@ -38,3 +38,14 @@ build-vulkan: ## Configure and compile the portable Mesa Vulkan compute target w
 
 clean-vulkan: ## Purge isolated targets and generated cache objects for Vulkan
 	rm -rf $(BUILD_DIR)
+
+# Dynamic On-Demand Submodule Hydration Guard (Requirement 10.30.30)
+.PHONY: check-submodule-llama
+
+check-submodule-llama:
+	@if [ ! -f "$(ENGINE_DIR)/CMakeLists.txt" ]; then \
+		echo "[irislime] Missing engine submodule detected. Hydrating $(ENGINE_DIR) on-demand..."; \
+		git submodule update --init --recursive $(ENGINE_DIR); \
+	fi
+
+build-vulkan: check-submodule-llama

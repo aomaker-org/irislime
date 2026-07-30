@@ -26,7 +26,7 @@ fi
 
 # Prefer the smallest tinyllama quant available, otherwise fallback to the smallest gguf file.
 MODEL=""
-if ls "$PROJECT_ROOT"/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf >/dev/null 2>&1; then
+if [[ -f "$PROJECT_ROOT/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf" ]]; then
     MODEL="$PROJECT_ROOT/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf"
 else
     MODEL="$(find "$PROJECT_ROOT/models" -maxdepth 1 -type f -name '*.gguf' -printf '%s %p\n' | sort -n | head -1 | awk '{print $2}')"

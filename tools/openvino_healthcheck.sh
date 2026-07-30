@@ -65,7 +65,7 @@ GGML_OPENVINO_DISABLE_CACHE="$OPENVINO_DISABLE_CACHE" \
 RC=${PIPESTATUS[0]}
 set -e
 
-if grep -E "ov::Exception|Compute error|failed to decode|graph_compute: .*failed|GGML OpenVINO backend" "$LOG_FILE" >/dev/null 2>&1; then
+if grep -E "ov::Exception|Compute error|failed to decode|graph_compute: .*failed|GGML OpenVINO backend" "$LOG_FILE" 2>> /tmp/openvino_hc_audit.log; then
     if [[ $RC -eq 0 ]]; then
         RC=10
     fi

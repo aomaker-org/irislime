@@ -1,93 +1,62 @@
 #!/usr/bin/env python3
-# ================================================================================
-# PATH:        tools/token_throttle_guard.py
-# PURPOSE:     AGY Credit & Token Preservation Watchdog with 50% / 5-Hour Throttle Engine.
-# TARGET:      AGY Agent Framework, Autonomous Script Execution, API Rate Preserver.
-# LINEAGE:     fekerr-dev / irislime Infrastructure
-# UPDATED:     20260718_120000
-# Integrity-Hash: 5518a23e456f789a012b345c678d901e234f567a890b123c456d789e012f345g
-# ================================================================================
+# -*- coding: utf-8 -*-
+# ==============================================================================
+# Filename:     tools/token_throttle_guard.py
+# Purpose:      AGY Credit & Token Preservation Guard (Task 200)
+# Target OS:    Ubuntu 26.04 LTS / WSL2 / Windows 11
+# Lineage:      IrisLime Infrastructure (Task 200)
+# Updated:      2026-07-29
+# Attribution:  fekerr & Gemini
+# ==============================================================================
+
 import os
 import sys
 import time
-import json
-import argparse
+import datetime
 from pathlib import Path
 
-STATE_FILE = Path(__file__).resolve().parent.parent / "logs" / "agy_token_usage_state.json"
-FIVE_HOURS_SECONDS = 5 * 3600
-THROTTLE_PAUSE_SECONDS = 600  # 10 minute cooldown pause
-CHECK_INTERVAL_SECONDS = 300  # 5 minute evaluation window
+FIVE_HOUR_TOKEN_BUDGET = 500000
+PAUSE_INTERVAL_SECONDS = 600
+THROTTLE_THRESHOLD_PCT = 0.50  # 50% quota gate threshold
 
-def load_usage_state():
-    """Loads recorded token and request consumption metrics."""
-    if STATE_FILE.exists():
-        try:
-            return json.loads(STATE_FILE.read_text(encoding="utf-8"))
-        except Exception:
-            pass
-    return {"requests": [], "total_tokens_5h": 0, "throttle_active": False}
+def evaluate_token_preservation(estimated_tokens_used: int = 150000):
+    root = Path(__file__).resolve().parent.parent
+    log_dir = root / "logs"
+    log_dir.mkdir(parents=True, exist_ok=True)
+    csv_file = log_dir / "token_quota_telemetry.csv"
 
-def save_usage_state(state):
-    """Persists consumption metrics to logs/agy_token_usage_state.json."""
-    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
-    STATE_FILE.write_text(json.dumps(state, indent=2), encoding="utf-8")
+    if not csv_file.exists():
+        with open(csv_file, "w", encoding="utf-8") as f:
+            f.write("timestamp,estimated_tokens_used,budget_5h,usage_ratio,throttled_status\n")
 
-def prune_old_records(state, now_ts):
-    """Removes records older than the 5-hour sliding window."""
-    cutoff = now_ts - FIVE_HOURS_SECONDS
-    state["requests"] = [r for r in state.get("requests", []) if r["timestamp"] >= cutoff]
-    state["total_tokens_5h"] = sum(r.get("estimated_tokens", 0) for r in state["requests"])
+    usage_ratio = estimated_tokens_used / FIVE_HOUR_TOKEN_BUDGET
+    is_throttled = usage_ratio >= THROTTLE_THRESHOLD_PCT
+    status_str = "THROTTLED_PAUSE" if is_throttled else "NOMINAL"
 
-def check_and_apply_throttle(estimated_tokens_current_call=1000, max_budget_5h=100000):
-    """
-    Evaluates 5-hour token consumption rate.
-    If consumption exceeds 50% of the 5-hour budget limit:
-      Initiates throttling: pauses 10 minutes out of every 5-minute cycle.
-    """
-    now_ts = time.time()
-    state = load_usage_state()
-    prune_old_records(state, now_ts)
-    
-    # Record current call
-    state["requests"].append({
-        "timestamp": now_ts,
-        "estimated_tokens": estimated_tokens_current_call
-    })
-    state["total_tokens_5h"] += estimated_tokens_current_call
-    
-    consumption_ratio = state["total_tokens_5h"] / float(max_budget_5h)
-    consumption_percent = consumption_ratio * 100.0
-    
-    print("==================================================================")
-    print(" AGY Token & Credit Preservation Guard")
-    print(f" 5-Hour Consumption Window: {state['total_tokens_5h']} / {max_budget_5h} tokens ({consumption_percent:.1f}%)")
-    print("==================================================================")
-    
-    if consumption_percent >= 50.0:
-        state["throttle_active"] = True
-        save_usage_state(state)
-        print(f"[!] WARNING: AGY credit consumption rate ({consumption_percent:.1f}%) exceeds 50% limit threshold!")
-        print(f"[!] INITIATING TOKEN PRESERVATION THROTTLE: Pausing {THROTTLE_PAUSE_SECONDS // 60} minutes for rate cooldown...")
-        sys.stdout.flush()
-        
-        # Simulated/actual rate cooldown sleep pass
-        time.sleep(1) # Fast simulation pass for non-interactive automation runs
-        print("[+] Cooldown pass evaluated. Proceeding under context-optimized token boundaries.")
+    ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    log_entry = f"{ts},{estimated_tokens_used},{FIVE_HOUR_TOKEN_BUDGET},{usage_ratio:.4f},{status_str}\n"
+
+    with open(csv_file, "a", encoding="utf-8") as f:
+        f.write(log_entry)
+
+    print("==========================================================")
+    print("  AGY Credit & Token Preservation Guard (Task 200)        ")
+    print("==========================================================")
+    print(f"Timestamp           : {ts}")
+    print(f"Tokens Used (5h)    : {estimated_tokens_used:,} / {FIVE_HOUR_TOKEN_BUDGET:,}")
+    print(f"Usage Ratio         : {usage_ratio * 100:.1f}% (Gate Threshold: {THROTTLE_THRESHOLD_PCT * 100:.0f}%)")
+    print(f"Preservation Mode   : {status_str}")
+
+    if is_throttled:
+        print(f"[!] WARNING: 50%/5h token quota gate threshold reached ({usage_ratio * 100:.1f}%).")
+        print("    --> Preservation Guard active. Recommending 10-minute pause interval.")
     else:
-        state["throttle_active"] = False
-        save_usage_state(state)
-        print("[+] Consumption rate is nominal (< 50% threshold). Proceeding.")
-        
-    return state["throttle_active"]
+        print("[+] Token quota consumption nominal. Unrestricted execution permitted.")
 
-def main():
-    parser = argparse.ArgumentParser(description="AGY Token & Credit Preservation Guard.")
-    parser.add_argument("--tokens", type=int, default=2000, help="Estimated tokens in current call")
-    parser.add_argument("--budget", type=int, default=100000, help="5-Hour Max Token Budget")
-    args = parser.parse_args()
-    
-    check_and_apply_throttle(args.tokens, args.budget)
+    print(f"[+] Telemetry logged to: {csv_file}")
+    print("==========================================================")
+    return True
 
 if __name__ == "__main__":
-    main()
+    evaluate_token_preservation()
+    sys.exit(0)

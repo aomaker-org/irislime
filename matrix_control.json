@@ -19,7 +19,8 @@
         {
           "name": "RelWithDebInfo",
           "suffix": "relwithdebinfo",
-          "track_telemetry": true
+          "track_telemetry": true,
+          "enabled": false
         },
         {
           "name": "Release",
@@ -53,7 +54,8 @@
         {
           "name": "RelWithDebInfo",
           "suffix": "relwithdebinfo",
-          "track_telemetry": true
+          "track_telemetry": true,
+          "enabled": false
         },
         {
           "name": "Release",

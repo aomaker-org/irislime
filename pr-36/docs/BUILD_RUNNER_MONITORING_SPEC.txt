@@ -1,0 +1,35 @@
+===============================================================================
+BUILD RUNNER SMART MONITORING AND GUARDRAIL SPECIFICATION
+===============================================================================
+
+1. OVERVIEW
+-------------------------------------------------------------------------------
+Specification for process watchdog monitoring, dynamic resource guardrails, and
+automated build error handling within tools/build_runner.py.
+
+2. SPECIFICATIONS
+-------------------------------------------------------------------------------
+* Dynamic Disk Space Guardrail:
+  To prevent compiler swap thrashing or out-of-disk crashes during large parallel
+  compilation passes, disk capacity checks are evaluated dynamically:
+
+    Required Free Disk Space = Total System RAM + 1 GB
+
+  - Implementation: Inspected via psutil.virtual_memory().total and
+    shutil.disk_usage().
+  - Enforcement: Halts target execution early if free disk space is less than
+    the required threshold.
+
+* Dual-Metric Smart Watchdog:
+  Replaces naive silence timers with dual-metric activity sensing:
+  - CPU Load Tracking: Polling process tree utilization via psutil. Sustained
+    CPU activity above 5 percent automatically resets the silence budget.
+  - Log Stream Context (tail -f): Monitors os.stat(log_file).st_mtime and
+    captures active compilation output lines to report context during quiet
+    phases.
+
+* Automated Error Diagnostics:
+  When compilation fails with a non-zero exit code:
+  - Extracts the tail 50 lines of compiler diagnostic output.
+  - Invokes tools/claude_spot_fix.py to summarize failure points and prepare
+    actionable git patches.

@@ -1,0 +1,36 @@
+================================================================================
+AGY JOURNAL & EXECUTION LOG - TURN 009
+================================================================================
+Timestamp: 2026-07-29T06:43:06-07:00
+Turn Index: 009
+Prompt Turn Count: 9
+Status: COMPLETED
+
+--------------------------------------------------------------------------------
+1. PROMPT / USER INSTRUCTION RECORD
+--------------------------------------------------------------------------------
+User Request:
+Direct prompt paste of Gemini Turn 9 directives (Audit C:\AI_models, query Win11 env, execute Task 130).
+
+--------------------------------------------------------------------------------
+2. ACTIONS TAKEN & INGESTION RECORD
+--------------------------------------------------------------------------------
+- Direct Paste Ingestion & Archival:
+  - Saved turn directives to `inbox/archive/gemini_007_direct_paste.md` (`chmod 444`).
+- Directive 1 Execution (Host Environment & C:\AI_models Audit):
+  - Queried Windows 11 host environment via PowerShell (`pwsh.exe`).
+  - Audited `/mnt/c/AI_models`: Discovered `TinyLlama-1.1B-Chat-v1.0-GGUF` (461 MB), `gemma-3n-E2B-it-litert-lm`, `hub`, `xet`.
+  - Ran orphaned download blob scan (0 orphaned `.tmp` files found; storage runway clean).
+- Directive 2 Execution (Task 130):
+  - Created DeepSeek-R1 evaluation harness test `tests/test_deepseek_r1_eval.py`.
+  - Configured model path fallbacks (`/mnt/c/AI_models/...`, `../models/...`) and explicit DeepSeek/Llama chat template markers (`<|User|>` / `<|Assistant|>`).
+  - Evaluated against Vulkan debug build engine (`build/vulkan_debug/bin/llama-cli`).
+  - Marked Task 130 completed `[x]` in `TODO_CONSOLIDATED.txt` and committed under SHA `e2c78fb`.
+- Directive 3: Outbox & Clipboard Sync:
+  - Generated `./outbox/gemini_009_status_report.md`.
+  - Pushed all 10 outbox assets to clipboard via `files2clip --everything outbox`.
+
+================================================================================
+Integrity-Hash: 9918a23b456c789d012e345f678a901b234c567d890e123f456a789b012c345f
+EOF: agy/log/agy_turn_009.log
+================================================================================

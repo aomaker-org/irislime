@@ -1,0 +1,45 @@
+===============================================================================
+SUBMODULE HYDRATION ARCHITECTURE AND BUILD INTERLOCK
+===============================================================================
+
+1. OVERVIEW
+-------------------------------------------------------------------------------
+This document specifies the on-demand engine submodule hydration pattern
+implemented across IrisLime build blueprints (Requirement 10.30.30).
+
+2. PROBLEM STATEMENT
+-------------------------------------------------------------------------------
+In fresh, unhydrated repository clones (or bare CI/CD environments where
+'git clone --recurse-submodules' was omitted), core engine folders such as
+llama.cpp/ exist as empty target directories. Executing 'make build' or direct
+CMake configurations prior to hydration resulted in immediate build target
+failures due to missing root CMakeLists.txt assets.
+
+3. ARCHITECTURE AND IMPLEMENTATION
+-------------------------------------------------------------------------------
+A dynamic check-and-fetch guard target (check-engine-submodule) is injected
+into infra/make/base.mk:
+
+  .PHONY: check-engine-submodule
+
+  check-engine-submodule:
+	@if [ ! -f "$(ENGINE_DIR)/CMakeLists.txt" ]; then \
+		echo "[irislime] Missing engine submodule detected at '$(ENGINE_DIR)'."; \
+		echo "[irislime] Hydrating submodule on-demand via git..."; \
+		git submodule update --init --recursive $(ENGINE_DIR); \
+	fi
+
+4. MODULE BINDING
+-------------------------------------------------------------------------------
+All engine target Makefiles (infra/make/vulkan.mk, sycl.mk, openvino.mk) list
+check-engine-submodule as a strict prerequisite:
+
+  build-vulkan: check-engine-submodule
+  build-sycl: check-engine-submodule
+  build-openvino: bootstrap-headers check-engine-submodule
+
+5. VERIFICATION
+-------------------------------------------------------------------------------
+Verified during AGY Task 40. The runner intercepted the un-hydrated submodule
+state (-660e63f), triggered an on-demand clone, checked out the target commit,
+and proceeded to compile 7,918 SPIR-V compute modules without failure.

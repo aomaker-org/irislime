@@ -5,10 +5,29 @@
 # Attribution:  fekerr & Gemini (20260704_1710 / Cross-Platform Pass)
 # ==============================================================================
 
+# Inclusion Guard
+
+ifndef BASE_MK_INCLUDED
+BASE_MK_INCLUDED := 1
+
 # Strict Environment Guard Interlock
 ifndef IRISLIME_READY
   $(error [!] IrisLime environment context not detected! Run 'source config_win11' or 'source config_env')
 endif
+
+# --- ANSI TERMINAL COLOR PALETTE ---
+# Shared across the entire Makefile hierarchy
+COLOR_RESET   := \033[0m
+COLOR_BOLD    := \033[1m
+COLOR_CYAN    := \033[36m
+COLOR_GREEN   := \033[32m
+COLOR_YELLOW  := \033[33m
+COLOR_RED     := \033[31m
+COLOR_BLUE    := \033[34m
+COLOR_MAGENTA := \033[35m
+
+CYAN  := $(COLOR_CYAN)
+RESET := $(COLOR_RESET)
 
 # --- GLOBAL SHELL CONFIGURATION ---
 SHELL        := bash
@@ -17,16 +36,20 @@ SHELL        := bash
 QUIET ?= 0
 
 # --- HARDWARE TOPOLOGY & MEMORY PARSER ---
-TOTAL_THREADS := $(shell nproc 2>/dev/null || echo 4)
-NUM_P_THREADS := $(shell grep -l ',' /sys/devices/system/cpu/cpu*/topology/thread_siblings_list 2>/dev/null | wc -l)
-NUM_E_THREADS := $(shell grep -L ',' /sys/devices/system/cpu/cpu*/topology/thread_siblings_list 2>/dev/null | wc -l)
+TOTAL_THREADS := $(shell nproc || echo 4)
+NUM_P_THREADS := $(shell grep -l ',' /sys/devices/system/cpu/cpu*/topology/thread_siblings_list | wc -l)
+NUM_E_THREADS := $(shell grep -L ',' /sys/devices/system/cpu/cpu*/topology/thread_siblings_list | wc -l)
 
-# Forensic Memory Check (Graceful fallback if /proc/meminfo is absent natively)
-TOTAL_RAM_GB  := $(shell grep MemTotal /proc/meminfo 2>/dev/null | awk '{print int($$2/1024/1024)}')
+# Forensic Memory Check
+TOTAL_RAM_GB  := $(shell grep MemTotal /proc/meminfo | awk '{print int($$2/1024/1024)}')
 ifeq ($(TOTAL_RAM_GB),)
   TOTAL_RAM_GB := 16
 endif
 RAM_SAFE_JOBS := $(shell echo $$(( $(TOTAL_RAM_GB) / 4 )))
+
+# --- WINDOWS HOST & LOCAL DISK SPACE PROBE ---
+WIN_HOST_FREE_GB  := $(shell df -BG /mnt/c | awk 'NR==2 {print $$4}' | tr -d 'G')
+MIN_DISK_FLOOR_GB := 10
 
 # Calculate CPU Build Capacity and Physical Inference Cores
 ifeq ($(NUM_P_THREADS),0)
@@ -64,15 +87,22 @@ show-topology: ## Audit and display host platform core topologies and memory bou
 	@echo "IrisLime Hardware & Memory Telemetry Report"
 	@echo "=================================================================="
 	@echo "  Total System Memory Detected       : $(TOTAL_RAM_GB) GB"
+	@if [ -n "$(WIN_HOST_FREE_GB)" ]; then \
+		echo "  Windows Host Free Space (/mnt/c)   : $(WIN_HOST_FREE_GB) GB"; \
+	fi
 	@echo "  Memory-Safe Max Parallel Jobs      : $(RAM_SAFE_JOBS)"
 	@echo "  Detected Total Logical Processors  : $(TOTAL_THREADS)"
 	@echo "  Performance Core Threads Detected  : $(NUM_P_THREADS) (Physical P-Cores: $(NUM_INF_THREADS))"
 	@echo "  Efficient Core Threads Detected    : $(NUM_E_THREADS)"
 	@echo "------------------------------------------------------------------"
-	@echo "  CALIBRATED CONCURRENCY CAPACITY   : $(CALIBRATED_BUILD_JOBS)"
+	@echo "  CALIBRATED CONCURRENCY CAPACITY    : $(CALIBRATED_BUILD_JOBS)"
 	@echo "  ACTIVE RUNNER CONCURRENCY VALUE    : $(NUM_BUILD_JOBS)"
 	@echo "  CALIBRATED INFERENCE THREADS (-t)  : $(NUM_INF_THREADS)"
 	@echo "=================================================================="
+	@if [ -n "$(WIN_HOST_FREE_GB)" ] && [ "$(WIN_HOST_FREE_GB)" -lt "$(MIN_DISK_FLOOR_GB)" ]; then \
+		echo "[!] WARNING: Windows host partition (/mnt/c) has only $(WIN_HOST_FREE_GB) GB free (Floor: $(MIN_DISK_FLOOR_GB) GB)."; \
+		echo "[!] Large compilation targets or submodule fetches may fail unexpectedly!"; \
+	fi
 
 verify-infra: ## Validate internal modular build folder workspace directory structures
 	@if [ ! -d "infra/make" ]; then \
@@ -91,7 +121,7 @@ setup-venv: .venv/.installed ## Provision and auto-sync localized python depende
 track-workspace: ## List active binary assets and log configurations inside active build folders
 	@echo ""
 	@echo "[+] Mapping current IrisLime variant tree structure for: $(BUILD_DIR)"
-	@if command -v tree &> /dev/null; then \
+	@if command -v tree; then \
 		tree -f $(BUILD_DIR); \
 	else \
 		find $(BUILD_DIR) -type f -name "*.log" -o -name "llama-cli"; \
@@ -119,3 +149,17 @@ clean-base:
 	@echo "[Clean] Removing build/base_* directories"
 	rm -rf build/base_*
 
+.PHONY: check-engine-submodule
+
+ENGINE_DIR ?= llama.cpp
+
+check-engine-submodule: ## Dynamically check and fetch engine submodule if uninitialized
+	@if [ ! -f "$(ENGINE_DIR)/CMakeLists.txt" ]; then \
+		echo "[irislime] Missing engine submodule detected at '$(ENGINE_DIR)'."; \
+		echo "[irislime] Hydrating submodule on-demand via git..."; \
+		git submodule update --init --recursive $(ENGINE_DIR); \
+	fi
+
+endif # BASE_MK_INCLUDED
+
+# End of base.mk

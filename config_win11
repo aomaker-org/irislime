@@ -43,10 +43,10 @@ if [ "${_ACTION}" == "unset" ]; then
     
     # Remove custom functions and aliases
     unset -f ps7 pto pti set_prompt
-    unalias extract_telemetry quick_litert test_history probe_hardware test_runner build_runner files2clip clip2files pack2clip patch_incoming 2>/dev/null
+    unalias extract_telemetry quick_litert test_history probe_hardware test_runner build_runner files2clip clip2files pack2clip patch_incoming 2>> /tmp/config_win11_audit.log || true
     
     if command -v deactivate >/dev/null 2>&1; then
-        deactivate
+        deactivate 2>> /tmp/config_win11_audit.log || true
         echo "[+] Host virtual environment deactivated."
     fi
     echo "[+] IrisLime host environment unset."
@@ -146,8 +146,8 @@ export PATH="${INTEL_COMPILER_BIN}:${OPENVINO_BIN_POS}:${OPENVINO_ALT_POS}:${OPE
 
 # 10. Node.js Version Management via NVM
 if command -v nvm &> /dev/null; then
-    nvm use 20 --silent >/dev/null 2>&1 || true
-    echo "[+] Node.js Toolchain synchronized via native system engine (version: $(node -v 2>/dev/null))."
+    nvm use 20 --silent 2>> /tmp/config_win11_audit.log || true
+    echo "[+] Node.js Toolchain synchronized via native system engine (version: $(node -v 2>> /tmp/config_win11_audit.log))."
 else
     echo "[!] Warning: Native nvm.exe missing. Native UI loops may fail dependencies."
 fi
@@ -155,6 +155,12 @@ fi
 # 11. PowerShell Bridge & IO Patching Helpers
 ps7() {
     "/c/Program Files/PowerShell/7/pwsh.exe" "$@"
+}
+to_win_path() {
+    wslpath -w "$1" 2>> /tmp/config_win11_audit.log || echo "$1"
+}
+to_wsl_path() {
+    wslpath -u "$1" 2>> /tmp/config_win11_audit.log || echo "$1"
 }
 pto() { 
     "${PYTHON_VENV_EXE}" "${IRISLIME_ROOT}/tools/patch_io.py" out "$@"
