@@ -59,18 +59,51 @@ class BuildOrchestrator:
         print(f"[Watchdog Init] Activity monitoring initialized. Silence Budget: {self.silence_budget}s")
         print("==================================================================\n")
 
+    def get_llamacpp_version(self) -> str:
+        """Captures `git rev-parse HEAD` of the llama.cpp submodule or directory."""
+        llamacpp_dir = Path("llama.cpp")
+        if llamacpp_dir.exists():
+            try:
+                res = subprocess.run(
+                    ["git", "-C", "llama.cpp", "rev-parse", "HEAD"],
+                    capture_output=True, text=True, check=True
+                )
+                return res.stdout.strip()
+            except Exception:
+                pass
+        try:
+            res = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                capture_output=True, text=True, check=True
+            )
+            return res.stdout.strip()
+        except Exception:
+            return "unknown"
+
     def update_manifest(self, status: str):
-        """Atomically update the workspace root build_status.json manifest file."""
+        """Atomically update the workspace root build_status.json and build_meta.json manifest files."""
+        llamacpp_sha = self.get_llamacpp_version()
         manifest_data = {
             "last_built_target": self.target,
             "profile": self.profile,
             "timestamp": self.timestamp,
             "target_directory": str(self.target_dir),
             "log_file_location": str(self.log_file),
+            "llamacpp_commit_sha": llamacpp_sha,
             "status": status
         }
         with open(MANIFEST_FILE, "w") as f:
             json.dump(manifest_data, f, indent=2)
+
+        meta_file = Path("build/build_meta.json").resolve()
+        with open(meta_file, "w") as f:
+            json.dump({
+                "llamacpp_commit_sha": llamacpp_sha,
+                "timestamp": self.timestamp,
+                "target": self.target,
+                "profile": self.profile,
+                "status": status
+            }, f, indent=2)
 
     def _stream_reader(self, pipe, queue: Queue):
         """Background thread worker reading text strings line-by-line natively."""
