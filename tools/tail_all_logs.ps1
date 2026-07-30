@@ -18,9 +18,9 @@ Write-Host "[*] Log Directory : $LogDir" -ForegroundColor Yellow
 Write-Host "----------------------------------------------------------" -ForegroundColor Gray
 
 # Find active log files
-$LogFiles = Get-ChildItem -Path $LogDir -Recurse -Filter "*.log" | Select-Object -ExpandProperty FullName
-$CsvFiles = Get-ChildItem -Path $LogDir -Recurse -Filter "*.csv" | Select-Object -ExpandProperty FullName
-$AllTargets = $LogFiles + $CsvFiles
+$LogFiles = @(Get-ChildItem -Path $LogDir -Recurse -Filter "*.log" | Select-Object -ExpandProperty FullName)
+$CsvFiles = @(Get-ChildItem -Path $LogDir -Recurse -Filter "*.csv" | Select-Object -ExpandProperty FullName)
+$AllTargets = @($LogFiles + $CsvFiles)
 
 if (-not $AllTargets) {
     Write-Host "[!] No active log files found under $LogDir" -ForegroundColor Red

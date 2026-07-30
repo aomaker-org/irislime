@@ -49,6 +49,10 @@ SECTION 6: COMPLETED BACKLOG REFORMS
 * [x] PIPELINE SYNC: Verify rclone syncs state and blobs to gdrive after sandbox baseline commit.
 * [x] SHEBANGS: Sweep python scripts in tools/ to optimize execution paths.
 
+SECTION 7: FUTURE GENERAL-PURPOSE TOOLING & SYSTEM MONITORING (`fekerr-dev-pub`)
+270. [ ] General-Purpose Tool Audit & Extraction (`fekerr-dev-pub`): Audit repository scripts (files2clip, clip2files, xfer, tail_all_logs) for general-purpose reuse, decouple project-specific paths, and publish/provision binaries into ~/.local/bin.
+280. [ ] System State & File Change Monitoring Daemon: Design an independent Python system-wide monitoring tool for cross-platform log streaming, timestamping, and file change observation decoupled from irislime core.
+
 ================================================================================
 Integrity-Hash: 9918a23b456c789d012e345f678a901b234c567d890e123f456a789b012c345f
 EOF:         fekerr-dev/TODO_CONSOLIDATED.txt
