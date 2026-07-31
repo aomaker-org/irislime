@@ -49,6 +49,7 @@ include infra/make/openvino.mk
 include infra/make/sycl.mk
 include infra/make/vulkan.mk
 include infra/make/litert.mk
+include infra/make/android.mk
 
 # 4. Global Maintenance Redirections
 clean: ## Purge assets within designated active BUILD_DIR target space
